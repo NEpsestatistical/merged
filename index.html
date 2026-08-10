@@ -50,6 +50,7 @@
   img{max-width:100%; display:block;}
   a{color:inherit;}
 
+  /* ---------- cinematic section labels + reveal motion ---------- */
   .kicker{font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:8px; margin-bottom:10px; font-weight:600;}
   .kicker::before{content:""; width:20px; height:2px; background:var(--gold); display:inline-block;}
   .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease);}
@@ -57,6 +58,7 @@
   .tagline-banner{font-family:var(--font-mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-dim); text-align:center;}
   .tagline-banner b{color:var(--gold);}
 
+  /* ---------- topbar / nav ---------- */
   header.topbar{position:sticky; top:0; z-index:30; background:rgba(10,10,12,.9); backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%); border-bottom:1px solid var(--line);}
   .topbar-inner{max-width:1160px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
   .brand{display:flex; align-items:center; gap:10px;}
@@ -103,6 +105,7 @@
   .panel{display:none;}
   .panel.active{display:block;}
 
+  /* ---------- watchlist strip ---------- */
   .wl-card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; margin-bottom:16px; box-shadow:var(--shadow-sm);}
   .wl-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
   .wl-head h4{margin:0; font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-dim); font-weight:800;}
@@ -117,6 +120,7 @@
   .wl-add{display:flex; gap:6px; margin-top:10px;}
   .wl-add input{flex:1; background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px; font-family:var(--font-mono);}
 
+  /* ---------- filter bar / feed ---------- */
   .filter-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:20px;}
   .chip-row{display:flex; gap:8px; flex-wrap:wrap;}
   .chip{background:transparent; border:1px solid var(--line); color:var(--ink-dim); padding:8px 16px; border-radius:0; font-size:11.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; transition:background .15s, color .15s, border-color .15s;}
@@ -152,6 +156,7 @@
   .fab:hover{transform:translateY(-2px); background:var(--gold-2);}
   .fab:active{transform:scale(.95);}
 
+  /* ---------- friends ---------- */
   .section-title{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.14em; color:var(--gold); font-weight:700; margin:34px 0 16px; display:flex; align-items:center; gap:8px;}
   .section-title::before{content:""; width:20px; height:2px; background:var(--gold); display:inline-block;}
   .section-title:first-child{margin-top:0;}
@@ -176,6 +181,7 @@
   .person-card .ph{font-size:11.5px; color:var(--ink-faint); font-family:var(--font-mono); margin-bottom:6px;}
   .person-card .pb{font-size:12px; color:var(--ink-dim); line-height:1.4; margin-bottom:12px; min-height:34px;}
 
+  /* ---------- messages ---------- */
   .convo-row{display:flex; align-items:center; gap:12px; padding:12px 8px; border-radius:var(--radius-sm); cursor:pointer; margin-bottom:2px;}
   .convo-row:hover{background:var(--panel-2);}
   .convo-info{flex:1; min-width:0;}
@@ -198,6 +204,7 @@
   .typing-row span:nth-child(2){animation-delay:.2s;} .typing-row span:nth-child(3){animation-delay:.4s;}
   @keyframes tp{0%,60%,100%{opacity:.3; transform:translateY(0);} 30%{opacity:1; transform:translateY(-3px);}}
 
+  /* ---------- modal ---------- */
   .overlay-bg{position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); z-index:40; opacity:0; pointer-events:none; transition:opacity .2s;}
   .overlay-bg.show{opacity:1; pointer-events:auto;}
   .modal{position:fixed; left:50%; bottom:0; transform:translate(-50%,100%); width:100%; max-width:560px; max-height:90vh; background:var(--bg); border:1px solid var(--line); border-radius:var(--radius-lg) var(--radius-lg) 0 0; z-index:41; display:flex; flex-direction:column; transition:transform .28s var(--ease), opacity .2s, visibility 0s .28s; opacity:0; visibility:hidden; pointer-events:none; box-shadow:var(--shadow-lg);}
@@ -262,6 +269,7 @@
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
   .loading{text-align:center; padding:60px 0; color:var(--ink-faint);}
 
+  /* ---------- google-style login ---------- */
   .login-gate{position:fixed; inset:0; background:var(--bg); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;}
   .login-gate.hide{display:none;}
   .login-card{width:100%; max-width:380px; text-align:center;}
@@ -302,6 +310,7 @@
   .acct-manual button{width:100%; background:#1a73e8; color:#fff; border:none; border-radius:6px; padding:10px; font-size:13.5px; font-weight:600; cursor:pointer;}
   .acct-foot{padding:12px 24px 20px; font-size:11px; color:#80868b; text-align:center; border-top:1px solid #e8eaed;}
 
+  /* ---------- home / 3D logo ---------- */
   .home-hero{position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; padding:90px 16px 64px; margin-bottom:0; border-radius:0; background:radial-gradient(120% 100% at 50% -10%, #1a1210 0%, var(--bg) 62%); overflow:hidden; border:none; border-bottom:1px solid var(--line);}
   .hero-bg-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; opacity:.4; pointer-events:none;}
   .hero-bg-overlay{position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(10,10,12,.55) 0%, rgba(10,10,12,.75) 55%, var(--bg) 100%); pointer-events:none;}
@@ -360,6 +369,7 @@
   .trend-score .ts-val{font-weight:800; font-size:14px;}
   .trend-score .ts-lbl{font-size:10px; color:var(--ink-faint); text-transform:uppercase;}
 
+  /* ---------- auth extras: reset-password card, follow lists ---------- */
   .pw-reset-card{width:100%; max-width:340px; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-lg);}
   .pw-reset-card h4{margin:0 0 6px; font-size:17px;}
   .pw-reset-card p{margin:0 0 16px; font-size:12.5px; color:var(--ink-dim); line-height:1.5;}
@@ -371,6 +381,7 @@
   .follow-sub{display:none;}
   .follow-sub.active{display:block;}
 
+  /* ---------- LightWave-style feature panels ---------- */
   .feature-panel{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; margin-bottom:80px;}
   .feature-panel.rev .fp-media{order:2;}
   .feature-panel.rev .fp-copy{order:1;}
@@ -410,14 +421,6 @@
   .footer-social a{width:30px; height:30px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--ink-dim); text-decoration:none; font-size:13px; transition:border-color .15s, color .15s;}
   .footer-social a:hover{border-color:var(--gold); color:var(--gold);}
   @media (max-width:700px){ .footer-inner{grid-template-columns:1fr; gap:28px;} }
-
-  /* Portfolio panel improvements */
-  #portfolio-frame {
-    border-radius: 8px;
-    box-shadow: 0 4px 24px rgba(0,0,0,.5);
-    border: 1px solid var(--line);
-    background: var(--bg);
-  }
 </style>
 </head>
 <body>
@@ -450,7 +453,7 @@
   </div>
 </div>
 
-<!-- USERNAME SETUP GATE -->
+<!-- USERNAME SETUP GATE (shown once, right after first sign-up) -->
 <div class="login-gate hide" id="username-gate">
   <div class="login-card">
     <div class="mark" style="border-radius:14px; background:var(--gold); color:var(--gold-ink); display:flex; align-items:center; justify-content:center; font-weight:800;">EE</div>
@@ -491,7 +494,7 @@
   </div>
 </div>
 
-<!-- PASSWORD RESET OVERLAY -->
+<!-- ============= PASSWORD RESET OVERLAY (shown when user opens their reset-link) ============= -->
 <div class="acct-overlay" id="pw-reset-overlay">
   <div class="pw-reset-card">
     <h4>Set a new password</h4>
@@ -549,5 +552,2206 @@
       <div class="hero-scroll-cue">Scroll</div>
     </div>
 
+    <!-- ===== What can you do with Elite Elliott (LightWave-style feature panels) ===== -->
     <div class="home-section" style="margin-bottom:8px;">
-      <div class="kicker" style="just
+      <div class="kicker" style="justify-content:center;">Trader Network</div>
+      <h2 style="text-align:center; font-size:clamp(24px,4vw,38px); font-weight:400; font-family:var(--font-display); text-transform:uppercase; margin:0 0 56px; color:var(--ink);">What can you do with Elite Elliott?</h2>
+
+      <div class="feature-panel">
+        <div class="fp-media">
+          <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1000&q=80" alt="Trader posting a chart call" loading="lazy">
+        </div>
+        <div class="fp-copy">
+          <div class="kicker">Call Your Shots</div>
+          <h3>Post chart calls with real conviction</h3>
+          <p>Share a ticker, a sentiment, and a timeframe — bullish, bearish or neutral — and put your read on the tape in front of the network.</p>
+          <p>Every call is timestamped and tracked, so your win rate speaks for itself instead of a highlight reel of your best trades.</p>
+        </div>
+      </div>
+
+      <div class="feature-panel rev">
+        <div class="fp-media">
+          <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1000&q=80" alt="Traders networking and following each other" loading="lazy">
+        </div>
+        <div class="fp-copy">
+          <div class="kicker">Build Your Circle</div>
+          <h3>Follow traders you actually rate</h3>
+          <p>Find setups worth watching, follow the people posting them, and build a feed that reflects the strategies and tickers you care about.</p>
+          <p>Mutual follows unlock direct messages, so the best conversations don't stay stuck in public replies.</p>
+        </div>
+      </div>
+
+      <div class="feature-panel">
+        <div class="fp-media">
+          <img src="https://images.unsplash.com/photo-1642052519154-77e15068ec7a?w=1000&q=80" alt="Real-time trading chat and market data" loading="lazy">
+        </div>
+        <div class="fp-copy">
+          <div class="kicker">Stay In The Loop</div>
+          <h3>Real-time chat, trending tickers &amp; news</h3>
+          <p>Message your network the moment a setup develops, track the tickers heating up across the feed, and pull in Nepal and world market news without leaving the app.</p>
+          <p>One place for the calls, the conversation and the context — no five-app juggling act.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CTA banner ===== -->
+    <div class="cta-banner">
+      <div class="kicker">Trader Network</div>
+      <h2>Trade at the speed of Elliott</h2>
+      <button class="btn btn-gold" onclick="showTab('feed')">Enter The Feed</button>
+    </div>
+
+    <!-- ===== Testimonials ===== -->
+    <div class="home-section testimonial-strip">
+      <h3>What the network has to say about calling their shots on Elite Elliott.</h3>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="tq">Posting my calls publicly changed how I trade — I actually respect my own stop-loss now that my win rate is on display.</div>
+          <div class="ta"><b>@wavehunter</b>Swing trader, NQ &amp; ES</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="tq">Found three traders on here whose reads are sharper than half the finance twitter accounts I used to follow.</div>
+          <div class="ta"><b>@delta_priya</b>Options trader</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="tq">The trending tab is basically a heat-map of what the community is watching before it shows up anywhere else.</div>
+          <div class="ta"><b>@ktm_bull</b>Retail trader, Kathmandu</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-section">
+      <div class="section-title">Your account</div>
+      <div class="acct-security-card" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:12px;" id="home-acct-info"></div>
+        <button class="btn btn-outline-bear btn-sm" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+
+    <div class="home-section">
+      <div class="section-title">Edit profile</div>
+      <div class="acct-security-card">
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.4px;">Profile picture</label>
+        <div class="asc-row" style="align-items:center;">
+          <div id="home-avatar-preview"></div>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('avatar-file-input-home').click()">Upload photo</button>
+          <input type="file" id="avatar-file-input-home" accept="image/*" style="display:none" onchange="handleAvatarUpload(this.files[0])">
+        </div>
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.4px; margin-top:14px;">Display name</label>
+        <div class="asc-row">
+          <input type="text" id="home-edit-name" placeholder="Your name" maxlength="40">
+        </div>
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.4px; margin-top:12px;">Username</label>
+        <div class="asc-row">
+          <input type="text" id="home-edit-handle" placeholder="username" maxlength="20" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
+        </div>
+        <div style="margin-top:10px;"><button class="btn btn-gold btn-sm" onclick="saveProfileFromHome()">Save changes</button></div>
+        <div class="asc-note" id="home-edit-note">Letters, numbers, and underscores only. Your username must be unique.</div>
+      </div>
+    </div>
+
+    <div class="home-section">
+      <div class="section-title">Follow us</div>
+      <div class="social-grid" id="social-grid"></div>
+    </div>
+
+    <div class="home-section">
+      <div class="section-title">Account security</div>
+      <div class="acct-security-card">
+        <div class="asc-current" id="asc-current-email"></div>
+        <label style="display:block; font-size:12px; font-weight:700; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.4px; margin-top:12px;">Change password</label>
+        <div class="asc-row">
+          <input type="password" id="home-new-password" placeholder="New password">
+          <button class="btn btn-gold btn-sm" onclick="changePasswordFromHome()">Update</button>
+        </div>
+        <div class="asc-note">Your account and password are managed securely by Supabase Auth — this updates your real password immediately. Forgot it entirely? Sign out and use "Forgot password?" on the sign-in screen to get a reset link by email.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEED PANEL -->
+  <div class="panel active" id="panel-feed">
+    <div class="wl-card">
+      <div class="wl-head"><h4>Your Watchlist</h4><button class="icon-btn" style="width:28px; height:28px; font-size:13px;" onclick="renderWatchlist(true)" title="Refresh prices">↻</button></div>
+      <div class="wl-row" id="wl-row"></div>
+      <div class="wl-add">
+        <input type="text" id="wl-input" placeholder="Ticker, e.g. NVDA or RELIANCE.IN" maxlength="14" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter') addWatchTicker()">
+        <button class="btn btn-ghost btn-sm" onclick="addWatchTicker()">Add</button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="chip-row" id="filter-chips"></div>
+      <select class="sort-select" id="sort-select" onchange="setSort(this.value)">
+        <option value="newest">Newest</option>
+        <option value="top">Most Liked</option>
+      </select>
+    </div>
+    <div class="feed" id="feed"><div class="loading">Loading the feed…</div></div>
+  </div>
+
+  <!-- FRIENDS PANEL (discover & add new traders) -->
+  <div class="panel" id="panel-friends">
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="friend-search" placeholder="Find traders by name or @username…" oninput="renderFriendsPanel()">
+    </div>
+    <div class="people-grid" id="suggested-grid"></div>
+  </div>
+
+  <!-- MESSAGES PANEL -->
+  <div class="panel" id="panel-messages">
+    <div id="convo-list"></div>
+  </div>
+
+  <!-- TRENDING PANEL -->
+  <div class="panel" id="panel-trending">
+    <div class="section-title">Trending tickers</div>
+    <p style="font-size:12.5px; color:var(--ink-dim); margin:-4px 0 14px;">Ranked by post activity and likes on Elite Elliott right now.</p>
+    <div class="trend-list" id="trend-list"></div>
+  </div>
+
+  <!-- NEPAL NEWS PANEL -->
+  <div class="panel" id="panel-nepal-news">
+    <div class="section-title">Nepal — latest headlines</div>
+    <div class="news-grid" id="nepal-news-grid"><div class="loading">Loading news…</div></div>
+  </div>
+
+  <!-- WORLD NEWS PANEL -->
+  <div class="panel" id="panel-world-news">
+    <div class="section-title">International headlines</div>
+    <div class="news-source-tabs" id="world-news-tabs"></div>
+    <div class="news-grid" id="world-news-grid"><div class="loading">Loading news…</div></div>
+  </div>
+
+  <!-- PORTFOLIO PANEL (embedded — merged from portfolio.html, no external file needed) -->
+  <div class="panel" id="panel-portfolio" style="padding:0;">
+    <iframe id="portfolio-frame" title="NEPSE Portfolio"
+      style="width:100%; height:85vh; min-height:640px; border:0; display:block; background:#0B0E11;"
+      loading="lazy"></iframe>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand"><div class="mark">EE</div><div><div class="name">Elite Elliott</div><div class="tag">Trader network</div></div></div>
+      <p>A social network for traders — post chart calls, track your win rate, follow other traders and talk shop in real time.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="#" onclick="showTab('feed');return false;">Feed</a></li>
+        <li><a href="#" onclick="showTab('trending');return false;">Trending</a></li>
+        <li><a href="#" onclick="showTab('friends');return false;">Find traders</a></li>
+        <li><a href="#" onclick="showTab('world-news');return false;">World News</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Account</h5>
+      <ul>
+        <li><a href="#" onclick="showTab('home');return false;">Your account</a></li>
+        <li><a href="#" onclick="showTab('messages');return false;">Messages</a></li>
+        <li><a href="#" onclick="signOut();return false;">Sign out</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© <span id="footer-year"></span> Elite Elliott. All rights reserved.</div>
+    <div class="footer-social">
+      <a href="#" title="Twitter / X">𝕏</a>
+      <a href="#" title="Instagram">◎</a>
+      <a href="#" title="YouTube">▶</a>
+    </div>
+  </div>
+</footer>
+
+<button class="fab" onclick="openNewPost()">＋ Post Chart</button>
+
+<div class="overlay-bg" id="overlay-bg" onclick="closeModals()"></div>
+
+<!-- NEW POST MODAL -->
+<div class="modal" id="new-post-modal">
+  <div class="modal-head"><h3>Post a Chart</h3><button class="close-x" onclick="closeModals()">✕</button></div>
+  <div class="modal-body">
+    <div class="field">
+      <label>Chart Image</label>
+      <label class="drop-zone" id="drop-zone" for="file-input">
+        <div class="dz-label" id="dz-label"><span class="em">📊</span>Tap to upload a chart screenshot<br><span style="text-decoration:underline;">or drag &amp; drop an image here</span></div>
+      </label>
+      <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
+    </div>
+    <div class="field"><label>Ticker</label><input type="text" id="in-ticker" placeholder="e.g. AAPL, BTCUSD" maxlength="12" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="field">
+      <label>Timeframe</label>
+      <div class="tf-grid" id="tf-grid"></div>
+    </div>
+    <div class="field">
+      <label>Sentiment</label>
+      <div class="seg-control" id="sent-control">
+        <div class="seg-btn" data-s="bullish" onclick="selectSentiment('bullish')">▲ Bullish</div>
+        <div class="seg-btn" data-s="neutral" onclick="selectSentiment('neutral')">● Neutral</div>
+        <div class="seg-btn" data-s="bearish" onclick="selectSentiment('bearish')">▼ Bearish</div>
+      </div>
+    </div>
+    <div class="field"><label>Analysis / Caption</label><textarea id="in-caption" placeholder="What's your read on this setup?"></textarea></div>
+    <div class="field"><label>Posting as</label><div class="static-val" id="posting-as"></div></div>
+    <button class="btn btn-gold" style="width:100%; justify-content:center; padding:13px;" id="submit-btn" onclick="submitPost()">Post to Feed</button>
+  </div>
+</div>
+
+<!-- POST DETAIL MODAL -->
+<div class="modal" id="detail-modal">
+  <div class="modal-head"><h3>Chart Post</h3><button class="close-x" onclick="closeModals()">✕</button></div>
+  <div class="modal-body" id="detail-body"></div>
+</div>
+
+<!-- USER PROFILE MODAL -->
+<div class="modal" id="profile-modal">
+  <div class="modal-head"><h3>Trader Profile</h3><button class="close-x" onclick="closeModals()">✕</button></div>
+  <div class="modal-body" id="profile-body"></div>
+</div>
+
+<!-- SIGN OUT CONFIRM MODAL -->
+<div class="modal" id="signout-modal" style="max-width:360px;">
+  <div class="modal-head">
+    <h3>Sign out</h3>
+    <button class="close-x" onclick="closeSignoutModal()">✕</button>
+  </div>
+  <div class="modal-body" style="padding:22px 20px 4px; text-align:center;">
+    <div style="font-size:36px; margin-bottom:10px;">👋</div>
+    <p style="color:var(--ink-dim); font-size:14px; margin:0 0 4px;">Sign out of Elite Elliott?</p>
+    <p style="color:var(--ink-faint); font-size:12.5px; margin:0;">You can sign back in anytime with the same account.</p>
+  </div>
+  <div class="modal-foot" style="display:flex; gap:10px; padding:16px 20px 20px;">
+    <button class="btn btn-ghost" style="flex:1; justify-content:center;" onclick="closeSignoutModal()">Cancel</button>
+    <button class="btn btn-outline-bear" style="flex:1; justify-content:center;" onclick="confirmSignOut()">Sign out</button>
+  </div>
+</div>
+
+<!-- CHAT MODAL -->
+<div class="modal" id="chat-modal">
+  <div class="modal-head">
+    <div class="mh-info">
+      <div class="avatar sm" id="chat-avatar"></div>
+      <div><h3 id="chat-name"></h3><div class="mh-sub" id="chat-sub"></div></div>
+    </div>
+    <button class="close-x" onclick="closeModals()">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="chat-thread" id="chat-thread"></div>
+  </div>
+  <div class="modal-foot">
+    <input type="text" id="chat-input" placeholder="Message…" onkeydown="if(event.key==='Enter') sendChatMessage()">
+    <button class="icon-btn" style="background:var(--gold); border-color:var(--gold); color:var(--gold-ink);" onclick="sendChatMessage()">➤</button>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <img id="lightbox-img" src="" alt="Full size chart">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ================= SUPABASE CONFIG =================
+   1. Create a free project at https://supabase.com
+   2. Project Settings → API → copy "Project URL" and "anon public" key below.
+   3. Run schema.sql (provided alongside this file) in the Supabase SQL editor.
+   4. Authentication → URL Configuration → add this page's URL as a Redirect URL
+      (needed for password-reset links and Google sign-in to come back here).
+   5. (Optional) Authentication → Providers → enable Google, add your OAuth
+      client id/secret, to make the "Continue with Google" button work.
+================================================== */
+const SUPABASE_URL = "https://bfuatuhoosiwaugcxhjt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmdWF0dWhvb3Npd2F1Z2N4aGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzIxNTksImV4cCI6MjEwMTg0ODE1OX0.0eGEG6MDysnAx8P08xdf9hQxzBTl1erQRNxFOh4ZQDI";
+const supabaseReady = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY";
+const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+/* ================= CONFIG ================= */
+const TIMEFRAMES = ["Scalp","Day","Swing","Position"];
+const storageAvailable = typeof window !== "undefined" && !!window.indexedDB;
+
+const DEMO_ACCOUNTS = [];
+
+const REPLY_BANK = [
+  "Yeah, watching that level too — waiting on a retest before adding.",
+  "Volume's thin on this move, I'd want confirmation first.",
+  "That's roughly where my invalidation sits as well.",
+  "Trimmed half my size into that pop, letting the rest ride.",
+  "Curious what timeframe you're on, looks different on the daily.",
+  "Solid read, I've got a similar bias on this one.",
+  "I'd wait for a clean close through that zone before adding size.",
+  "Appreciate you sharing the chart, mind if I borrow this setup? 😄",
+  "Clean level. Momentum's diverging too on my end.",
+  "Neutral here until we get more data this week.",
+  "That lines up with the flow I'm seeing on my end.",
+  "Been eyeing the same zone — good catch."
+];
+
+const AVATAR_PALETTE = ["#F0B90B","#16C784","#EA3943","#5B7083","#8E7CC3","#2FB8E8","#E88D4C"];
+
+/* ================= STATE ================= */
+const state = {
+  posts: [], users: [],
+  currentUser: null,             // { id, name, email, handle, color } — id is the Supabase auth user id
+  following: [],                 // profiles the current user follows
+  followers: [],                 // profiles that follow the current user
+  allProfiles: [],                // every profile (for search/suggestions)
+  messages: [],                  // messages in the currently open conversation
+  convoSummaries: [],            // last message + unread count per conversation, for the Messages list
+  filter: "all", sort: "newest",
+  activeTab: "feed",
+  activeChatId: null,
+  msgChannel: null,               // realtime subscription handle
+  newPost: { image:null, timeframe:null, sentiment:null },
+  myPosts: [], likedPosts: [],
+  priceCache: {},                // ticker -> { price, chg, live, ts }
+  priceFailCount: {},            // ticker -> consecutive fetch failure count (drives backoff)
+};
+function followSet(){ return new Set(state.following.map(p=>p.id)); }
+function followerSet(){ return new Set(state.followers.map(p=>p.id)); }
+function isMutualFriend(id){ return followSet().has(id) && followerSet().has(id); }
+function mutualFriends(){ return state.following.filter(p=>followerSet().has(p.id)); }
+
+/* ================= UTIL ================= */
+function uid(){ return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8); }
+function timeAgo(iso){
+  const s = Math.floor((Date.now()-new Date(iso).getTime())/1000);
+  if(s<10) return "just now";
+  if(s<60) return s+"s ago";
+  if(s<3600) return Math.floor(s/60)+"m ago";
+  if(s<86400) return Math.floor(s/3600)+"h ago";
+  return Math.floor(s/86400)+"d ago";
+}
+function shortTime(iso){ return new Date(iso).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
+function escapeHtml(str){ const d=document.createElement("div"); d.textContent=str||""; return d.innerHTML; }
+function showToast(msg){
+  const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(showToast._id); showToast._id=setTimeout(()=>t.classList.remove("show"),2000);
+}
+function sentArrow(s){ return s==="bullish"?"▲":s==="bearish"?"▼":"●"; }
+function initials(name){ return (name||"?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
+function hashStr(str){ let h=0; for(const c of String(str)) h=(h*31 + c.charCodeAt(0))>>>0; return h; }
+function colorFor(seed){ return AVATAR_PALETTE[hashStr(seed)%AVATAR_PALETTE.length]; }
+function avatarHtml(name, color, size, avatarUrl){
+  if(avatarUrl) return `<div class="avatar ${size||''}" style="background:${color}; padding:0; overflow:hidden;"><img src="${avatarUrl}" alt="${escapeHtml(name)}" style="width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;"></div>`;
+  return `<div class="avatar ${size||''}" style="background:${color}">${escapeHtml(initials(name))}</div>`;
+}
+function convoId(a,b){ return [a,b].sort().join("::"); }
+
+/* ================= STORAGE (IndexedDB — local to this browser) ================= */
+const DB_NAME = "ee_social_db";
+const DB_VERSION = 1;
+let _dbPromise = null;
+function openDb(){
+  if(_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if(!db.objectStoreNames.contains("posts")) db.createObjectStore("posts", { keyPath:"id" });
+      if(!db.objectStoreNames.contains("users")) db.createObjectStore("users", { keyPath:"id" });
+      if(!db.objectStoreNames.contains("friendships")) db.createObjectStore("friendships", { keyPath:"id" });
+      if(!db.objectStoreNames.contains("messages")) db.createObjectStore("messages", { keyPath:"id" });
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  return _dbPromise;
+}
+function idbGetAll(store){
+  return openDb().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction(store, "readonly");
+    const req = tx.objectStore(store).getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  }));
+}
+function idbPut(store, obj){
+  return openDb().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction(store, "readwrite");
+    tx.objectStore(store).put(obj);
+    tx.oncomplete = () => resolve(obj);
+    tx.onerror = () => reject(tx.error);
+  }));
+}
+function idbDelete(store, id){
+  return openDb().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction(store, "readwrite");
+    tx.objectStore(store).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  }));
+}
+
+/* ================= LOCAL PREFS ================= */
+function loadLocal(){
+  try{ state.myPosts = JSON.parse(localStorage.getItem("ee_my_posts")||"[]"); }catch(e){ state.myPosts=[]; }
+  try{ state.likedPosts = JSON.parse(localStorage.getItem("ee_liked_posts")||"[]"); }catch(e){ state.likedPosts=[]; }
+}
+function saveLocal(){
+  try{ localStorage.setItem("ee_my_posts", JSON.stringify(state.myPosts)); }catch(e){}
+  try{ localStorage.setItem("ee_liked_posts", JSON.stringify(state.likedPosts)); }catch(e){}
+}
+function getSavedUser(){ try{ return JSON.parse(localStorage.getItem("ee_current_user")||"null"); }catch(e){ return null; } }
+function saveCurrentUser(u){ try{ localStorage.setItem("ee_current_user", JSON.stringify(u)); }catch(e){} }
+function clearCurrentUser(){ try{ localStorage.removeItem("ee_current_user"); }catch(e){} }
+function getWatchlist(){
+  if(!state.currentUser) return [];
+  try{ return JSON.parse(localStorage.getItem("ee_wl_"+state.currentUser.id)||'["SPY","BTCUSD","NVDA"]'); }catch(e){ return []; }
+}
+function saveWatchlist(list){ try{ localStorage.setItem("ee_wl_"+state.currentUser.id, JSON.stringify(list)); }catch(e){} }
+
+/* ================= AUTH / LOGIN GATE (Supabase) ================= */
+function avatarHtmlLight(name){
+  return `<div class="avatar sm" style="background:${colorFor(name)}">${escapeHtml(initials(name))}</div>`;
+}
+// "Add another account" box is just a convenience for switching devices/names in this demo UI;
+// real accounts and passwords always live in Supabase, never in the browser.
+function openAccountPicker(){
+  document.getElementById("acct-manual").classList.add("show");
+  document.getElementById("acct-overlay").classList.add("show");
+  setTimeout(()=>document.getElementById("manual-name").focus(), 50);
+}
+function closeAccountPicker(){ document.getElementById("acct-overlay").classList.remove("show"); }
+function toggleManualAcct(){ document.getElementById("acct-manual").classList.add("show"); document.getElementById("manual-name").focus(); }
+function submitManualAccount(){ closeAccountPicker(); showToast("Use the email form to sign in or create an account."); }
+
+function requireSupabase(){
+  if(!supabaseReady){
+    setEmailMsg("This app isn't connected to Supabase yet — add your project URL & anon key in the SUPABASE CONFIG section of the code.");
+    return false;
+  }
+  return true;
+}
+function setEmailMsg(text, ok){
+  const el = document.getElementById("email-login-msg");
+  el.textContent = text || "";
+  el.classList.toggle("ok", !!ok);
+}
+function readEmailForm(){
+  const email = document.getElementById("email-login-email").value.trim().toLowerCase();
+  const password = document.getElementById("email-login-password").value;
+  return { email, password };
+}
+function validEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+async function emailSignUp(){
+  if(!requireSupabase()) return;
+  const { email, password } = readEmailForm();
+  if(!validEmail(email)){ setEmailMsg("Enter a valid email address."); return; }
+  if(password.length < 6){ setEmailMsg("Password should be at least 6 characters."); return; }
+  const namePart = email.split("@")[0].replace(/[^a-zA-Z0-9]+/g," ").trim();
+  const name = namePart.split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ") || "Trader";
+  const { data, error } = await sb.auth.signUp({ email, password, options:{ data:{ name } } });
+  if(error){ setEmailMsg(error.message); return; }
+  if(data.session){
+    setEmailMsg("Account created — signing you in…", true);
+    await onSignedIn(data.session.user);
+  } else {
+    setEmailMsg("Check your inbox to confirm your email, then sign in.", true);
+  }
+}
+async function emailSignIn(){
+  if(!requireSupabase()) return;
+  const { email, password } = readEmailForm();
+  if(!validEmail(email)){ setEmailMsg("Enter a valid email address."); return; }
+  if(!password){ setEmailMsg("Enter your password."); return; }
+  setEmailMsg("Signing in…", true);
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error){ setEmailMsg(error.message); return; }
+  setEmailMsg("Signed in — welcome back…", true);
+  await onSignedIn(data.user);
+}
+async function emailForgotPassword(){
+  if(!requireSupabase()) return;
+  const { email } = readEmailForm();
+  if(!validEmail(email)){ setEmailMsg("Enter your email above first, then tap Forgot password."); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split("#")[0] });
+  if(error){ setEmailMsg(error.message); return; }
+  setEmailMsg("Password reset email sent — check your inbox for the link.", true);
+}
+async function googleSignIn(){
+  if(!requireSupabase()) return;
+  const { error } = await sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.href.split("#")[0] } });
+  if(error){
+    // Supabase returns a generic "provider is not enabled" (or similar 4xx) when Google OAuth
+    // hasn't been turned on for this project yet — that's a setup step, not something the person
+    // signing in can fix, so say so plainly instead of surfacing the raw API error text.
+    const msg = /provider is not enabled|unsupported provider|validation_failed/i.test(error.message)
+      ? "Google sign-in isn't set up for this app yet — enable the Google provider in Supabase (Authentication → Providers) or sign in with email instead."
+      : error.message;
+    showToast(msg);
+  }
+}
+function submitPasswordReset(){
+  const pw = document.getElementById("pw-reset-input").value;
+  const msgEl = document.getElementById("pw-reset-msg");
+  if(pw.length < 6){ msgEl.textContent = "Password should be at least 6 characters."; return; }
+  sb.auth.updateUser({ password: pw }).then(({ error })=>{
+    if(error){ msgEl.textContent = error.message; return; }
+    document.getElementById("pw-reset-overlay").classList.remove("show");
+    showToast("Password updated — you're all set.");
+  });
+}
+
+// Called once we have a real Supabase auth user (from sign-in, sign-up, or an existing session).
+async function onSignedIn(authUser){
+  const { profile, isNew } = await ensureProfile(authUser);
+  state.currentUser = {
+    id: authUser.id,
+    name: profile.name,
+    email: authUser.email,
+    handle: "@" + (profile.handle || ""),
+    color: profile.color || colorFor(authUser.email || authUser.id),
+    avatarUrl: profile.avatar_url || null,
+  };
+  saveCurrentUser(state.currentUser);
+  closeAccountPicker();
+  document.getElementById("login-gate").classList.add("hide");
+
+  if(isNew){
+    document.getElementById("ug-name").value = profile.name || "";
+    document.getElementById("ug-handle").value = profile.handle || "";
+    document.getElementById("ug-msg").textContent = "";
+    document.getElementById("username-gate").classList.remove("hide");
+    return; // bootApp() runs after they submit the username-setup form
+  }
+
+  await bootApp();
+}
+async function submitUsernameSetup(){
+  const msg = document.getElementById("ug-msg");
+  const name = document.getElementById("ug-name").value.trim();
+  const handle = document.getElementById("ug-handle").value.trim();
+  if(!name){ msg.textContent = "Enter a display name."; return; }
+  if(!handle || handle.length < 3){ msg.textContent = "Username must be at least 3 characters."; return; }
+
+  const { data: existing, error: checkErr } = await sb.from("profiles")
+    .select("id").eq("handle", handle).neq("id", state.currentUser.id).maybeSingle();
+  if(checkErr){ msg.textContent = checkErr.message; return; }
+  if(existing){ msg.textContent = "That username is already taken — try another."; return; }
+
+  const { data, error } = await sb.from("profiles")
+    .update({ name, handle })
+    .eq("id", state.currentUser.id)
+    .select().maybeSingle();
+  if(error){ msg.textContent = error.message; return; }
+
+  state.currentUser.name = data.name;
+  state.currentUser.handle = "@" + data.handle;
+  saveCurrentUser(state.currentUser);
+  document.getElementById("username-gate").classList.add("hide");
+  await bootApp();
+}
+// Fetches this user's profile row, creating it if the signup DB trigger hasn't run yet (or doesn't exist).
+// Returns { profile, isNew } — isNew is true for brand-new accounts, whether the row was just
+// inserted here or was auto-created moments ago by the schema's on_auth_user_created trigger.
+async function ensureProfile(authUser){
+  let { data: profile } = await sb.from("profiles").select("*").eq("id", authUser.id).maybeSingle();
+  let isNew = false;
+  if(!profile){
+    isNew = true;
+    const name = authUser.user_metadata?.name || (authUser.email||"Trader").split("@")[0];
+    const handle = (name.toLowerCase().replace(/[^a-z0-9]+/g,"") || "trader") + authUser.id.slice(0,4);
+    const insertRes = await sb.from("profiles").insert({ id: authUser.id, name, handle, color: colorFor(authUser.email||authUser.id) }).select().maybeSingle();
+    profile = insertRes.data || { name, handle, color: colorFor(authUser.email||authUser.id) };
+  } else if(authUser.created_at && (Date.now() - new Date(authUser.created_at).getTime()) < 60000){
+    // Auth account was created less than a minute ago — this is a first-ever sign-in,
+    // even though the DB trigger already auto-created the profile row.
+    isNew = true;
+  }
+  return { profile, isNew };
+}
+function signOut(){
+  document.getElementById("overlay-bg").classList.add("show");
+  document.getElementById("signout-modal").classList.add("show");
+}
+function closeSignoutModal(){
+  document.getElementById("overlay-bg").classList.remove("show");
+  document.getElementById("signout-modal").classList.remove("show");
+}
+function confirmSignOut(){
+  closeSignoutModal();
+  if(state.msgChannel){ sb.removeChannel(state.msgChannel); state.msgChannel = null; }
+  clearCurrentUser();
+  if(supabaseReady) sb.auth.signOut().finally(()=>location.reload());
+  else location.reload();
+}
+
+/* ================= DATA LOAD ================= */
+// Posts, likes, and comments are shared, real data — always loaded from Supabase so every
+// signed-in user sees the same feed. (Falls back to empty state if Supabase isn't configured.)
+async function loadAllData(){
+  if(supabaseReady && state.currentUser){
+    await loadSocialData();
+    await loadPostsFromSupabase();
+  } else {
+    state.posts = [];
+  }
+}
+async function loadPostsFromSupabase(){
+  if(!supabaseReady || !state.currentUser){ state.posts = []; return; }
+  const me = state.currentUser.id;
+  const [{ data: posts, error: postsErr }, { data: likes }, { data: comments }] = await Promise.all([
+    sb.from("posts").select("*").order("created_at", { ascending:false }),
+    sb.from("post_likes").select("post_id, user_id"),
+    sb.from("post_comments").select("*").order("created_at", { ascending:true }),
+  ]);
+  if(postsErr){ showToast(postsErr.message); state.posts = []; return; }
+
+  const likesByPost = {};
+  (likes||[]).forEach(l => { (likesByPost[l.post_id] ||= []).push(l.user_id); });
+  const commentsByPost = {};
+  (comments||[]).forEach(c => { (commentsByPost[c.post_id] ||= []).push(c); });
+
+  state.likedPosts = (likes||[]).filter(l=>l.user_id===me).map(l=>l.post_id);
+
+  state.posts = (posts||[]).map(p => {
+    const author = userById(p.author_id);
+    return {
+      id: p.id,
+      ticker: p.ticker,
+      sentiment: p.sentiment,
+      timeframe: p.timeframe,
+      caption: p.caption || "",
+      imageDataUrl: p.image_data_url,
+      authorId: p.author_id,
+      author: author ? author.name : "Trader",
+      createdAt: p.created_at,
+      entryPrice: p.entry_price, entryPriceLive: p.entry_price_live,
+      likes: (likesByPost[p.id]||[]).length,
+      comments: (commentsByPost[p.id]||[]).map(c => ({
+        id: c.id,
+        author: (userById(c.author_id)||{}).name || "Trader",
+        text: c.text,
+        createdAt: c.created_at,
+      })),
+    };
+  });
+}
+async function loadSocialData(){
+  const me = state.currentUser.id;
+  const [{ data: following }, { data: followers }, { data: allProfiles }] = await Promise.all([
+    sb.from("follows").select("following_id, profiles!follows_following_id_fkey(*)").eq("follower_id", me),
+    sb.from("follows").select("follower_id, profiles!follows_follower_id_fkey(*)").eq("following_id", me),
+    sb.from("profiles").select("*").neq("id", me),
+  ]);
+  state.following = (following||[]).map(r=>r.profiles).filter(Boolean);
+  state.followers = (followers||[]).map(r=>r.profiles).filter(Boolean);
+  state.allProfiles = allProfiles || [];
+  await loadConvoSummaries();
+  subscribeToMessages();
+}
+function userById(id){
+  if(state.currentUser && id===state.currentUser.id) return state.currentUser;
+  return state.users.find(u=>u.id===id) || state.allProfiles.find(u=>u.id===id)
+    || state.following.find(u=>u.id===id) || state.followers.find(u=>u.id===id)
+    || { id, name:"Unknown Trader", color:"#5B7083", handle:"" };
+}
+
+/* ================= NAV ================= */
+function showTab(tab){
+  state.activeTab = tab;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+tab).classList.add("active");
+  if(tab==="friends") renderFriendsPanel();
+  if(tab==="messages") renderMessagesPanel();
+  if(tab==="feed"){ renderWatchlist(); renderFeed(); }
+  if(tab==="home") renderHomePanel();
+  if(tab==="trending") renderTrending();
+  if(tab==="nepal-news") loadNepalNews();
+  if(tab==="world-news") loadWorldNews();
+}
+function onBellClick(){
+  showTab(newFollowerCount() ? "friends" : "messages");
+}
+
+/* ================= NOTIFICATIONS ================= */
+// "New followers" = people following you that you don't follow back yet — closest thing to a
+// friend-request style notification under a plain follow/follower model.
+function newFollowerCount(){
+  if(!state.currentUser) return 0;
+  const mine = followSet();
+  return state.followers.filter(p=>!mine.has(p.id)).length;
+}
+function totalUnread(){
+  return state.convoSummaries.reduce((sum,c)=>sum+(c.unread||0), 0);
+}
+function renderNotifBadges(){
+  const reqCount = newFollowerCount();
+  const msgCount = totalUnread();
+  const bellDot = document.getElementById("bell-dot");
+  bellDot.textContent = (reqCount+msgCount)>0 ? String(reqCount+msgCount) : "";
+  const fb = document.getElementById("friends-badge");
+  fb.style.display = reqCount>0 ? "inline-block" : "none"; fb.textContent = reqCount;
+  const mb = document.getElementById("messages-badge");
+  mb.style.display = msgCount>0 ? "inline-block" : "none"; mb.textContent = msgCount;
+}
+
+/* ================= WATCHLIST ================= */
+/* ================= LIVE PRICES (no key required) =================
+   Yahoo Finance's public chart endpoint now requires an authenticated session (started returning
+   401s after its Feb 2025 redesign), so it can't be used unauthenticated anymore. Using instead:
+   - Crypto: CoinGecko's simple/price endpoint — free, no key, sends proper CORS headers.
+   - Everything else (stocks/ETFs/indices): Stooq's CSV endpoint — free, no key, no CORS headers
+     of its own, so it's routed through the same CORS-proxy chain used for the news feeds below.
+================================================================================================= */
+const CRYPTO_IDS = { BTC:"bitcoin", ETH:"ethereum", SOL:"solana", BNB:"binancecoin", XRP:"ripple",
+  ADA:"cardano", DOGE:"dogecoin", DOT:"polkadot", MATIC:"matic-network", POL:"polygon-ecosystem-token",
+  LTC:"litecoin", AVAX:"avalanche-2", LINK:"chainlink", TRX:"tron", SHIB:"shiba-inu", ATOM:"cosmos",
+  UNI:"uniswap", XLM:"stellar", NEAR:"near", APT:"aptos" };
+const STOOQ_INDEX_ALIASES = { "SPX":"^spx", "US500":"^spx", "DJI":"^dji", "DOW":"^dji", "NDX":"^ndq",
+  "NASDAQ":"^ndq", "VIX":"^vix", "US30":"^dji" };
+const PRICE_CACHE_TTL_MS = 45000;
+const PRICE_BACKOFF_TTL_MS = 5*60000; // after repeated failures, stop hammering the proxy chain for this long
+const PRICE_MAX_CONSECUTIVE_FAILS = 3;
+
+function cryptoIdFor(ticker){
+  const t = ticker.toUpperCase();
+  const base = Object.keys(CRYPTO_IDS).find(b => t === b || t === b+"USD" || t === b+"USDT");
+  return base ? CRYPTO_IDS[base] : null;
+}
+
+// Resolves a watchlist ticker to the symbol Stooq expects.
+// - "AAPL"           -> "aapl.us"     (default: US-listed equities)
+// - "SPX" / "NASDAQ"  -> "^spx"/"^ndq" (known indices, see STOOQ_INDEX_ALIASES)
+// - "RELIANCE.IN"     -> "reliance.in" (user gave an explicit exchange suffix — passed straight through)
+// Stooq's exchange suffixes: .us (US), .uk (LSE), .de (Xetra), .jp (Tokyo), .in (India/NSE), .hk (Hong Kong), etc.
+function resolveStooqSymbol(ticker){
+  const t = ticker.trim();
+  const alias = STOOQ_INDEX_ALIASES[t.toUpperCase()];
+  if(alias) return { symbol: alias, explicitExchange: true };
+  if(t.includes(".")) return { symbol: t.toLowerCase(), explicitExchange: true };
+  return { symbol: t.toLowerCase() + ".us", explicitExchange: false };
+}
+
+function priceForFallback(ticker, note){
+  // Used only if live data can't be reached (offline, symbol unrecognized, all sources down) —
+  // keeps the UI populated instead of showing nothing, clearly marked as not live.
+  const h = hashStr(ticker);
+  const price = (20 + (h%48000)/100).toFixed(2);
+  const chg = (((h>>3)%4000)/100 - 20).toFixed(2);
+  return { price, chg: parseFloat(chg), live:false, error: note };
+}
+
+async function fetchCryptoPrice(ticker){
+  const id = cryptoIdFor(ticker);
+  const cgUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`;
+  const attempts = [
+    { label:"direct", run: () => fetchWithTimeout(cgUrl, 7000).then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP "+r.status))) },
+    ...CORS_PROXIES.map((build,i) => ({ label:"proxy"+i, run: async () => {
+      const { url, json } = build(cgUrl);
+      const res = await fetchWithTimeout(url, 9000);
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      if(json){ const data = await res.json(); return JSON.parse(data.contents); }
+      return res.json();
+    }}))
+  ];
+  const errors = [];
+  for(const a of attempts){
+    try{
+      const data = await a.run();
+      const entry = data[id];
+      if(!entry || typeof entry.usd !== "number") throw new Error("No data in response");
+      return { price: entry.usd.toFixed(entry.usd < 10 ? 4 : 2), chg: parseFloat((entry.usd_24h_change||0).toFixed(2)), live:true };
+    }catch(e){ errors.push(`${a.label}: ${e.message}`); }
+  }
+  throw new Error("CoinGecko unreachable — " + errors.join(" | "));
+}
+
+function parseStooqCsv(csv){
+  const lines = csv.trim().split("\n").map(l=>l.split(","));
+  const header = lines[0].map(h=>h.trim().toLowerCase());
+  const closeIdx = header.indexOf("close");
+  if(closeIdx === -1) throw new Error("Unexpected CSV format");
+  const closes = lines.slice(1)
+    .map(row => parseFloat(row[closeIdx]))
+    .filter(v => !isNaN(v));
+  if(!closes.length) throw new Error("No rows");
+  return closes;
+}
+
+async function fetchStooqPrice(ticker){
+  const { symbol, explicitExchange } = resolveStooqSymbol(ticker);
+  const d2 = new Date();
+  const d1 = new Date(d2.getTime() - 12*24*60*60*1000); // 12 days back so weekends/holidays don't leave us with <2 rows
+  const fmt = d => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
+  const stooqUrl = `https://stooq.com/q/d/l/?s=${encodeURIComponent(symbol)}&d1=${fmt(d1)}&d2=${fmt(d2)}&i=d`;
+
+  const attempts = [
+    { label:"direct", run: () => fetchWithTimeout(stooqUrl, 6000).then(r => r.ok ? r.text() : Promise.reject(new Error("HTTP "+r.status))) },
+    ...CORS_PROXIES.map((build,i) => ({ label:"proxy"+i, run: async () => {
+      const { url, json } = build(stooqUrl);
+      const res = await fetchWithTimeout(url, 9000);
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      if(json){ const data = await res.json(); return data.contents; }
+      return res.text();
+    }}))
+  ];
+
+  const errors = [];
+  for(const a of attempts){
+    try{
+      const csv = await a.run();
+      if(!csv) throw new Error("Empty response");
+      if(csv.trim().startsWith("<")) throw new Error("Got HTML, not CSV (proxy likely blocked/erroring)");
+      if(/^\s*Exceeded/i.test(csv) || /Exceeded the daily hits limit/i.test(csv)) throw new Error("Stooq daily limit hit");
+      const closes = parseStooqCsv(csv);
+      const price = closes[closes.length-1];
+      const prev = closes.length > 1 ? closes[closes.length-2] : price;
+      const chg = prev ? ((price - prev) / prev) * 100 : 0;
+      return { price: price.toFixed(price < 10 ? 4 : 2), chg: parseFloat(chg.toFixed(2)), live:true };
+    }catch(e){ errors.push(`${a.label}: ${e.message}`); }
+  }
+  // Non-US tickers without an explicit ".exchange" suffix are the #1 cause of "unrecognized symbol" —
+  // surface that clearly instead of a generic unreachable error, so the person knows what to fix.
+  if(!explicitExchange){
+    throw new Error(`"${ticker}" not found on US markets — for non-US tickers add the exchange, e.g. "${ticker}.IN" (India), "${ticker}.UK" (London), "${ticker}.HK" (Hong Kong)`);
+  }
+  throw new Error("Stooq unreachable — " + errors.join(" | "));
+}
+
+async function fetchLivePrice(ticker, force){
+  const cached = state.priceCache[ticker];
+  const fails = state.priceFailCount[ticker] || 0;
+  // Back off automatically after repeated failures — an unmapped/dead symbol will otherwise retry
+  // through the full proxy chain every 45s forever, which just adds load for no benefit.
+  const effectiveTtl = fails >= PRICE_MAX_CONSECUTIVE_FAILS ? PRICE_BACKOFF_TTL_MS : PRICE_CACHE_TTL_MS;
+  if(!force && cached && (Date.now() - cached.ts) < effectiveTtl) return cached;
+
+  let result;
+  try{
+    result = cryptoIdFor(ticker) ? await fetchCryptoPrice(ticker) : await fetchStooqPrice(ticker);
+    state.priceFailCount[ticker] = 0;
+  }catch(e){
+    console.error(`[watchlist] live price failed for ${ticker}:`, e.message);
+    state.priceFailCount[ticker] = fails + 1;
+    result = priceForFallback(ticker, e.message);
+  }
+  result.ts = Date.now();
+  state.priceCache[ticker] = result;
+  return result;
+}
+
+// Runs async fetchers with limited concurrency and a small stagger between starts, instead of
+// firing every watchlist ticker's request at once — gentler on the free CORS proxies we depend on.
+async function runLimited(items, worker, concurrency=3, staggerMs=120){
+  const results = new Array(items.length);
+  let next = 0;
+  async function lane(){
+    while(next < items.length){
+      const i = next++;
+      if(staggerMs) await new Promise(r=>setTimeout(r, staggerMs));
+      results[i] = await worker(items[i], i);
+    }
+  }
+  await Promise.all(Array.from({length:Math.min(concurrency, items.length)}, lane));
+  return results;
+}
+
+function stooqChartImgUrl(ticker){
+  // Stooq's public chart-image endpoint — no key required. Renders a small line chart PNG
+  // straight from their servers, so no CORS proxy or extra fetch call is needed for it.
+  const symbol = cryptoIdFor(ticker)
+    ? (ticker.toUpperCase().replace(/USDT?$/,"") + "usd")
+    : resolveStooqSymbol(ticker).symbol;
+  return `https://stooq.com/c/?s=${encodeURIComponent(symbol)}&c=3m&t=l&a=0&b=0&w=280&h=80`;
+}
+function priceChipHtml(t, data, loading){
+  const up = data.chg >= 0;
+  const priceStr = loading ? "…" : `$${data.price} ${up?'+':''}${data.chg}%`;
+  const nlBadge = (!loading && !data.live) ? ` <span title="${escapeHtml(data.error || 'Live data unavailable')}" style="opacity:.6; cursor:help;">•nl</span>` : '';
+  return `<div class="wl-chip" data-ticker="${escapeHtml(t)}">
+    <div class="t">${escapeHtml(t)}<button onclick="removeWatchTicker('${t}')" title="Remove">✕</button></div>
+    <div class="p ${loading?'':(up?'up':'down')}" style="${loading?'color:var(--ink-faint);':''}">${priceStr}${nlBadge}</div>
+    <img class="wl-spark" src="${stooqChartImgUrl(t)}" alt="" loading="lazy" onerror="this.classList.add('hidden')">
+  </div>`;
+}
+
+async function renderWatchlist(force){
+  const list = getWatchlist();
+  const row = document.getElementById("wl-row");
+  if(!list.length){ row.innerHTML = `<div style="font-size:12px; color:var(--ink-faint); padding:6px 2px;">No tickers yet — add one below.</div>`; return; }
+
+  // Paint instantly from cache (or a loading state) so the UI never looks empty, then patch in fresh data.
+  row.innerHTML = list.map(t=>{
+    const cached = state.priceCache[t];
+    return priceChipHtml(t, cached || {price:0,chg:0,live:false}, !cached);
+  }).join("");
+
+  const results = await runLimited(list, t => fetchLivePrice(t, force));
+  // Bail if the watchlist changed (or another render started) while we were fetching.
+  if(JSON.stringify(getWatchlist()) !== JSON.stringify(list)) return;
+  row.innerHTML = list.map((t,i) => priceChipHtml(t, results[i], false)).join("");
+}
+
+let priceRefreshTimer = null;
+function startPriceAutoRefresh(){
+  if(priceRefreshTimer) clearInterval(priceRefreshTimer);
+  priceRefreshTimer = setInterval(()=>{
+    if(state.activeTab === "feed" && document.visibilityState === "visible") renderWatchlist();
+  }, 45000);
+}
+
+function addWatchTicker(){
+  const input = document.getElementById("wl-input");
+  const t = input.value.trim().toUpperCase();
+  if(!t) return;
+  const list = getWatchlist();
+  if(list.includes(t)){ showToast(t+" is already on your watchlist"); return; }
+  list.push(t); saveWatchlist(list); input.value=""; renderWatchlist();
+}
+function removeWatchTicker(t){ saveWatchlist(getWatchlist().filter(x=>x!==t)); renderWatchlist(); }
+
+/* ================= CALL TRACKING (win/loss vs. price at time of posting) ================= */
+const CALL_MOVE_THRESHOLD_PCT = 0.3; // moves smaller than this count as a "push", not a win or loss
+
+function callOutcome(sentiment, pctChange){
+  if(sentiment === "bullish"){
+    if(pctChange > CALL_MOVE_THRESHOLD_PCT) return "win";
+    if(pctChange < -CALL_MOVE_THRESHOLD_PCT) return "loss";
+    return "push";
+  }
+  if(sentiment === "bearish"){
+    if(pctChange < -CALL_MOVE_THRESHOLD_PCT) return "win";
+    if(pctChange > CALL_MOVE_THRESHOLD_PCT) return "loss";
+    return "push";
+  }
+  // neutral call: win if price stayed roughly range-bound, loss if it broke out either direction
+  return Math.abs(pctChange) < CALL_MOVE_THRESHOLD_PCT*2 ? "win" : "loss";
+}
+
+function perfBadgeHtml(post, live, loading){
+  if(post.entryPrice == null) return ""; // posted before tracking existed, or entry price unavailable — untracked
+  if(loading) return `<span class="badge tf" data-perf-post="${post.id}" style="opacity:.6;">tracking…</span>`;
+  if(!live){
+    return `<span class="badge tf" data-perf-post="${post.id}" title="Couldn't fetch current price to score this call">— untracked</span>`;
+  }
+  const current = parseFloat(live.price);
+  const pct = ((current - post.entryPrice) / post.entryPrice) * 100;
+  const outcome = callOutcome(post.sentiment, pct);
+  const icon = outcome==="win" ? "✓" : outcome==="loss" ? "✕" : "•";
+  const cls = outcome==="win" ? "bullish" : outcome==="loss" ? "bearish" : "neutral";
+  const sign = pct>=0 ? "+" : "";
+  return `<span class="badge ${cls}" data-perf-post="${post.id}" title="Entry $${post.entryPrice} → now $${current}">${icon} ${sign}${pct.toFixed(1)}% since posted</span>`;
+}
+
+// After a feed/detail/profile render, fill in each post's performance badge asynchronously —
+// dedupes ticker lookups so posting five NVDA calls only costs one live-price fetch.
+async function hydrateCallPerformance(posts){
+  const tracked = posts.filter(p => p.entryPrice != null);
+  if(!tracked.length) return;
+  const tickers = [...new Set(tracked.map(p=>p.ticker))];
+  const results = await Promise.all(tickers.map(t => fetchLivePrice(t)));
+  const priceByTicker = {}; tickers.forEach((t,i)=> priceByTicker[t]=results[i]);
+  tracked.forEach(p => {
+    const el = document.querySelector(`[data-perf-post="${p.id}"]`);
+    if(!el) return;
+    const live = priceByTicker[p.ticker];
+    el.outerHTML = perfBadgeHtml(p, live && live.live ? live : null, false);
+  });
+}
+
+// Win rate across a set of posts (e.g. one trader's history) — pushes are excluded from the
+// percentage (they're neither a win nor a loss) but still counted toward "tracked".
+async function computeWinRate(posts){
+  const tracked = posts.filter(p => p.entryPrice != null);
+  if(!tracked.length) return null;
+  const tickers = [...new Set(tracked.map(p=>p.ticker))];
+  const results = await Promise.all(tickers.map(t => fetchLivePrice(t)));
+  const priceByTicker = {}; tickers.forEach((t,i)=> priceByTicker[t]=results[i]);
+  let wins=0, losses=0, pushes=0, unresolved=0;
+  tracked.forEach(p=>{
+    const live = priceByTicker[p.ticker];
+    if(!live || !live.live){ unresolved++; return; }
+    const pct = ((parseFloat(live.price) - p.entryPrice) / p.entryPrice) * 100;
+    const outcome = callOutcome(p.sentiment, pct);
+    if(outcome==="win") wins++; else if(outcome==="loss") losses++; else pushes++;
+  });
+  const decided = wins+losses;
+  return { wins, losses, pushes, unresolved, total: tracked.length, winRate: decided ? Math.round((wins/decided)*100) : null };
+}
+
+/* ================= IMAGE HANDLING ================= */
+function compressImage(file, maxDim=1000, quality=0.72){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(w > maxDim || h > maxDim){
+          if(w >= h){ h = Math.round(h*maxDim/w); w = maxDim; } else { w = Math.round(w*maxDim/h); h = maxDim; }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+async function handleFile(file){
+  if(!file) return;
+  if(!file.type || !file.type.startsWith("image/")){ showToast("Please choose an image file"); return; }
+  try{
+    const dataUrl = await compressImage(file);
+    state.newPost.image = dataUrl;
+    const dz = document.getElementById("drop-zone");
+    dz.classList.add("has-img");
+    dz.innerHTML = `<img src="${dataUrl}" alt="preview">`;
+  }catch(e){
+    showToast("Couldn't read that image: " + (e && e.message ? e.message : "unknown error"));
+  }
+}
+function setupDropZone(){
+  const dz = document.getElementById("drop-zone");
+  const fileInput = document.getElementById("file-input");
+  if(!dz || !fileInput) return;
+  ["dragenter","dragover"].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dz.style.borderColor = "var(--gold)"; }));
+  ["dragleave","drop"].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dz.style.borderColor = ""; }));
+  dz.addEventListener("drop", e => {
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if(file) handleFile(file);
+  });
+}
+
+/* ================= NEW POST ================= */
+function openNewPost(){
+  state.newPost = { image:null, timeframe:null, sentiment:null };
+  document.getElementById("drop-zone").classList.remove("has-img");
+  document.getElementById("drop-zone").innerHTML = `<div class="dz-label"><span class="em">📊</span>Tap to upload a chart screenshot</div>`;
+  document.getElementById("in-ticker").value = "";
+  document.getElementById("in-caption").value = "";
+  document.getElementById("posting-as").innerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "sm", state.currentUser.avatarUrl) + `<span>${escapeHtml(state.currentUser.name)}</span>`;
+  document.querySelectorAll("#tf-grid .tf-btn").forEach(b=>b.classList.remove("sel"));
+  document.querySelectorAll("#sent-control .seg-btn").forEach(b=>b.classList.remove("sel"));
+  document.getElementById("overlay-bg").classList.add("show");
+  document.getElementById("new-post-modal").classList.add("show");
+}
+function selectTimeframe(tf, el){ state.newPost.timeframe = tf; document.querySelectorAll("#tf-grid .tf-btn").forEach(b=>b.classList.toggle("sel", b===el)); }
+function selectSentiment(s){ state.newPost.sentiment = s; document.querySelectorAll("#sent-control .seg-btn").forEach(b=>b.classList.toggle("sel", b.dataset.s===s)); }
+
+async function submitPost(){
+  const ticker = document.getElementById("in-ticker").value.trim();
+  const caption = document.getElementById("in-caption").value.trim();
+  if(!state.newPost.image){ showToast("Add a chart image first"); return; }
+  if(!ticker){ showToast("Enter a ticker symbol"); return; }
+  if(!state.newPost.sentiment){ showToast("Pick a sentiment"); return; }
+  if(!state.newPost.timeframe){ showToast("Pick a timeframe"); return; }
+  if(!requireSupabase()) return;
+
+  const btn = document.getElementById("submit-btn"); btn.disabled = true; btn.textContent = "Posting…";
+  try{
+    const { data, error } = await sb.from("posts").insert({
+      author_id: state.currentUser.id,
+      ticker, sentiment: state.newPost.sentiment, timeframe: state.newPost.timeframe,
+      caption, image_data_url: state.newPost.image,
+    }).select().maybeSingle();
+    if(error) throw error;
+    state.posts.unshift({
+      id: data.id, ticker: data.ticker, sentiment: data.sentiment, timeframe: data.timeframe,
+      caption: data.caption || "", imageDataUrl: data.image_data_url,
+      authorId: data.author_id, author: state.currentUser.name, createdAt: data.created_at,
+      likes: 0, comments: [],
+      entryPrice: null, entryPriceLive: false,
+    });
+    closeModals(); renderFeed(); renderTape();
+    showToast("Posted to the feed 📈");
+
+    // Grab the entry price in the background so the post itself isn't held up waiting
+    // on a third-party price API — attach it to the post once it comes back.
+    (async () => {
+      try{
+        const snap = await fetchLivePrice(ticker.toUpperCase());
+        if(!snap.live) return;
+        const entryPrice = parseFloat(snap.price);
+        const { error: updErr } = await sb.from("posts")
+          .update({ entry_price: entryPrice, entry_price_live: true })
+          .eq("id", data.id);
+        if(updErr) return;
+        const local = state.posts.find(p => p.id === data.id);
+        if(local){ local.entryPrice = entryPrice; local.entryPriceLive = true; renderFeed(); renderTape(); }
+      }catch(e){ /* untracked, no big deal */ }
+    })();
+  }catch(e){ showToast("Couldn't post: " + (e.message||"try again")); }
+  btn.disabled = false; btn.textContent = "Post to Feed";
+}
+
+/* ================= FEED ================= */
+function setFilter(f, el){ state.filter = f; document.querySelectorAll("#filter-chips .chip").forEach(c=>c.classList.toggle("active", c===el)); renderFeed(); }
+function setSort(v){ state.sort = v; renderFeed(); }
+function visiblePosts(){
+  let list = state.posts.filter(p => (p.reports||0) < 5);
+  if(state.filter !== "all") list = list.filter(p => p.sentiment === state.filter);
+  list = [...list].sort((a,b)=> state.sort==="top" ? (b.likes-a.likes) : (new Date(b.createdAt)-new Date(a.createdAt)));
+  return list;
+}
+function renderFeed(){
+  const hiddenCount = state.posts.filter(p => (p.reports||0) >= 5).length;
+  const list = visiblePosts();
+  const feedEl = document.getElementById("feed");
+  if(!storageAvailable){
+    feedEl.innerHTML = `<div class="empty-state"><div class="em">🔌</div><p>Local storage isn't available in this browser.<br>Posts can't be saved or shown here.</p></div>`;
+    return;
+  }
+  if(list.length===0){
+    feedEl.innerHTML = `<div class="empty-state"><div class="em">📭</div><p>No charts posted yet.<br>Be the first to share your analysis.</p></div>`;
+    return;
+  }
+  feedEl.innerHTML = list.map(p => `
+    <div class="post-card" onclick="openDetail('${p.id}')">
+      <div class="post-thumb">
+        <img src="${p.imageDataUrl}" alt="${escapeHtml(p.ticker)} chart" loading="lazy">
+        <div class="sent-badge ${p.sentiment}">${sentArrow(p.sentiment)} $${escapeHtml(p.ticker)}</div>
+        <div class="tf-badge">${escapeHtml(p.timeframe)}</div>
+      </div>
+      <div class="post-body">
+        ${p.caption ? `<div class="post-caption">${escapeHtml(p.caption)}</div>` : ""}
+        ${p.entryPrice != null ? `<div>${perfBadgeHtml(p, null, true)}</div>` : ""}
+        <div class="post-meta">
+          <span class="post-author">${avatarHtml(p.author, colorFor(p.authorId||p.author), "sm")}${escapeHtml(p.author)} · ${timeAgo(p.createdAt)}</span>
+          <span class="post-stats"><span>❤ ${p.likes||0}</span><span>💬 ${(p.comments||[]).length}</span></span>
+        </div>
+      </div>
+    </div>
+  `).join("") + (hiddenCount>0 ? `<div class="hidden-note">${hiddenCount} post${hiddenCount>1?"s":""} hidden after community reports</div>` : "");
+  hydrateCallPerformance(list);
+}
+
+/* ================= TICKER TAPE ================= */
+function renderTape(){
+  const tape = document.getElementById("tape");
+  const track = document.getElementById("tape-track");
+  const recent = [...state.posts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,10);
+  if(recent.length===0){ tape.classList.add("empty"); track.innerHTML = `<div class="tape-seg">Waiting for the first post…</div>`; return; }
+  tape.classList.remove("empty");
+  const seg = p => `<div class="tape-seg ${p.sentiment==='bullish'?'bull':p.sentiment==='bearish'?'bear':''}"><b>$${escapeHtml(p.ticker)}</b> ${sentArrow(p.sentiment)} ${p.sentiment}</div>`;
+  const html = recent.map(seg).join("");
+  track.innerHTML = html + html;
+}
+
+/* ================= POST DETAIL ================= */
+// Shows the poster's avatar, name, @handle, bio, and Message/Follow buttons — same building
+// blocks used in the Friends tab — so anyone viewing a post can see who posted it and act on it.
+function authorProfileRowHtml(p){
+  const u = p.authorId ? userById(p.authorId) : null;
+  const isSelf = state.currentUser && p.authorId === state.currentUser.id;
+  if(!u){
+    // Fallback for posts without a resolvable profile (e.g. author left, or demo data).
+    return `<div class="author-row">${avatarHtml(p.author, colorFor(p.authorId||p.author), "sm")}Posted by ${escapeHtml(p.author)} · ${timeAgo(p.createdAt)}</div>`;
+  }
+  return `<div class="person-row" style="padding:10px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:4px 0 2px;">
+    <div style="cursor:pointer; display:flex; align-items:center; gap:10px; flex:1; min-width:0;" onclick="openProfile('${u.id}')">
+      ${avatarHtml(u.name, u.color, "", u.avatar_url)}
+      <div class="person-info">
+        <div class="pn">${escapeHtml(u.name)}${isSelf ? " (you)" : ""}</div>
+        <div class="ph">@${escapeHtml(u.handle||"")} · ${timeAgo(p.createdAt)}</div>
+        ${u.bio ? `<div class="pb">${escapeHtml(u.bio)}</div>` : ""}
+      </div>
+    </div>
+    <div class="person-actions">${isSelf ? "" : personActionButtons(u)}</div>
+  </div>`;
+}
+function openDetail(id){
+  const p = state.posts.find(x=>x.id===id); if(!p) return;
+  const isMine = state.currentUser && p.authorId === state.currentUser.id;
+  const liked = state.likedPosts.includes(id);
+  document.getElementById("detail-body").innerHTML = `
+    <img class="detail-img" src="${p.imageDataUrl}" alt="${escapeHtml(p.ticker)} chart" onclick="openLightbox('${p.imageDataUrl.replace(/'/g,"\\'")}')">
+    <div class="badge-row">
+      <span class="badge ${p.sentiment}">${sentArrow(p.sentiment)} $${escapeHtml(p.ticker)}</span>
+      <span class="badge tf">${escapeHtml(p.timeframe)}</span>
+      ${perfBadgeHtml(p, null, true)}
+    </div>
+    ${p.caption ? `<div class="detail-caption">${escapeHtml(p.caption)}</div>` : ""}
+    ${authorProfileRowHtml(p)}
+    <div class="detail-actions">
+      <button class="btn ${liked?'btn-outline-bull':'btn-ghost'}" onclick="toggleLike('${p.id}')">❤ ${p.likes||0}</button>
+      <button class="btn btn-ghost" onclick="reportPost('${p.id}')">🚩 Report</button>
+      ${isMine ? `<button class="btn btn-outline-bear" onclick="deletePost('${p.id}')">🗑 Delete</button>` : ""}
+    </div>
+    <div class="comments-title">Comments (${(p.comments||[]).length})</div>
+    <div id="comments-list">${renderComments(p)}</div>
+    <div class="comment-form">
+      <input type="text" id="comment-input" placeholder="Add a comment…">
+      <button class="btn btn-gold" onclick="addComment('${p.id}')">Send</button>
+    </div>
+  `;
+  document.getElementById("overlay-bg").classList.add("show");
+  document.getElementById("detail-modal").classList.add("show");
+  hydrateCallPerformance([p]);
+}
+function renderComments(p){
+  if(!(p.comments||[]).length) return `<div style="font-size:13px; color:var(--ink-faint); padding:4px 0 8px;">No comments yet — start the discussion.</div>`;
+  return p.comments.map(c=>`<div class="comment"><span class="ca">${escapeHtml(c.author)}</span><span class="ct">${timeAgo(c.createdAt)}</span><div class="cb">${escapeHtml(c.text)}</div></div>`).join("");
+}
+async function toggleLike(id){
+  const p = state.posts.find(x=>x.id===id); if(!p) return;
+  if(!requireSupabase()) return;
+  const me = state.currentUser.id;
+  const liked = state.likedPosts.includes(id);
+  try{
+    if(liked){
+      const { error } = await sb.from("post_likes").delete().eq("post_id", id).eq("user_id", me);
+      if(error) throw error;
+      state.likedPosts = state.likedPosts.filter(x=>x!==id);
+      p.likes = Math.max(0, (p.likes||0) - 1);
+    } else {
+      const { error } = await sb.from("post_likes").insert({ post_id: id, user_id: me });
+      if(error) throw error;
+      state.likedPosts.push(id);
+      p.likes = (p.likes||0) + 1;
+    }
+  }catch(e){ showToast(e.message||"Couldn't update like"); return; }
+  openDetail(id); renderFeed();
+}
+async function reportPost(id){
+  const p = state.posts.find(x=>x.id===id); if(!p) return;
+  if(!requireSupabase()) return;
+  const { error } = await sb.from("post_reports").insert({ post_id: id, reporter_id: state.currentUser.id });
+  if(error){ showToast(error.message.includes("duplicate") ? "You've already reported this post." : error.message); return; }
+  showToast("Thanks — reported for review.");
+  closeModals(); renderFeed();
+}
+async function deletePost(id){
+  if(!confirm("Delete this post? This can't be undone.")) return;
+  if(!requireSupabase()) return;
+  const { error } = await sb.from("posts").delete().eq("id", id).eq("author_id", state.currentUser.id);
+  if(error){ showToast(error.message); return; }
+  state.posts = state.posts.filter(p=>p.id!==id);
+  closeModals(); renderFeed(); renderTape();
+  showToast("Post deleted");
+}
+async function addComment(id){
+  const input = document.getElementById("comment-input");
+  const text = input.value.trim(); if(!text) return;
+  const p = state.posts.find(x=>x.id===id); if(!p) return;
+  if(!requireSupabase()) return;
+  const { data, error } = await sb.from("post_comments").insert({
+    post_id: id, author_id: state.currentUser.id, text,
+  }).select().maybeSingle();
+  if(error){ showToast(error.message); return; }
+  p.comments = p.comments || [];
+  p.comments.push({ id: data.id, author: state.currentUser.name, text: data.text, createdAt: data.created_at });
+  input.value = "";
+  openDetail(id); renderFeed();
+}
+
+/* ================= FRIENDS / FOLLOW (Supabase) ================= */
+function relationshipState(otherId){
+  const following = followSet().has(otherId), follower = followerSet().has(otherId);
+  if(following && follower) return "friends";
+  if(following) return "following";
+  if(follower) return "follower";
+  return "none";
+}
+async function followUser(otherId){
+  if(!requireSupabase()) return;
+  const { error } = await sb.from("follows").insert({ follower_id: state.currentUser.id, following_id: otherId });
+  if(error){ showToast(error.message); return; }
+  await loadSocialData();
+  renderFriendsPanel(); renderNotifBadges(); renderMessagesPanel();
+  const u = userById(otherId);
+  showToast("Following " + u.name + (followerSet().has(otherId) ? " 🤝 you're now friends" : ""));
+}
+async function unfollowUser(otherId){
+  if(!requireSupabase()) return;
+  const { error } = await sb.from("follows").delete().eq("follower_id", state.currentUser.id).eq("following_id", otherId);
+  if(error){ showToast(error.message); return; }
+  await loadSocialData();
+  renderFriendsPanel(); renderNotifBadges(); renderMessagesPanel();
+}
+function personActionButtons(u){
+  const rel = relationshipState(u.id);
+  const followBtn = rel==="following" || rel==="friends"
+    ? `<button class="btn btn-ghost btn-sm" onclick="unfollowUser('${u.id}')">Unfollow</button>`
+    : `<button class="btn btn-gold btn-sm" onclick="followUser('${u.id}')">＋ Follow</button>`;
+  return `<button class="btn btn-outline-bull btn-sm" onclick="openChat('${u.id}')">Message</button>${followBtn}`;
+}
+function filterBySearch(list, q){
+  if(!q) return list;
+  return list.filter(u => {
+    const name = (u.name||"").toLowerCase();
+    const handle = (u.handle||"").toLowerCase();
+    const nameStartsWith = name.split(/\s+/).some(word => word.startsWith(q));
+    return name.startsWith(q) || nameStartsWith || handle.startsWith(q) || ("@"+handle).startsWith(q);
+  });
+}
+function personRowHtml(u, extraNote){
+  return `<div class="person-row">
+    <div style="cursor:pointer; display:flex; align-items:center; gap:10px; flex:1; min-width:0;" onclick="openProfile('${u.id}')">
+      ${avatarHtml(u.name, u.color, "", u.avatar_url)}
+      <div class="person-info">
+        <div class="pn">${escapeHtml(u.name)}</div>
+        <div class="ph">@${escapeHtml(u.handle||"")}</div>
+        ${u.bio ? `<div class="pb">${escapeHtml(u.bio)}</div>` : ""}
+        ${extraNote ? `<div class="pb">${extraNote}</div>` : ""}
+      </div>
+    </div>
+    <div class="person-actions">${personActionButtons(u)}</div>
+  </div>`;
+}
+function emptyRow(text){ return `<div class="empty-state" style="padding:24px 10px;"><p>${text}</p></div>`; }
+
+function renderFriendsPanel(){
+  if(!state.currentUser) return;
+  if(!supabaseReady){
+    document.getElementById("suggested-grid").innerHTML = emptyRow("Connect Supabase to see other traders you can add.");
+    return;
+  }
+  const q = (document.getElementById("friend-search").value||"").trim().toLowerCase();
+
+  let suggestions = filterBySearch(state.allProfiles.filter(u=>!followSet().has(u.id)), q);
+  suggestions = suggestions.slice().sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  document.getElementById("suggested-grid").innerHTML = suggestions.length ? suggestions.map(u=>`
+    <div class="person-card">
+      <div style="cursor:pointer;" onclick="openProfile('${u.id}')">
+        ${avatarHtml(u.name, u.color, "lg", u.avatar_url)}
+        <div class="pn">${escapeHtml(u.name)}</div>
+        <div class="ph">@${escapeHtml(u.handle||"")}</div>
+        <div class="pb">${escapeHtml(u.bio||"Elite Elliott trader")}</div>
+      </div>
+      <button class="btn btn-gold btn-sm" style="width:100%; justify-content:center;" onclick="followUser('${u.id}')">＋ Follow</button>
+    </div>
+  `).join("") : `<div class="empty-state" style="padding:20px 10px; grid-column:1/-1;"><p>${q ? 'No traders match your search.' : 'No other traders have signed up yet — invite some friends!'}</p></div>`;
+}
+
+/* ================= USER PROFILE (view another trader) ================= */
+let profileTabData = { friends: [], following: [], followers: [] };
+let profileTabActive = "friends";
+async function openProfile(otherId){
+  if(!otherId) return;
+  if(!state.currentUser){ return; }
+  const isSelf = otherId === state.currentUser.id;
+  const u = isSelf ? state.currentUser : userById(otherId);
+  if(!u){ showToast("Couldn't load that profile."); return; }
+
+  const avatarBlock = isSelf ? `
+    <div style="position:relative; display:inline-block;">
+      <div id="profile-avatar-wrap">${avatarHtml(u.name, u.color, "lg", u.avatarUrl)}</div>
+      <button class="btn btn-gold btn-sm" style="position:absolute; bottom:-4px; right:-4px; border-radius:50%; width:30px; height:30px; padding:0; justify-content:center;" onclick="document.getElementById('avatar-file-input').click()" title="Change profile picture">📷</button>
+    </div>
+    <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this.files[0])">
+  ` : avatarHtml(u.name, u.color, "lg", u.avatar_url);
+
+  profileTabActive = "friends";
+  document.getElementById("profile-body").innerHTML = `
+    <div style="text-align:center; padding:6px 0 4px;">
+      ${avatarBlock}
+      <div class="pn" style="font-size:18px; margin-top:10px;">${escapeHtml(u.name)}${isSelf ? " (you)" : ""}</div>
+      <div class="ph">@${escapeHtml((u.handle||"").replace(/^@/,""))}</div>
+      ${u.bio ? `<div class="pb" style="margin-top:6px;">${escapeHtml(u.bio)}</div>` : ""}
+      <div id="profile-winrate" style="margin-top:8px;"></div>
+    </div>
+    <div class="person-actions" style="justify-content:center; display:flex; gap:8px; margin:14px 0 6px;">
+      ${isSelf
+        ? `<button class="btn btn-ghost btn-sm" onclick="closeModals(); showTab('home')">✎ Edit profile</button><button class="btn btn-outline-bear btn-sm" onclick="closeModals(); signOut()">Sign out</button>`
+        : personActionButtons(u)}
+    </div>
+    <div id="profile-social-section" style="margin-top:18px;">
+      <div class="subtab-row">
+        <button class="subtab-btn active" data-psub="friends" onclick="setProfileTab('friends')">Friends</button>
+        <button class="subtab-btn" data-psub="following" onclick="setProfileTab('following')">Following</button>
+        <button class="subtab-btn" data-psub="followers" onclick="setProfileTab('followers')">Followers</button>
+      </div>
+      <div id="profile-social-list" style="padding:10px 0;">Loading…</div>
+    </div>
+    <div id="profile-posts-section" style="margin-top:18px;">
+      <div class="comments-title">${isSelf ? "Your Post History" : "Post History"}</div>
+      <div id="profile-posts-list" style="padding:8px 0;">Loading…</div>
+    </div>
+  `;
+  document.getElementById("overlay-bg").classList.add("show");
+  document.getElementById("profile-modal").classList.add("show");
+
+  // Load friends / following / followers for this profile (self or other).
+  if(requireSupabase()){
+    try{
+      let following, followers;
+      if(isSelf){
+        following = state.following;
+        followers = state.followers;
+      } else {
+        const [{ data: theirFollowing, error: e1 }, { data: theirFollowers, error: e2 }] = await Promise.all([
+          sb.from("follows").select("following_id, profiles!follows_following_id_fkey(*)").eq("follower_id", otherId),
+          sb.from("follows").select("follower_id, profiles!follows_follower_id_fkey(*)").eq("following_id", otherId),
+        ]);
+        if(e1) throw e1; if(e2) throw e2;
+        following = (theirFollowing||[]).map(r=>r.profiles).filter(Boolean);
+        followers = (theirFollowers||[]).map(r=>r.profiles).filter(Boolean);
+      }
+      const followingIds = new Set(following.map(p=>p.id));
+      const followerIds = new Set(followers.map(p=>p.id));
+      profileTabData = {
+        friends: following.filter(p=>followerIds.has(p.id)),
+        following, followers,
+      };
+    }catch(e){
+      profileTabData = { friends: [], following: [], followers: [] };
+    }
+    renderProfileSocialList(u, isSelf);
+  }
+
+  // Post history.
+  const theirPosts = state.posts.filter(p=>p.authorId===otherId).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const postsEl = document.getElementById("profile-posts-list");
+  if(postsEl){
+    postsEl.innerHTML = theirPosts.length ? `
+      <div class="feed" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px;">
+        ${theirPosts.map(p=>`
+          <div class="post-card" onclick="closeModals(); openDetail('${p.id}')">
+            <div class="post-thumb"><img src="${p.imageDataUrl}" alt="${escapeHtml(p.ticker)} chart" loading="lazy"></div>
+            <div style="padding:8px 10px; display:flex; flex-direction:column; gap:5px;">
+              <span class="badge ${p.sentiment}" style="font-size:11px;">${sentArrow(p.sentiment)} $${escapeHtml(p.ticker)}</span>
+              ${p.entryPrice != null ? perfBadgeHtml(p, null, true) : ""}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    ` : emptyRow(isSelf ? "You haven't posted any charts yet." : `${escapeHtml(u.name)} hasn't posted any charts yet.`);
+  }
+  hydrateCallPerformance(theirPosts);
+
+  // Win rate — computed from tracked calls only; posts made before this feature existed
+  // (no entry_price) aren't counted since there's nothing to score them against.
+  const winRateEl = document.getElementById("profile-winrate");
+  if(winRateEl){
+    computeWinRate(theirPosts).then(stats=>{
+      if(!winRateEl.isConnected) return; // profile modal may have closed by the time this resolves
+      if(!stats || stats.winRate == null){
+        winRateEl.innerHTML = "";
+        return;
+      }
+      const cls = stats.winRate >= 55 ? "bullish" : stats.winRate <= 45 ? "bearish" : "neutral";
+      winRateEl.innerHTML = `<span class="badge ${cls}" title="${stats.wins}W · ${stats.losses}L · ${stats.pushes} push${stats.unresolved?` · ${stats.unresolved} pending`:""}">📊 ${stats.winRate}% win rate · ${stats.wins+stats.losses} call${stats.wins+stats.losses===1?"":"s"} scored</span>`;
+    });
+  }
+}
+function setProfileTab(tab){
+  profileTabActive = tab;
+  document.querySelectorAll("#profile-social-section .subtab-btn").forEach(b=>b.classList.toggle("active", b.dataset.psub===tab));
+  renderProfileSocialList();
+}
+function renderProfileSocialList(){
+  const listEl = document.getElementById("profile-social-list");
+  if(!listEl) return;
+  const list = profileTabData[profileTabActive] || [];
+  const labels = {
+    friends: "No mutual friends yet.",
+    following: "Not following anyone yet.",
+    followers: "No followers yet.",
+  };
+  listEl.innerHTML = list.length
+    ? list.map(p=>personRowHtml(p)).join("")
+    : emptyRow(labels[profileTabActive]);
+}
+// Upload / change your own profile picture. Compresses the image and stores it as a data URL
+// on your profiles row (same approach the chart posts use — no storage bucket required).
+async function handleAvatarUpload(file){
+  if(!file || !state.currentUser) return;
+  if(!requireSupabase()) return;
+  try{
+    const dataUrl = await compressImage(file, 400, 0.8);
+    const { error } = await sb.from("profiles").update({ avatar_url: dataUrl }).eq("id", state.currentUser.id);
+    if(error) throw error;
+    state.currentUser.avatarUrl = dataUrl;
+    saveCurrentUser(state.currentUser);
+    const wrap = document.getElementById("profile-avatar-wrap");
+    if(wrap) wrap.innerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "lg", dataUrl);
+    const myAvatarEl = document.getElementById("my-avatar");
+    if(myAvatarEl) myAvatarEl.outerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "", dataUrl).replace('class="avatar "','id="my-avatar" class="avatar" onclick="openProfile(state.currentUser.id)" title="View your profile"');
+    const avatarPreview = document.getElementById("home-avatar-preview");
+    if(avatarPreview) avatarPreview.innerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "", dataUrl);
+    renderFeed();
+    showToast("Profile picture updated");
+  }catch(e){
+    showToast(e.message || "Couldn't upload image");
+  }
+}
+
+/* ================= DIRECT MESSAGES (Supabase + Realtime) ================= */
+// Builds one row per person you've exchanged messages with (most recent first), each with
+// a preview of the last message and an unread count — pulled straight from Supabase.
+async function loadConvoSummaries(){
+  if(!supabaseReady || !state.currentUser) { state.convoSummaries = []; return; }
+  const me = state.currentUser.id;
+  const { data, error } = await sb.from("messages")
+    .select("*")
+    .or(`sender_id.eq.${me},recipient_id.eq.${me}`)
+    .order("created_at", { ascending:false });
+  if(error){ console.warn("loadConvoSummaries", error); state.convoSummaries = []; return; }
+  const byOther = new Map();
+  for(const m of (data||[])){
+    const otherId = m.sender_id===me ? m.recipient_id : m.sender_id;
+    if(!byOther.has(otherId)) byOther.set(otherId, { otherId, last:m, unread:0 });
+    if(m.recipient_id===me && !m.read) byOther.get(otherId).unread++;
+  }
+  // make sure every profile we know about is at least resolvable via userById
+  state.allProfiles.forEach(p=>{ if(!state.users.find(u=>u.id===p.id)) state.users.push(p); });
+  state.convoSummaries = Array.from(byOther.values());
+}
+function renderMessagesPanel(){
+  if(!state.currentUser) return;
+  const listEl = document.getElementById("convo-list");
+  if(!supabaseReady){
+    listEl.innerHTML = emptyRow("Connect Supabase to send and receive real direct messages.");
+    return;
+  }
+  if(!state.convoSummaries.length){
+    listEl.innerHTML = `<div class="empty-state"><div class="em">💬</div><p>No conversations yet.<br>Message a friend or follower to start one.</p></div>`;
+    return;
+  }
+  listEl.innerHTML = state.convoSummaries.map(c=>{
+    const u = userById(c.otherId);
+    const mine = c.last.sender_id===state.currentUser.id;
+    const preview = (mine?"You: ":"") + c.last.content;
+    return `<div class="convo-row ${c.unread?'unread':''}" onclick="openChat('${c.otherId}')">
+      ${avatarHtml(u.name, u.color, "", u.avatar_url)}
+      <div class="convo-info">
+        <div class="cn">${escapeHtml(u.name)}<span class="ctime">${timeAgo(c.last.created_at)}</span></div>
+        <div class="clast">${escapeHtml(preview)}</div>
+      </div>
+      ${c.unread ? `<span class="unread-dot"></span>` : ''}
+    </div>`;
+  }).join("");
+}
+
+async function openChat(otherId){
+  if(!requireSupabase()) return;
+  state.activeChatId = otherId;
+  const u = userById(otherId);
+  document.getElementById("chat-avatar").outerHTML = avatarHtml(u.name, u.color, "sm", u.avatar_url).replace('class="avatar sm"','id="chat-avatar" class="avatar sm"');
+  document.getElementById("chat-name").textContent = u.name;
+  document.getElementById("chat-sub").textContent = "@" + (u.handle||"");
+  document.getElementById("chat-thread").innerHTML = `<div class="loading">Loading messages…</div>`;
+  document.getElementById("overlay-bg").classList.add("show");
+  document.getElementById("chat-modal").classList.add("show");
+  await loadChatThread(otherId);
+  await markConvoRead(otherId);
+  setTimeout(()=>{ const inp=document.getElementById("chat-input"); inp.value=""; inp.focus(); }, 0);
+}
+async function loadChatThread(otherId){
+  const me = state.currentUser.id;
+  const { data, error } = await sb.from("messages")
+    .select("*")
+    .or(`and(sender_id.eq.${me},recipient_id.eq.${otherId}),and(sender_id.eq.${otherId},recipient_id.eq.${me})`)
+    .order("created_at", { ascending:true });
+  if(error){ showToast(error.message); return; }
+  state.messages = data || [];
+  renderChatThread();
+}
+async function markConvoRead(otherId){
+  const { error } = await sb.from("messages").update({ read:true })
+    .eq("sender_id", otherId).eq("recipient_id", state.currentUser.id).eq("read", false);
+  if(!error){ await loadConvoSummaries(); renderNotifBadges(); renderMessagesPanel(); }
+}
+function renderChatThread(){
+  if(!state.activeChatId) return;
+  const thread = document.getElementById("chat-thread");
+  let html = state.messages.map(m=>{
+    const mine = m.sender_id===state.currentUser.id;
+    return `<div class="msg-row ${mine?'me':'them'}"><div><div class="msg-bubble">${escapeHtml(m.content)}</div><span class="msg-time">${shortTime(m.created_at)}</span></div></div>`;
+  }).join("");
+  if(!state.messages.length) html = `<div style="text-align:center; color:var(--ink-faint); font-size:12.5px; padding:20px 0;">This is the start of your conversation.</div>`;
+  thread.innerHTML = html;
+  thread.scrollTop = thread.scrollHeight;
+}
+async function sendChatMessage(){
+  if(!state.activeChatId || !requireSupabase()) return;
+  const input = document.getElementById("chat-input");
+  const content = input.value.trim(); if(!content) return;
+  input.value = "";
+  const { error } = await sb.from("messages").insert({
+    sender_id: state.currentUser.id, recipient_id: state.activeChatId, content
+  });
+  if(error){ showToast(error.message); return; }
+  // Realtime subscription (below) will push this back to us and re-render the thread.
+}
+// Live-updates: any message sent to or by the current user (from any tab/device) streams in instantly.
+function subscribeToMessages(){
+  if(!supabaseReady || !state.currentUser) return;
+  if(state.msgChannel) sb.removeChannel(state.msgChannel);
+  const me = state.currentUser.id;
+  state.msgChannel = sb.channel("messages-" + me)
+    .on("postgres_changes", { event:"INSERT", schema:"public", table:"messages", filter:`recipient_id=eq.${me}` }, handleIncomingMessage)
+    .on("postgres_changes", { event:"INSERT", schema:"public", table:"messages", filter:`sender_id=eq.${me}` }, handleIncomingMessage)
+    .subscribe();
+}
+async function handleIncomingMessage(payload){
+  const m = payload.new;
+  const otherId = m.sender_id===state.currentUser.id ? m.recipient_id : m.sender_id;
+  if(state.activeChatId===otherId){
+    state.messages.push(m);
+    renderChatThread();
+    if(m.recipient_id===state.currentUser.id) markConvoRead(otherId);
+  } else if(m.recipient_id===state.currentUser.id){
+    showToast("New message from " + userById(m.sender_id).name);
+  }
+  await loadConvoSummaries();
+  renderMessagesPanel(); renderNotifBadges();
+}
+
+/* ================= LIGHTBOX / MODALS ================= */
+function openLightbox(src){ document.getElementById("lightbox-img").src = src; document.getElementById("lightbox").classList.add("show"); }
+function closeLightbox(e){ if(e) e.stopPropagation(); document.getElementById("lightbox").classList.remove("show"); }
+function closeModals(){
+  document.getElementById("overlay-bg").classList.remove("show");
+  document.getElementById("new-post-modal").classList.remove("show");
+  document.getElementById("detail-modal").classList.remove("show");
+  document.getElementById("chat-modal").classList.remove("show");
+  document.getElementById("signout-modal").classList.remove("show");
+  document.getElementById("profile-modal").classList.remove("show");
+  state.activeChatId = null;
+}
+
+/* ================= STATIC UI ================= */
+function buildStaticUI(){
+  document.getElementById("tf-grid").innerHTML = TIMEFRAMES.map(tf=>`<div class="tf-btn" onclick="selectTimeframe('${tf}', this)">${tf}</div>`).join("");
+  const chips = [["all","All"],["bullish","▲ Bullish"],["neutral","● Neutral"],["bearish","▼ Bearish"]];
+  document.getElementById("filter-chips").innerHTML = chips.map(([v,l],i)=>`<span class="chip ${i===0?'active':''}" data-s="${v}" onclick="setFilter('${v}', this)">${l}</span>`).join("");
+  setupDropZone();
+}
+
+/* ================= HOME / SOCIAL / SECURITY ================= */
+const SOCIAL_LINKS = [
+  { name:"YouTube",  sub:"Elliott Wave with Statistical", url:"https://www.youtube.com/@NepseElliottwaveanalysis", color:"#FF0000", icon:"▶" },
+  { name:"Instagram", sub:"@ewt_aashish",        url:"https://www.instagram.com/ewt_aashish/", color:"#E1306C", icon:"📷" },
+  { name:"Discord",   sub:"Community server",    url:"https://discord.gg/ryhbrjAFn", color:"#5865F2", icon:"💬" }
+];
+function renderSocialGrid(){
+  document.getElementById("social-grid").innerHTML = SOCIAL_LINKS.map(s=>`
+    <a class="social-link" href="${s.url}" target="_blank" rel="noopener noreferrer">
+      <div class="si" style="background:${s.color}">${s.icon}</div>
+      <div><div class="sl-name">${escapeHtml(s.name)}</div><div class="sl-sub">${escapeHtml(s.sub)}</div></div>
+    </a>
+  `).join("");
+}
+async function changePasswordFromHome(){
+  if(!requireSupabase()) return;
+  const input = document.getElementById("home-new-password");
+  const pw = input.value;
+  if(pw.length < 6){ showToast("Password should be at least 6 characters."); return; }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  if(error){ showToast(error.message); return; }
+  input.value = "";
+  showToast("Password updated ✅");
+}
+function renderHomePanel(){
+  if(!state.currentUser) return;
+  document.getElementById("home-acct-info").innerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "", state.currentUser.avatarUrl) +
+    `<div><div style="font-weight:700; font-size:14px;">${escapeHtml(state.currentUser.name)}</div><div style="font-size:12px; color:var(--ink-faint);">${escapeHtml(state.currentUser.email||"")}</div></div>`;
+  const avatarPreview = document.getElementById("home-avatar-preview");
+  if(avatarPreview) avatarPreview.innerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "", state.currentUser.avatarUrl);
+  renderSocialGrid();
+  document.getElementById("asc-current-email").textContent = "Signed in as " + (state.currentUser.email||"");
+  const nameInput = document.getElementById("home-edit-name");
+  const handleInput = document.getElementById("home-edit-handle");
+  if(nameInput && document.activeElement !== nameInput) nameInput.value = state.currentUser.name || "";
+  if(handleInput && document.activeElement !== handleInput) handleInput.value = state.currentUser.handle || "";
+}
+async function saveProfileFromHome(){
+  if(!requireSupabase()) return;
+  const note = document.getElementById("home-edit-note");
+  const name = document.getElementById("home-edit-name").value.trim();
+  const handle = document.getElementById("home-edit-handle").value.trim();
+  if(!name){ showToast("Name can't be empty."); return; }
+  if(!handle || handle.length < 3){ showToast("Username must be at least 3 characters."); return; }
+
+  // Check uniqueness (excluding self) before attempting the update.
+  const { data: existing, error: checkErr } = await sb.from("profiles")
+    .select("id").eq("handle", handle).neq("id", state.currentUser.id).maybeSingle();
+  if(checkErr){ showToast(checkErr.message); return; }
+  if(existing){ if(note) note.textContent = "That username is already taken — try another."; showToast("Username already taken."); return; }
+
+  const { data, error } = await sb.from("profiles")
+    .update({ name, handle })
+    .eq("id", state.currentUser.id)
+    .select().maybeSingle();
+  if(error){ showToast(error.message); return; }
+
+  state.currentUser.name = data.name;
+  state.currentUser.handle = data.handle;
+  if(note) note.textContent = "Letters, numbers, and underscores only. Your username must be unique.";
+  showToast("Profile updated ✅");
+  renderHomePanel();
+  const myAvatarEl = document.getElementById("my-avatar");
+  if(myAvatarEl) myAvatarEl.outerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "", state.currentUser.avatarUrl).replace('class="avatar "','id="my-avatar" class="avatar" onclick="openProfile(state.currentUser.id)" title="View your profile"');
+}
+
+/* ================= TRENDING ================= */
+function renderTrending(){
+  const scores = {};
+  for(const p of state.posts){
+    if((p.reports||0) >= 5) continue;
+    const t = (p.ticker||"").toUpperCase().trim();
+    if(!t) continue;
+    if(!scores[t]) scores[t] = { ticker:t, posts:0, likes:0, comments:0, bullish:0, bearish:0, topPost:null };
+    scores[t].posts += 1;
+    scores[t].likes += (p.likes||0);
+    scores[t].comments += (p.comments||[]).length;
+    if(p.sentiment==="bullish") scores[t].bullish++;
+    if(p.sentiment==="bearish") scores[t].bearish++;
+    // Track the single best post for this ticker (most liked, ties broken by newest) so the row can open it directly.
+    if(!scores[t].topPost || (p.likes||0) > (scores[t].topPost.likes||0) ||
+       ((p.likes||0) === (scores[t].topPost.likes||0) && new Date(p.createdAt) > new Date(scores[t].topPost.createdAt))){
+      scores[t].topPost = p;
+    }
+  }
+  const ranked = Object.values(scores)
+    .map(s => ({ ...s, score: s.posts*3 + s.likes*2 + s.comments }))
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,20);
+  const listEl = document.getElementById("trend-list");
+  if(!ranked.length){
+    listEl.innerHTML = `<div class="empty-state"><div class="em">🔥</div><p>Nothing trending yet.<br>Post a chart to get things moving.</p></div>`;
+    return;
+  }
+  listEl.innerHTML = ranked.map((s,i)=>{
+    const lean = s.bullish===s.bearish ? "Mixed" : (s.bullish>s.bearish ? "▲ Bullish lean" : "▼ Bearish lean");
+    return `<div class="trend-row ${i===0?'r1':i===1?'r2':i===2?'r3':''}" style="cursor:pointer;" onclick="openDetail('${s.topPost.id}')" title="View top $${escapeHtml(s.ticker)} post">
+      <div class="trend-rank">${i+1}</div>
+      <div class="trend-main"><div class="tt">$${escapeHtml(s.ticker)}</div><div class="tm">${s.posts} post${s.posts>1?'s':''} · ${lean}</div></div>
+      <div class="trend-score"><div class="ts-val">${s.score}</div><div class="ts-lbl">${s.likes}♥ · ${s.comments}💬</div></div>
+    </div>`;
+  }).join("");
+}
+
+/* ================= LIVE NEWS (RSS via public CORS proxy, no key required) ================= */
+const NEWS_FEEDS = {
+  nepal: [
+    // Direct feed, confirmed serving real application/rss+xml.
+    { name:"Online Khabar", url:"https://www.onlinekhabar.com/feed" },
+    // kathmandupost.com and thehimalayantimes.com no longer expose working public RSS endpoints
+    // (the old /author/rss and /rss_2.php paths now return HTML or a JS challenge page), so we
+    // pull their latest coverage through Google News' site-scoped search feed instead.
+    { name:"Kathmandu Post", url:"https://news.google.com/rss/search?q=when:2d+site:kathmandupost.com&hl=en-NP&gl=NP&ceid=NP:en" },
+    { name:"Himalayan Times", url:"https://news.google.com/rss/search?q=when:2d+site:thehimalayantimes.com&hl=en-NP&gl=NP&ceid=NP:en" },
+    { name:"Setopati", url:"https://news.google.com/rss/search?q=when:2d+site:setopati.com&hl=en-NP&gl=NP&ceid=NP:en" },
+    // Catch-all top stories for Nepal, so anything the site-specific feeds miss still shows up.
+    { name:"Nepal Top Stories", url:"https://news.google.com/rss/headlines/section/geo/Nepal?hl=en-NP&gl=NP&ceid=NP:en" }
+  ],
+  world: [
+    { name:"BBC World", url:"https://feeds.bbci.co.uk/news/world/rss.xml" },
+    { name:"Al Jazeera", url:"https://www.aljazeera.com/xml/rss/all.xml" },
+    { name:"The Guardian", url:"https://www.theguardian.com/world/rss" },
+    { name:"NYT World", url:"https://rss.nytimes.com/services/xml/rss/nyt/World.xml" },
+    // Reuters retired its public RSS feeds, so their wire coverage comes through Google News instead.
+    { name:"Reuters", url:"https://news.google.com/rss/search?q=when:1d+site:reuters.com&hl=en-US&gl=US&ceid=US:en" },
+    { name:"Top World Stories", url:"https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en" }
+  ]
+};
+const CORS_PROXIES = [
+  u => ({ url: "https://api.allorigins.win/raw?url=" + encodeURIComponent(u), json:false }),
+  u => ({ url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u), json:false }),
+  u => ({ url: "https://corsproxy.io/?url=" + encodeURIComponent(u), json:false }),
+  u => ({ url: "https://api.allorigins.win/get?url=" + encodeURIComponent(u), json:true }),
+  u => ({ url: "https://r.jina.ai/" + u, json:false }),
+  u => ({ url: "https://thingproxy.freeboard.io/fetch/" + u, json:false })
+];
+function fetchWithTimeout(url, ms){
+  const controller = new AbortController();
+  const t = setTimeout(()=>controller.abort(), ms);
+  return fetch(url, { signal: controller.signal }).finally(()=>clearTimeout(t));
+}
+const newsCache = { nepal:null };
+function textOf(node, selector){
+  const el = node.querySelector(selector);
+  return el ? (el.textContent || "").trim() : "";
+}
+function parseRssXml(xmlText){
+  const doc = new DOMParser().parseFromString(xmlText, "text/xml");
+  if(doc.querySelector("parsererror")) throw new Error("Bad XML");
+  const isAtom = !!doc.querySelector("feed > entry");
+  const nodes = isAtom ? Array.from(doc.querySelectorAll("entry")) : Array.from(doc.querySelectorAll("item"));
+  return nodes.map(n => {
+    let link = "";
+    if(isAtom){
+      const linkEl = n.querySelector("link[href]");
+      link = linkEl ? linkEl.getAttribute("href") : "";
+    } else {
+      link = textOf(n, "link");
+    }
+    let img = "";
+    const media = n.querySelector("media\\:content, media\\:thumbnail, enclosure[type^='image']");
+    if(media) img = media.getAttribute("url") || "";
+    if(!img){
+      const desc = textOf(n, "description") || textOf(n, "summary") || textOf(n, "content");
+      const m = desc.match(/<img[^>]+src="([^"]+)"/i);
+      if(m) img = m[1];
+    }
+    const pub = textOf(n,"pubDate") || textOf(n,"published") || textOf(n,"updated");
+    return {
+      title: textOf(n,"title"),
+      link,
+      thumbnail: img,
+      pubDate: pub
+    };
+  });
+}
+async function fetchRssItems(feedUrl){
+  let lastErr;
+
+  // Try rss2json first — purpose-built for this, generally more reliable than generic CORS proxies.
+  try{
+    const r2jUrl = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(feedUrl);
+    const res = await fetchWithTimeout(r2jUrl, 8000);
+    if(res.ok){
+      const data = await res.json();
+      if(data.status === "ok" && Array.isArray(data.items) && data.items.length){
+        return data.items.map(it => ({
+          title: it.title || "",
+          link: it.link || "",
+          thumbnail: it.thumbnail || it.enclosure?.link || "",
+          pubDate: it.pubDate || ""
+        }));
+      }
+    }
+  }catch(e){ lastErr = e; }
+
+  // try a direct fetch next, in case the feed itself allows CORS
+  try{
+    const res = await fetchWithTimeout(feedUrl, 6000);
+    if(res.ok){
+      const items = parseRssXml(await res.text());
+      if(items.length) return items;
+    }
+  }catch(e){ lastErr = e; }
+
+  for(const build of CORS_PROXIES){
+    const { url, json } = build(feedUrl);
+    try{
+      const res = await fetchWithTimeout(url, 9000);
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      let text;
+      if(json){
+        const data = await res.json();
+        text = data.contents || "";
+      } else {
+        text = await res.text();
+      }
+      const items = parseRssXml(text);
+      if(items.length) return items;
+      lastErr = new Error("No items parsed");
+    }catch(e){ lastErr = e; }
+  }
+  throw lastErr || new Error("Feed unreachable");
+}
+function newsCardHtml(item, sourceName){
+  const img = item.thumbnail || "";
+  let dateStr = "";
+  if(item.pubDate){
+    const d = new Date(item.pubDate);
+    if(!isNaN(d.getTime())) dateStr = timeAgo(d.toISOString());
+  }
+  return `<a class="news-card" href="${item.link}" target="_blank" rel="noopener noreferrer">
+    ${img ? `<img src="${img}" alt="" loading="lazy" onerror="this.remove()">` : ""}
+    <div class="nc-body">
+      <div class="nc-src">${escapeHtml(sourceName)}</div>
+      <div class="nc-title">${escapeHtml(item.title||"")}</div>
+      <div class="nc-time">${dateStr}</div>
+    </div>
+  </a>`;
+}
+async function loadNepalNews(force){
+  const grid = document.getElementById("nepal-news-grid");
+  if(newsCache.nepal && !force){ grid.innerHTML = newsCache.nepal; return; }
+  grid.innerHTML = `<div class="loading">Loading Nepal news…</div>`;
+  const results = await Promise.allSettled(NEWS_FEEDS.nepal.map(f => fetchRssItems(f.url).then(items=>({ f, items }))));
+  let cards = [];
+  for(const r of results){
+    if(r.status==="fulfilled"){
+      const { f, items } = r.value;
+      cards.push(...items.slice(0,12).map(it => ({ it, src: f.name, ts: new Date(it.pubDate).getTime()||0 })));
+    } else {
+      console.warn("Nepal news source failed:", r.reason);
+    }
+  }
+  if(!cards.length){
+    grid.innerHTML = `<div class="empty-state"><div class="em">📡</div><p>Couldn't load Nepal news right now.<br>The news sources may be unreachable from this browser.</p><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadNepalNews(true)">Retry</button></div>`;
+    return;
+  }
+  cards.sort((a,b)=>b.ts-a.ts);
+  const html = cards.slice(0,30).map(c=>newsCardHtml(c.it, c.src)).join("");
+  newsCache.nepal = html;
+  document.getElementById("nepal-news-grid").innerHTML = html;
+}
+let activeWorldSource = "all";
+function renderWorldNewsTabs(){
+  const tabs = [{ key:"all", label:"All" }, ...NEWS_FEEDS.world.map(f=>({ key:f.name, label:f.name }))];
+  document.getElementById("world-news-tabs").innerHTML = tabs.map(t=>
+    `<span class="chip ${activeWorldSource===t.key?'active':''}" onclick="setWorldSource('${t.key.replace(/'/g,"")}')">${escapeHtml(t.label)}</span>`
+  ).join("");
+}
+function setWorldSource(key){ activeWorldSource = key; renderWorldNewsTabs(); renderWorldNewsGrid(); }
+let worldNewsCards = [];
+async function loadWorldNews(force){
+  renderWorldNewsTabs();
+  const grid = document.getElementById("world-news-grid");
+  if(worldNewsCards.length && !force){ renderWorldNewsGrid(); return; }
+  grid.innerHTML = `<div class="loading">Loading world news…</div>`;
+  const results = await Promise.allSettled(NEWS_FEEDS.world.map(f => fetchRssItems(f.url).then(items=>({ f, items }))));
+  worldNewsCards = [];
+  for(const r of results){
+    if(r.status==="fulfilled"){
+      const { f, items } = r.value;
+      worldNewsCards.push(...items.slice(0,14).map(it => ({ it, src: f.name, ts: new Date(it.pubDate).getTime()||0 })));
+    } else {
+      console.warn("World news source failed:", r.reason);
+    }
+  }
+  if(!worldNewsCards.length){
+    grid.innerHTML = `<div class="empty-state"><div class="em">📡</div><p>Couldn't load world news right now.<br>The news sources may be unreachable from this browser.</p><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="loadWorldNews(true)">Retry</button></div>`;
+    return;
+  }
+  worldNewsCards.sort((a,b)=>b.ts-a.ts);
+  renderWorldNewsGrid();
+}
+function renderWorldNewsGrid(){
+  const grid = document.getElementById("world-news-grid");
+  const cards = activeWorldSource==="all" ? worldNewsCards : worldNewsCards.filter(c=>c.src===activeWorldSource);
+  grid.innerHTML = cards.length ? cards.slice(0,36).map(c=>newsCardHtml(c.it, c.src)).join("") : `<div class="empty-state"><p>No articles from this source right now.</p></div>`;
+}
+
+/* ================= BOOT ================= */
+async function bootApp(){
+  const fy = document.getElementById("footer-year"); if(fy) fy.textContent = new Date().getFullYear();
+  document.getElementById("my-avatar").outerHTML = avatarHtml(state.currentUser.name, state.currentUser.color, "", state.currentUser.avatarUrl).replace('class="avatar "','id="my-avatar" class="avatar" onclick="openProfile(state.currentUser.id)" title="View your profile"');
+  loadLocal();
+  await loadAllData();
+  renderWatchlist();
+  renderFeed();
+  renderTape();
+  renderNotifBadges();
+  startPriceAutoRefresh();
+  showTab("home");
+}
+
+async function init(){
+  buildStaticUI();
+  if(!storageAvailable){
+    document.getElementById("feed").innerHTML = `<div class="empty-state"><div class="em">🔌</div><p>Local storage isn't available in this browser.</p></div>`;
+  }
+  if(!supabaseReady){
+    document.getElementById("login-note-fallback")?.remove();
+    showToast("Add your Supabase URL & anon key in the code to enable real accounts.");
+    return; // login gate stays visible; forms will explain what's missing when used.
+  }
+
+  // Password-recovery links land here with a Supabase auth event, not a normal session —
+  // catch that and show the "set a new password" card instead of logging straight in.
+  sb.auth.onAuthStateChange((event, session) => {
+    if(event === "PASSWORD_RECOVERY"){
+      document.getElementById("pw-reset-overlay").classList.add("show");
+    }
+    if(event === "SIGNED_IN" && session?.user && !state.currentUser){
+      onSignedIn(session.user);
+    }
+    if(event === "SIGNED_OUT"){
+      clearCurrentUser();
+    }
+  });
+
+  try{
+    const { data: { session } } = await sb.auth.getSession();
+    if(session?.user){
+      await onSignedIn(session.user);
+    }
+    // otherwise the login gate stays visible until the person signs in / signs up.
+  }catch(e){
+    // A blip here (network hiccup, transient RLS/db error, etc.) does NOT mean the
+    // person got signed out — their Supabase session in localStorage is untouched.
+    // Show the login gate with a retry instead of silently stranding them, and
+    // never call clearCurrentUser()/signOut() here.
+    console.error("Session restore error:", e);
+    document.getElementById("login-gate").classList.remove("hide");
+    showToast("Couldn't restore your session — check your connection and refresh to retry.");
+  }
+}
+init().catch(e=>{
+  console.error("Init error:", e);
+  showToast("Something went wrong loading the app — check the console.");
+});
+
+// ---------- hero 3D boom-zoom scene (Three.js) ----------
+// A cinematic wireframe/particle field that booms in from deep space on load,
+// then settles into a slow ambient drift with gentle scroll-parallax.
+(function(){
+  const canvas = document.getElementById("hero-bg-canvas");
+  if(!canvas || !window.THREE) return;
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const hero = canvas.closest(".home-hero");
+  let w = hero.clientWidth, h = hero.clientHeight;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.setSize(w, h, false);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0a0a0c, 0.0125);
+
+  const camera = new THREE.PerspectiveCamera(55, w/h, 0.1, 2000);
+  camera.position.set(0, 0, 900); // starts far out — this is the "boom" launch point
+
+  // ----- gold/ember particle field -----
+  const PARTICLE_COUNT = 1400;
+  const positions = new Float32Array(PARTICLE_COUNT*3);
+  const seeds = new Float32Array(PARTICLE_COUNT);
+  for(let i=0;i<PARTICLE_COUNT;i++){
+    const r = 60 + Math.random()*260;
+    const theta = Math.random()*Math.PI*2;
+    const phi = Math.acos((Math.random()*2)-1);
+    positions[i*3]   = r*Math.sin(phi)*Math.cos(theta);
+    positions[i*3+1] = r*Math.sin(phi)*Math.sin(theta)*0.6;
+    positions[i*3+2] = r*Math.cos(phi);
+    seeds[i] = Math.random()*Math.PI*2;
+  }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  const pMat = new THREE.PointsMaterial({
+    color: 0xFF8A3D, size: 2.4, transparent:true, opacity:0.85,
+    blending: THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true
+  });
+  const particles = new THREE.Points(pGeo, pMat);
+  scene.add(particles);
+
+  // ----- rotating wireframe polyhedra (the "logo energy" echoing the EE cube) -----
+  const shapes = [];
+  const shapeDefs = [
+    { geo:new THREE.IcosahedronGeometry(70, 0), color:0xFF5A1F, pos:[-160, 40, -120] },
+    { geo:new THREE.OctahedronGeometry(50, 0),  color:0xFF8A3D, pos:[190, -60, -200] },
+    { geo:new THREE.TetrahedronGeometry(46, 0), color:0xFFC08A, pos:[40, 110, -260] }
+  ];
+  shapeDefs.forEach(def=>{
+    const mat = new THREE.MeshBasicMaterial({ color: def.color, wireframe:true, transparent:true, opacity:0.55 });
+    const mesh = new THREE.Mesh(def.geo, mat);
+    mesh.position.set(...def.pos);
+    mesh.userData.spin = { x:(Math.random()-0.5)*0.006, y:(Math.random()-0.5)*0.008 };
+    scene.add(mesh);
+    shapes.push(mesh);
+  });
+
+  // ----- faint horizon grid for depth -----
+  const grid = new THREE.GridHelper(1400, 28, 0xFF5A1F, 0x2A2A30);
+  grid.position.y = -180;
+  grid.material.transparent = true;
+  grid.material.opacity = 0.12;
+  scene.add(grid);
+
+  // ----- boom-zoom intro: camera rushes in from 900 -> 340, then eases to rest -----
+  const START_Z = 900, REST_Z = 340;
+  let t0 = performance.now();
+  const BOOM_MS = 2200;
+  function easeOutExpo(x){ return x===1 ? 1 : 1 - Math.pow(2,-10*x); }
+
+  let scrollY = 0;
+  window.addEventListener("scroll", ()=>{ scrollY = window.scrollY; }, { passive:true });
+
+  let raf;
+  function animate(now){
+    raf = requestAnimationFrame(animate);
+    const elapsed = now - t0;
+    const boomT = Math.min(elapsed / BOOM_MS, 1);
+    const eased = easeOutExpo(boomT);
+    camera.position.z = START_Z + (REST_Z - START_Z) * eased;
+    camera.fov = 70 - (70-55)*eased;
+    camera.updateProjectionMatrix();
+
+    const drift = now * 0.00006;
+    particles.rotation.y = drift;
+    particles.rotation.x = Math.sin(now*0.00003)*0.08;
+
+    shapes.forEach(s=>{ s.rotation.x += s.userData.spin.x; s.rotation.y += s.userData.spin.y; });
+
+    // subtle parallax as the hero scrolls out of view
+    const parallax = Math.min(scrollY, h) * 0.35;
+    scene.position.y = -parallax*0.15;
+    camera.position.y = parallax*0.05;
+
+    renderer.render(scene, camera);
+  }
+  raf = requestAnimationFrame(animate);
+
+  function onResize(){
+    w = hero.clientWidth; h = hero.clientHeight;
+    if(!w || !h) return;
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  }
+  window.addEventListener("resize", onResize);
+  const ro = new ResizeObserver(onResize);
+  ro.observe(hero);
+
+  document.addEventListener("visibilitychange", ()=>{
+    if(document.hidden){ cancelAnimationFrame(raf); } else { raf = requestAnimationFrame(animate); }
+  });
+})();
+
+// ---------- editorial scroll-reveal ----------
+// Fades/slides in cards and sections as they enter the viewport, the way STILL.'s
+// site reveals sections on scroll. Auto-tags common content blocks with .reveal,
+// then watches for anything new (feed cards, people, news, etc. render dynamically).
+(function(){
+  const REVEAL_SELECTORS = ".post-card, .person-card, .news-card, .trend-row, .home-section, .wl-card, .person-row";
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){ entry.target.classList.add("in"); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+  function tag(root){
+    root.querySelectorAll(REVEAL_SELECTORS).forEach(el=>{
+      if(el.dataset.revealed) return;
+      el.dataset.revealed = "1";
+      el.classList.add("reveal");
+      io.observe(el);
+    });
+  }
+  tag(document);
+
+  const mo = new MutationObserver((mutations)=>{
+    mutations.forEach(m=>{
+      m.addedNodes.forEach(node=>{
+        if(node.nodeType === 1) tag(node.matches?.(REVEAL_SELECTORS) ? node.parentElement || document : node);
+      });
+    });
+  });
+  mo.observe(document.body, { childList:true, subtree:true });
+})();
+</script>
+<script>
+// ---------- Embedded Portfolio panel (merged from portfolio.html) ----------
+(function(){
+  var PORTFOLIO_B64 = "PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9IlVURi04IiAvPgo8dGl0bGU+TkVQU0UgUG9ydGZvbGlvPC90aXRsZT4KPHNjcmlwdCBzcmM9Imh0dHBzOi8vY2RuanMuY2xvdWRmbGFyZS5jb20vYWpheC9saWJzL3hsc3gvMC4xOC41L3hsc3guZnVsbC5taW4uanMiPjwvc2NyaXB0Pgo8c3R5bGU+CiAgQGltcG9ydCB1cmwoJ2h0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9SW50ZXI6d2dodEA0MDA7NTAwOzYwMDs3MDAmZmFtaWx5PUlCTStQbGV4K01vbm86d2dodEA0MDA7NTAwOzYwMCZkaXNwbGF5PXN3YXAnKTsKICAqIHsgYm94LXNpemluZzogYm9yZGVyLWJveDsgfQogIGJvZHkgewogICAgbWFyZ2luOiAwOyBtaW4taGVpZ2h0OiAxMDB2aDsgYmFja2dyb3VuZDogIzBCMEUxMTsgY29sb3I6ICNFREVGRjE7CiAgICBmb250LWZhbWlseTogJ0lCTSBQbGV4IE1vbm8nLCB1aS1tb25vc3BhY2UsIG1vbm9zcGFjZTsgcGFkZGluZzogMjhweCAyMHB4IDYwcHg7CiAgfQogIC5lZS1icmFuZCB7IGRpc3BsYXk6IGZsZXg7IGFsaWduLWl0ZW1zOiBjZW50ZXI7IGdhcDogOHB4OyBtYXJnaW4tYm90dG9tOiAxOHB4OyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgfQogIC5lZS1tYXJrIHsgd2lkdGg6IDI2cHg7IGhlaWdodDogMjZweDsgYm9yZGVyLXJhZGl1czogN3B4OyBiYWNrZ3JvdW5kOiAjM0ZBNzk2OyBjb2xvcjogIzBCMEUxMTsgZm9udC13ZWlnaHQ6IDcwMDsgZm9udC1zaXplOiAxMnB4OyBkaXNwbGF5OiBmbGV4OyBhbGlnbi1pdGVtczogY2VudGVyOyBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjsgfQogIC5lZS1icmFuZC10ZXh0IHsgZm9udC1zaXplOiAxMnB4OyBjb2xvcjogIzZCNzY4MDsgbGV0dGVyLXNwYWNpbmc6IC4wNGVtOyB9CiAgLmVlLWJyYW5kLXRleHQgYiB7IGNvbG9yOiAjRURFRkYxOyB9CiAgLmxhYmVsIHsgZm9udC1mYW1pbHk6ICdJbnRlcicsIHNhbnMtc2VyaWY7IH0KICAud3JhcCB7IG1heC13aWR0aDogMTA0MHB4OyBtYXJnaW46IDAgYXV0bzsgfQoKICAvKiBIZWFkZXIgKi8KICAuaGVhZGVyIHsgZGlzcGxheTogZmxleDsganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuOyBhbGlnbi1pdGVtczogZmxleC1zdGFydDsgbWFyZ2luLWJvdHRvbTogMjRweDsgZmxleC13cmFwOiB3cmFwOyBnYXA6IDE2cHg7IH0KICAuZXllYnJvdyB7IGZvbnQtc2l6ZTogMTFweDsgbGV0dGVyLXNwYWNpbmc6IC4xNGVtOyBjb2xvcjogIzZCNzY4MDsgdGV4dC10cmFuc2Zvcm06IHVwcGVyY2FzZTsgbWFyZ2luLWJvdHRvbTogOHB4OyB9CiAgLnRvdGFsIHsgZm9udC1zaXplOiAzOHB4OyBmb250LXdlaWdodDogNjAwOyBsZXR0ZXItc3BhY2luZzogLS4wMWVtOyB9CiAgLnBsLXJvdyB7IGRpc3BsYXk6IGZsZXg7IGdhcDogMTBweDsgYWxpZ24taXRlbXM6IGNlbnRlcjsgbWFyZ2luLXRvcDogNnB4OyBmb250LXNpemU6IDE0cHg7IH0KICAudXAgeyBjb2xvcjogIzNGQTc5NjsgfSAuZG93biB7IGNvbG9yOiAjQzQ1NTNEOyB9CiAgYnV0dG9uIHsgZm9udC1mYW1pbHk6IGluaGVyaXQ7IGN1cnNvcjogcG9pbnRlcjsgfQogIC5idG4geyBkaXNwbGF5OiBmbGV4OyBhbGlnbi1pdGVtczogY2VudGVyOyBnYXA6IDZweDsgYmFja2dyb3VuZDogIzFEMjMyOTsgYm9yZGVyOiAxcHggc29saWQgIzJBMzEzODsgY29sb3I6ICNFREVGRjE7IHBhZGRpbmc6IDlweCAxNHB4OyBib3JkZXItcmFkaXVzOiA3cHg7IGZvbnQtc2l6ZTogMTNweDsgfQogIC5idG46aG92ZXIgeyBib3JkZXItY29sb3I6ICMzQTQyNEI7IH0KICAuYnRuLnByaW1hcnkgeyBiYWNrZ3JvdW5kOiAjM0ZBNzk2OyBib3JkZXItY29sb3I6ICMzRkE3OTY7IGNvbG9yOiAjMEQxMjEwOyBmb250LXdlaWdodDogNjAwOyB9CgogIC8qIFN0YXQgc3RyaXAgKi8KICAuc3RhdHMgeyBkaXNwbGF5OiBncmlkOyBncmlkLXRlbXBsYXRlLWNvbHVtbnM6IHJlcGVhdCg0LCAxZnIpOyBnYXA6IDFweDsgYmFja2dyb3VuZDogIzJBMzEzODsgYm9yZGVyOiAxcHggc29saWQgIzJBMzEzODsgYm9yZGVyLXJhZGl1czogMTBweDsgb3ZlcmZsb3c6IGhpZGRlbjsgbWFyZ2luLWJvdHRvbTogMjBweDsgfQogIC5zdGF0IHsgYmFja2dyb3VuZDogIzFBMUYyNDsgcGFkZGluZzogMTZweCAxOHB4OyB9CiAgLnN0YXQtbGFiZWwgeyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMHB4OyBsZXR0ZXItc3BhY2luZzogLjFlbTsgY29sb3I6ICM2Qjc2ODA7IHRleHQtdHJhbnNmb3JtOiB1cHBlcmNhc2U7IG1hcmdpbi1ib3R0b206IDZweDsgfQogIC5zdGF0LXZhbHVlIHsgZm9udC1zaXplOiAyMHB4OyBmb250LXdlaWdodDogNjAwOyB9CgogIC8qIEltcG9ydCBwYW5lbCAqLwogIC5wYW5lbCB7IGJhY2tncm91bmQ6ICMxQTFGMjQ7IGJvcmRlcjogMXB4IHNvbGlkICMyQTMxMzg7IGJvcmRlci1yYWRpdXM6IDEwcHg7IHBhZGRpbmc6IDIwcHg7IG1hcmdpbi1ib3R0b206IDIwcHg7IGRpc3BsYXk6IG5vbmU7IH0KICAucGFuZWwuc2hvdyB7IGRpc3BsYXk6IGJsb2NrOyB9CiAgLnBhbmVsIGgzIHsgZm9udC1mYW1pbHk6ICdJbnRlcicsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTRweDsgZm9udC13ZWlnaHQ6IDYwMDsgbWFyZ2luOiAwIDAgNHB4OyB9CiAgLnBhbmVsIHAgeyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBjb2xvcjogIzZCNzY4MDsgbWFyZ2luOiAwIDAgMTRweDsgbGluZS1oZWlnaHQ6IDEuNTsgfQogIC5kcm9wLXpvbmUgeyBib3JkZXI6IDEuNXB4IGRhc2hlZCAjM0E0MjRCOyBib3JkZXItcmFkaXVzOiA4cHg7IHBhZGRpbmc6IDI4cHg7IHRleHQtYWxpZ246IGNlbnRlcjsgZm9udC1mYW1pbHk6ICdJbnRlcicsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTNweDsgY29sb3I6ICM5QkEzQUI7IGN1cnNvcjogcG9pbnRlcjsgdHJhbnNpdGlvbjogYm9yZGVyLWNvbG9yIC4xNXM7IH0KICAuZHJvcC16b25lOmhvdmVyLCAuZHJvcC16b25lLmRyYWdvdmVyIHsgYm9yZGVyLWNvbG9yOiAjM0ZBNzk2OyBjb2xvcjogI0VERUZGMTsgfQogIC5kcm9wLXpvbmUgaW5wdXQgeyBkaXNwbGF5OiBub25lOyB9CiAgLmltcG9ydC1zdGF0dXMgeyBtYXJnaW4tdG9wOiAxMnB4OyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyB9CiAgLmltcG9ydC1zdGF0dXMub2sgeyBjb2xvcjogIzNGQTc5NjsgfQogIC5pbXBvcnQtc3RhdHVzLmVyciB7IGNvbG9yOiAjQzQ1NTNEOyB9CiAgLnJhdGUtcm93IHsgZGlzcGxheTogZmxleDsgZ2FwOiAyMHB4OyBtYXJnaW4tdG9wOiAxNnB4OyBmbGV4LXdyYXA6IHdyYXA7IH0KICAucmF0ZS1maWVsZCB7IGRpc3BsYXk6IGZsZXg7IGFsaWduLWl0ZW1zOiBjZW50ZXI7IGdhcDogOHB4OyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBjb2xvcjogIzlCQTNBQjsgfQogIC5yYXRlLWZpZWxkIGlucHV0IHsgd2lkdGg6IDYwcHg7IGJhY2tncm91bmQ6ICMxNDE4MUM7IGJvcmRlcjogMXB4IHNvbGlkICMyQTMxMzg7IGJvcmRlci1yYWRpdXM6IDVweDsgcGFkZGluZzogNXB4IDhweDsgY29sb3I6ICNFREVGRjE7IGZvbnQtZmFtaWx5OiBpbmhlcml0OyBmb250LXNpemU6IDEycHg7IH0KCiAgLnNldHRpbmdzLWJveCB7IGJhY2tncm91bmQ6ICMxQTFGMjQ7IGJvcmRlcjogMXB4IHNvbGlkICMyQTMxMzg7IGJvcmRlci1yYWRpdXM6IDEwcHg7IHBhZGRpbmc6IDIwcHg7IG1hcmdpbi1ib3R0b206IDIwcHg7IGRpc3BsYXk6IG5vbmU7IH0KICAuc2V0dGluZ3MtYm94LnNob3cgeyBkaXNwbGF5OiBibG9jazsgfQogIC5zZXR0aW5ncy1ib3ggaW5wdXRbdHlwZT10ZXh0XSB7IHdpZHRoOiAxMDAlOyBiYWNrZ3JvdW5kOiAjMTQxODFDOyBib3JkZXI6IDFweCBzb2xpZCAjMkEzMTM4OyBib3JkZXItcmFkaXVzOiA2cHg7IHBhZGRpbmc6IDlweCAxMXB4OyBjb2xvcjogI0VERUZGMTsgZm9udC1zaXplOiAxM3B4OyBmb250LWZhbWlseTogaW5oZXJpdDsgfQogIC5lcnJvci1ib3ggeyBiYWNrZ3JvdW5kOiByZ2JhKDE5Niw4NSw2MSwwLjEyKTsgYm9yZGVyOiAxcHggc29saWQgI0M0NTUzRDsgYm9yZGVyLXJhZGl1czogOHB4OyBwYWRkaW5nOiAxMHB4IDE0cHg7IGZvbnQtc2l6ZTogMTNweDsgY29sb3I6ICNFODk5OEE7IG1hcmdpbi1ib3R0b206IDIwcHg7IGRpc3BsYXk6IG5vbmU7IGZvbnQtZmFtaWx5OiAnSW50ZXInLCBzYW5zLXNlcmlmOyB9CgogIC8qIFRhYmxlICovCiAgLnRhYmxlIHsgYmFja2dyb3VuZDogIzFBMUYyNDsgYm9yZGVyOiAxcHggc29saWQgIzJBMzEzODsgYm9yZGVyLXJhZGl1czogMTBweDsgb3ZlcmZsb3c6IGhpZGRlbjsgbWFyZ2luLWJvdHRvbTogMjBweDsgb3ZlcmZsb3cteDogYXV0bzsgfQogIC5yb3cgeyBkaXNwbGF5OiBncmlkOyBncmlkLXRlbXBsYXRlLWNvbHVtbnM6IDEwMHB4IDcwcHggOTBweCA4NXB4IDEwNXB4IDk1cHggNzVweCA5NXB4IDExMHB4IDI4cHg7IHBhZGRpbmc6IDEycHggMTRweDsgZm9udC1zaXplOiAxM3B4OyBhbGlnbi1pdGVtczogY2VudGVyOyBib3JkZXItYm90dG9tOiAxcHggc29saWQgIzIwMjYyQzsgd2hpdGUtc3BhY2U6IG5vd3JhcDsgbWluLXdpZHRoOiA5MDBweDsgfQogIC5yb3cuaGVhZCB7IGZvbnQtZmFtaWx5OiAnSW50ZXInLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEwcHg7IGxldHRlci1zcGFjaW5nOiAuMDZlbTsgY29sb3I6ICM2Qjc2ODA7IHRleHQtdHJhbnNmb3JtOiB1cHBlcmNhc2U7IHBhZGRpbmc6IDEwcHggMTRweDsgfQogIC5zeW0geyBmb250LXdlaWdodDogNjAwOyB9CiAgLm11dGVkIHsgY29sb3I6ICM5QkEzQUI7IH0KICAuZmFpbnQgeyBjb2xvcjogIzRBNTE1ODsgfQogIC5yZW1vdmUtYnRuIHsgYmFja2dyb3VuZDogbm9uZTsgYm9yZGVyOiBub25lOyBjb2xvcjogIzZCNzY4MDsgZm9udC1zaXplOiAxNXB4OyBqdXN0aWZ5LXNlbGY6IGVuZDsgfQogIC5lbXB0eS1zdGF0ZSB7IHBhZGRpbmc6IDQwcHggMjBweDsgdGV4dC1hbGlnbjogY2VudGVyOyBjb2xvcjogIzZCNzY4MDsgZm9udC1zaXplOiAxM3B4OyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgfQogIC50YWcgeyBmb250LWZhbWlseTogJ0ludGVyJywgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMHB4OyBwYWRkaW5nOiAycHggN3B4OyBib3JkZXItcmFkaXVzOiAxMHB4OyBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IH0KICAudGFnLmx0IHsgYmFja2dyb3VuZDogcmdiYSg2MywxNjcsMTUwLC4xNSk7IGNvbG9yOiAjM0ZBNzk2OyB9CiAgLnRhZy5zdCB7IGJhY2tncm91bmQ6IHJnYmEoMTk2LDg1LDYxLC4xNSk7IGNvbG9yOiAjQzQ1NTNEOyB9CgogIC5hZGQtcm93IHsgZGlzcGxheTogZmxleDsgZ2FwOiA4cHg7IGZsZXgtd3JhcDogd3JhcDsgfQogIC5hZGQtcm93IGlucHV0IHsgYmFja2dyb3VuZDogIzFBMUYyNDsgYm9yZGVyOiAxcHggc29saWQgIzJBMzEzODsgYm9yZGVyLXJhZGl1czogNnB4OyBwYWRkaW5nOiAxMHB4IDEycHg7IGNvbG9yOiAjRURFRkYxOyBmb250LWZhbWlseTogaW5oZXJpdDsgZm9udC1zaXplOiAxM3B4OyB9CiAgLmFkZC1yb3cgaW5wdXQ6OnBsYWNlaG9sZGVyIHsgY29sb3I6ICM2Qjc2ODA7IH0KICAjc3ltYm9sSW5wdXQgeyBmbGV4OiAxIDEgMTAwcHg7IH0gI3F0eUlucHV0IHsgd2lkdGg6IDgwcHg7IH0gI2Nvc3RJbnB1dCB7IHdpZHRoOiA5NXB4OyB9ICNkYXRlSW5wdXQgeyB3aWR0aDogMTQwcHg7IGZvbnQtZmFtaWx5OiAnSW50ZXInLCBzYW5zLXNlcmlmOyB9CiAgLmFkZC1idG4geyBiYWNrZ3JvdW5kOiAjM0ZBNzk2OyBib3JkZXI6IG5vbmU7IGJvcmRlci1yYWRpdXM6IDZweDsgcGFkZGluZzogMTBweCAxNnB4OyBjb2xvcjogIzBEMTIxMDsgZm9udC13ZWlnaHQ6IDYwMDsgZm9udC1zaXplOiAxM3B4OyB9CgogIC5mb290ZXItbm90ZSB7IGZvbnQtc2l6ZTogMTFweDsgY29sb3I6ICM0QTUxNTg7IG1hcmdpbi10b3A6IDIwcHg7IHRleHQtYWxpZ246IGNlbnRlcjsgZm9udC1mYW1pbHk6ICdJbnRlcicsIHNhbnMtc2VyaWY7IGxpbmUtaGVpZ2h0OiAxLjY7IH0KICAudGF4LW5vdGUgeyBmb250LXNpemU6IDExcHg7IGNvbG9yOiAjNkI3NjgwOyBtYXJnaW4tdG9wOiA4cHg7IGZvbnQtZmFtaWx5OiAnSW50ZXInLCBzYW5zLXNlcmlmOyBsaW5lLWhlaWdodDogMS42OyB9CgogIEBrZXlmcmFtZXMgZmxhc2hVcCB7IDAlIHsgYmFja2dyb3VuZDogcmdiYSg2MywxNjcsMTUwLC4zNSk7IH0gMTAwJSB7IGJhY2tncm91bmQ6IHRyYW5zcGFyZW50OyB9IH0KICBAa2V5ZnJhbWVzIGZsYXNoRG93biB7IDAlIHsgYmFja2dyb3VuZDogcmdiYSgxOTYsODUsNjEsLjM1KTsgfSAxMDAlIHsgYmFja2dyb3VuZDogdHJhbnNwYXJlbnQ7IH0gfQogIC5mbGFzaC11cCB7IGFuaW1hdGlvbjogZmxhc2hVcCAxLjJzIGVhc2Utb3V0OyBib3JkZXItcmFkaXVzOiA0cHg7IH0KICAuZmxhc2gtZG93biB7IGFuaW1hdGlvbjogZmxhc2hEb3duIDEuMnMgZWFzZS1vdXQ7IGJvcmRlci1yYWRpdXM6IDRweDsgfQoKICBAbWVkaWEgKG1heC13aWR0aDogNjQwcHgpIHsKICAgIC5zdGF0cyB7IGdyaWQtdGVtcGxhdGUtY29sdW1uczogcmVwZWF0KDIsIDFmcik7IH0KICB9Cjwvc3R5bGU+CjwvaGVhZD4KPGJvZHk+CjxkaXYgY2xhc3M9IndyYXAiPgogIDxkaXYgY2xhc3M9ImVlLWJyYW5kIj4KICAgIDxkaXYgY2xhc3M9ImVlLW1hcmsiPkVFPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJlZS1icmFuZC10ZXh0Ij48Yj5FbGl0ZSBFbGxpb3R0PC9iPiDCtyBQb3J0Zm9saW88L2Rpdj4KICA8L2Rpdj4KICA8ZGl2IGNsYXNzPSJoZWFkZXIiPgogICAgPGRpdj4KICAgICAgPGRpdiBjbGFzcz0iZXllYnJvdyBsYWJlbCI+TkVQU0UgUG9ydGZvbGlvPC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9InRvdGFsIiBpZD0idG90YWxWYWx1ZSI+UnMgMDwvZGl2PgogICAgICA8ZGl2IGNsYXNzPSJwbC1yb3ciIGlkPSJ0b3RhbFBMIj48L2Rpdj4KICAgIDwvZGl2PgogICAgPGRpdiBzdHlsZT0iZGlzcGxheTpmbGV4OyBnYXA6OHB4OyBmbGV4LXdyYXA6IHdyYXA7Ij4KICAgICAgPGJ1dHRvbiBjbGFzcz0iYnRuIHByaW1hcnkgbGFiZWwiIGlkPSJpbXBvcnRCdG4iPuKHqiBJbXBvcnQgZnJvbSBNZXJvc2hhcmU8L2J1dHRvbj4KICAgICAgPGJ1dHRvbiBjbGFzcz0iYnRuIGxhYmVsIiBpZD0icmVmcmVzaEJ0biI+4oa7IFJlZnJlc2g8L2J1dHRvbj4KICAgICAgPGJ1dHRvbiBjbGFzcz0iYnRuIGxhYmVsIiBpZD0ic2V0dGluZ3NCdG4iPuKamTwvYnV0dG9uPgogICAgPC9kaXY+CiAgPC9kaXY+CgogIDxkaXYgY2xhc3M9InN0YXRzIj4KICAgIDxkaXYgY2xhc3M9InN0YXQiPgogICAgICA8ZGl2IGNsYXNzPSJzdGF0LWxhYmVsIj5Ub3RhbCBDb3N0IEJhc2lzPC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9InN0YXQtdmFsdWUiIGlkPSJzdGF0Q29zdCI+UnMgMDwvZGl2PgogICAgPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJzdGF0Ij4KICAgICAgPGRpdiBjbGFzcz0ic3RhdC1sYWJlbCI+VW5yZWFsaXplZCBHYWluPC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9InN0YXQtdmFsdWUiIGlkPSJzdGF0R2FpbiI+UnMgMDwvZGl2PgogICAgPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJzdGF0Ij4KICAgICAgPGRpdiBjbGFzcz0ic3RhdC1sYWJlbCI+RXN0LiBUYXggSWYgU29sZCBUb2RheTwvZGl2PgogICAgICA8ZGl2IGNsYXNzPSJzdGF0LXZhbHVlIiBpZD0ic3RhdFRheCI+UnMgMDwvZGl2PgogICAgPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJzdGF0Ij4KICAgICAgPGRpdiBjbGFzcz0ic3RhdC1sYWJlbCI+RXN0LiBOZXQgQWZ0ZXIgVGF4PC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9InN0YXQtdmFsdWUiIGlkPSJzdGF0TmV0Ij5ScyAwPC9kaXY+CiAgICA8L2Rpdj4KICA8L2Rpdj4KCiAgPGRpdiBjbGFzcz0icGFuZWwiIGlkPSJpbXBvcnRQYW5lbCI+CiAgICA8aDM+SW1wb3J0IGZyb20gTWVyb3NoYXJlIC8gQnJva2VyIChUTVMpPC9oMz4KICAgIDxwPgogICAgICBEcm9wIGFueSBjb21iaW5hdGlvbiBvZjogTWVyb3NoYXJlIDxiPlNoYXJlIFZhbHVlczwvYj4gQ1NWLCBNZXJvc2hhcmUgPGI+V0FDQyBSZXBvcnQ8L2I+IENTViwKICAgICAgTWVyb3NoYXJlIDxiPlRyYW5zYWN0aW9uIEhpc3Rvcnk8L2I+IENTViwgb3IgeW91ciBicm9rZXIncyA8Yj5UcmFkZSBCb29rPC9iPiAoLnhsc3gsIGZyb20gVE1TKSDigJQKICAgICAgZm9ybWF0cyBhcmUgYXV0by1kZXRlY3RlZCBhbmQgbWVyZ2VkIGJ5IHN5bWJvbC4gVGhlIFRyYWRlIEJvb2sgaXMgdGhlIGJlc3Qgc291cmNlIHNpbmNlIGl0IGhhcwogICAgICBhY3R1YWwgYnV5L3NlbGwgcHJpY2VzOyBob2xkaW5ncyBhcmUgcmVidWlsdCBmcm9tIGZ1bGwgdHJhZGUgaGlzdG9yeSB1c2luZyBGSUZPIGxvdCBtYXRjaGluZywgc28KICAgICAgYXZnIGNvc3QgYW5kIGhvbGRpbmcgcGVyaW9kIHJlZmxlY3Qgd2hhdCdzIGFjdHVhbGx5IHN0aWxsIGluIHlvdXIgYWNjb3VudC4KICAgIDwvcD4KICAgIDxkaXYgY2xhc3M9ImRyb3Atem9uZSIgaWQ9ImRyb3Bab25lIj4KICAgICAgRHJvcCBmaWxlKHMpIGhlcmUsIG9yIGNsaWNrIHRvIGJyb3dzZQogICAgICA8aW5wdXQgdHlwZT0iZmlsZSIgaWQ9ImZpbGVJbnB1dCIgYWNjZXB0PSIuY3N2LC54bHN4LC54bHMiIG11bHRpcGxlIC8+CiAgICA8L2Rpdj4KICAgIDxkaXYgY2xhc3M9ImltcG9ydC1zdGF0dXMiIGlkPSJpbXBvcnRTdGF0dXMiPjwvZGl2PgogICAgPGRpdiBjbGFzcz0iY2xpZW50LXBpY2tlciIgaWQ9ImNsaWVudFBpY2tlciIgc3R5bGU9ImRpc3BsYXk6bm9uZTsgbWFyZ2luLXRvcDoxMnB4OyI+CiAgICAgIDxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OidJbnRlcicsc2Fucy1zZXJpZjsgZm9udC1zaXplOjEycHg7IGNvbG9yOiM5QkEzQUI7IG1hcmdpbi1ib3R0b206OHB4OyI+CiAgICAgICAgVGhpcyB0cmFkZSBib29rIGhhcyBtdWx0aXBsZSBjbGllbnRzIOKAlCBwaWNrIG9uZSB0byBpbXBvcnQ6CiAgICAgIDwvZGl2PgogICAgICA8c2VsZWN0IGlkPSJjbGllbnRTZWxlY3QiIHN0eWxlPSJiYWNrZ3JvdW5kOiMxNDE4MUM7IGJvcmRlcjoxcHggc29saWQgIzJBMzEzODsgYm9yZGVyLXJhZGl1czo2cHg7IHBhZGRpbmc6OHB4IDEwcHg7IGNvbG9yOiNFREVGRjE7IGZvbnQtZmFtaWx5OmluaGVyaXQ7IGZvbnQtc2l6ZToxM3B4OyI+PC9zZWxlY3Q+CiAgICAgIDxidXR0b24gY2xhc3M9ImJ0biBwcmltYXJ5IGxhYmVsIiBpZD0iY2xpZW50SW1wb3J0QnRuIiBzdHlsZT0ibWFyZ2luLWxlZnQ6OHB4OyI+SW1wb3J0IGZvciB0aGlzIGNsaWVudDwvYnV0dG9uPgogICAgPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJyYXRlLXJvdyI+CiAgICAgIDxkaXYgY2xhc3M9InJhdGUtZmllbGQiPjxzcGFuPkxvbmctdGVybSByYXRlICglKTwvc3Bhbj48aW5wdXQgdHlwZT0ibnVtYmVyIiBpZD0ibHRSYXRlIiB2YWx1ZT0iNy41IiBzdGVwPSIwLjEiIC8+PC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9InJhdGUtZmllbGQiPjxzcGFuPlNob3J0LXRlcm0gcmF0ZSAoJSk8L3NwYW4+PGlucHV0IHR5cGU9Im51bWJlciIgaWQ9InN0UmF0ZSIgdmFsdWU9IjEwIiBzdGVwPSIwLjEiIC8+PC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9InJhdGUtZmllbGQiPjxzcGFuPkhvbGRpbmcgdGhyZXNob2xkIChkYXlzKTwvc3Bhbj48aW5wdXQgdHlwZT0ibnVtYmVyIiBpZD0iaG9sZGluZ1RocmVzaG9sZCIgdmFsdWU9IjM2NSIgLz48L2Rpdj4KICAgIDwvZGl2PgogICAgPGRpdiBjbGFzcz0idGF4LW5vdGUiPk5lcGFsIHRheGVzIGNhcGl0YWwgZ2FpbnMgb24gbGlzdGVkIHNoYXJlcyBvbmx5IHdoZW4gc29sZCDigJQgZmluYWwgdGF4IGRlZHVjdGVkIGJ5IHlvdXIgYnJva2VyIGF0IHRoZSBwb2ludCBvZiBzYWxlLiBUaGVzZSBmaWd1cmVzIGFyZSBpbGx1c3RyYXRpdmUgImlmIHNvbGQgdG9kYXkiIGVzdGltYXRlcywgbm90IHRheCBhZHZpY2UuPC9kaXY+CiAgPC9kaXY+CgogIDxkaXYgY2xhc3M9InNldHRpbmdzLWJveCIgaWQ9InNldHRpbmdzQm94Ij4KICAgIDxkaXYgY2xhc3M9ImxhYmVsIiBzdHlsZT0iZm9udC1zaXplOjEycHg7IGNvbG9yOiM2Qjc2ODA7IG1hcmdpbi1ib3R0b206OHB4OyI+V09SS0VSIFVSTCAobGl2ZSBwcmljZSBmZWVkKTwvZGl2PgogICAgPGlucHV0IHR5cGU9InRleHQiIGlkPSJ3b3JrZXJVcmxJbnB1dCIgdmFsdWU9Imh0dHBzOi8vc2hpbnktdGVybS1mNTk5LmJoYXJhdGlhYXNoaXNoNDMud29ya2Vycy5kZXYiIC8+CiAgPC9kaXY+CgogIDxkaXYgY2xhc3M9ImVycm9yLWJveCIgaWQ9ImVycm9yQm94Ij5Db3VsZG4ndCByZWFjaCB0aGUgcHJpY2UgZmVlZC4gQ2hlY2sgdGhlIFdvcmtlciBVUkwgaW4gc2V0dGluZ3MuPC9kaXY+CgogIDxkaXYgY2xhc3M9InRhYmxlIj4KICAgIDxkaXYgY2xhc3M9InJvdyBoZWFkIj4KICAgICAgPHNwYW4+U3ltYm9sPC9zcGFuPjxzcGFuPlF0eTwvc3Bhbj48c3Bhbj5BdmcgQ29zdDwvc3Bhbj48c3Bhbj5MVFA8L3NwYW4+PHNwYW4+VmFsdWU8L3NwYW4+PHNwYW4+UC9MPC9zcGFuPjxzcGFuPlRlcm08L3NwYW4+PHNwYW4+RXN0LiBUYXg8L3NwYW4+PHNwYW4+UHVyY2hhc2VkPC9zcGFuPjxzcGFuPjwvc3Bhbj4KICAgIDwvZGl2PgogICAgPGRpdiBpZD0iaG9sZGluZ3NMaXN0Ij48L2Rpdj4KICA8L2Rpdj4KCiAgPGRpdiBjbGFzcz0iYWRkLXJvdyI+CiAgICA8aW5wdXQgaWQ9InN5bWJvbElucHV0IiBwbGFjZWhvbGRlcj0iU1lNQk9MIiAvPgogICAgPGlucHV0IGlkPSJxdHlJbnB1dCIgdHlwZT0ibnVtYmVyIiBwbGFjZWhvbGRlcj0iUXR5IiAvPgogICAgPGlucHV0IGlkPSJjb3N0SW5wdXQiIHR5cGU9Im51bWJlciIgcGxhY2Vob2xkZXI9IkF2ZyBjb3N0IiAvPgogICAgPGlucHV0IGlkPSJkYXRlSW5wdXQiIHR5cGU9ImRhdGUiIHRpdGxlPSJQdXJjaGFzZSBkYXRlIChvcHRpb25hbCwgZm9yIHRheCkiIC8+CiAgICA8YnV0dG9uIGNsYXNzPSJhZGQtYnRuIGxhYmVsIiBpZD0iYWRkQnRuIj4rIEFkZDwvYnV0dG9uPgogIDwvZGl2PgoKICA8ZGl2IGNsYXNzPSJmb290ZXItbm90ZSI+CiAgICBMYXN0IHVwZGF0ZWQ6IDxzcGFuIGlkPSJsYXN0VXBkYXRlZCI+4oCUPC9zcGFuPjxici8+CiAgICBQcmljZXMgZnJvbSBhbiB1bm9mZmljaWFsIGxpdmUgZmVlZCDigJQgdmVyaWZ5IGJlZm9yZSBtYWtpbmcgdHJhZGluZyBkZWNpc2lvbnMuIFRheCBlc3RpbWF0ZXMgdXNlIGN1cnJlbnQgTmVwYWwgQ0dUIHJhdGVzIGFzIG9mIHRoZSBGWSAyMDI2LzI3IGJ1ZGdldDsgcmF0ZXMgY2FuIGNoYW5nZSwgYWRqdXN0IGFib3ZlIGlmIG5lZWRlZC4KICA8L2Rpdj4KPC9kaXY+Cgo8c2NyaXB0PgpsZXQgaG9sZGluZ3MgPSBbCiAgeyBpZDogMSwgc3ltYm9sOiAiTkFCSUwiLCBxdHk6IDUwLCBhdmdDb3N0OiA3ODAsIHB1cmNoYXNlRGF0ZTogIjIwMjUtMDMtMTUiIH0sCiAgeyBpZDogMiwgc3ltYm9sOiAiTklDQSIsIHF0eTogMTAwLCBhdmdDb3N0OiA0MTAsIHB1cmNoYXNlRGF0ZTogbnVsbCB9LApdOwpsZXQgcHJpY2VzID0ge307CmxldCBwcmV2UHJpY2VzID0ge307CgpmdW5jdGlvbiBmbXQobiwgZCA9IDIpIHsKICBpZiAobiA9PT0gbnVsbCB8fCBuID09PSB1bmRlZmluZWQgfHwgTnVtYmVyLmlzTmFOKG4pKSByZXR1cm4gIuKAlCI7CiAgcmV0dXJuIG4udG9Mb2NhbGVTdHJpbmcoImVuLVVTIiwgeyBtaW5pbXVtRnJhY3Rpb25EaWdpdHM6IGQsIG1heGltdW1GcmFjdGlvbkRpZ2l0czogZCB9KTsKfQoKZnVuY3Rpb24gZ2V0V29ya2VyVXJsKCkgewogIHJldHVybiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgid29ya2VyVXJsSW5wdXQiKS52YWx1ZS50cmltKCkucmVwbGFjZSgvXC8kLywgIiIpOwp9CgpmdW5jdGlvbiBnZXRSYXRlcygpIHsKICByZXR1cm4gewogICAgbHQ6IE51bWJlcihkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibHRSYXRlIikudmFsdWUpIC8gMTAwLAogICAgc3Q6IE51bWJlcihkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgic3RSYXRlIikudmFsdWUpIC8gMTAwLAogICAgdGhyZXNob2xkRGF5czogTnVtYmVyKGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJob2xkaW5nVGhyZXNob2xkIikudmFsdWUpLAogIH07Cn0KCmZ1bmN0aW9uIGhvbGRpbmdEYXlzKHB1cmNoYXNlRGF0ZSkgewogIGlmICghcHVyY2hhc2VEYXRlKSByZXR1cm4gbnVsbDsKICBjb25zdCB0aGVuID0gbmV3IERhdGUocHVyY2hhc2VEYXRlKTsKICBjb25zdCBub3cgPSBuZXcgRGF0ZSgpOwogIHJldHVybiBNYXRoLmZsb29yKChub3cgLSB0aGVuKSAvICgxMDAwICogNjAgKiA2MCAqIDI0KSk7Cn0KCi8qIC0tLS0tLS0tLS0gSW1wb3J0OiBDU1YvWExTWCBwYXJzaW5nIC0tLS0tLS0tLS0gKi8KZnVuY3Rpb24gbm9ybUhlYWRlcihoKSB7CiAgcmV0dXJuIFN0cmluZyhoIHx8ICIiKS50b0xvd2VyQ2FzZSgpLnJlcGxhY2UoL1teYS16MC05XS9nLCAiIik7Cn0KCmZ1bmN0aW9uIHBhcnNlQ1NWKHRleHQpIHsKICBjb25zdCBsaW5lcyA9IHRleHQuc3BsaXQoL1xyP1xuLykuZmlsdGVyKChsKSA9PiBsLnRyaW0oKS5sZW5ndGgpOwogIGlmIChsaW5lcy5sZW5ndGggPCAyKSByZXR1cm4gW107CiAgY29uc3Qgc3BsaXRMaW5lID0gKGxpbmUpID0+IHsKICAgIGNvbnN0IG91dCA9IFtdOyBsZXQgY3VyID0gIiI7IGxldCBpblF1b3RlcyA9IGZhbHNlOwogICAgZm9yIChsZXQgaSA9IDA7IGkgPCBsaW5lLmxlbmd0aDsgaSsrKSB7CiAgICAgIGNvbnN0IGMgPSBsaW5lW2ldOwogICAgICBpZiAoYyA9PT0gJyInKSB7IGluUXVvdGVzID0gIWluUXVvdGVzOyB9CiAgICAgIGVsc2UgaWYgKGMgPT09ICIsIiAmJiAhaW5RdW90ZXMpIHsgb3V0LnB1c2goY3VyLnRyaW0oKSk7IGN1ciA9ICIiOyB9CiAgICAgIGVsc2UgeyBjdXIgKz0gYzsgfQogICAgfQogICAgb3V0LnB1c2goY3VyLnRyaW0oKSk7CiAgICByZXR1cm4gb3V0OwogIH07CiAgY29uc3QgaGVhZGVycyA9IHNwbGl0TGluZShsaW5lc1swXSkubWFwKG5vcm1IZWFkZXIpOwogIHJldHVybiBsaW5lcy5zbGljZSgxKS5tYXAoKGxpbmUpID0+IHsKICAgIGNvbnN0IGNlbGxzID0gc3BsaXRMaW5lKGxpbmUpOwogICAgY29uc3Qgb2JqID0ge307CiAgICBoZWFkZXJzLmZvckVhY2goKGgsIGkpID0+IHsgb2JqW2hdID0gY2VsbHNbaV07IH0pOwogICAgcmV0dXJuIG9iajsKICB9KTsKfQoKZnVuY3Rpb24gcGFyc2VYTFNYKGFycmF5QnVmZmVyKSB7CiAgY29uc3Qgd2IgPSBYTFNYLnJlYWQoYXJyYXlCdWZmZXIsIHsgdHlwZTogImFycmF5IiB9KTsKICBsZXQgYWxsUm93cyA9IFtdOwogIHdiLlNoZWV0TmFtZXMuZm9yRWFjaCgobmFtZSkgPT4gewogICAgY29uc3Qgc2hlZXQgPSB3Yi5TaGVldHNbbmFtZV07CiAgICBjb25zdCByYXcgPSBYTFNYLnV0aWxzLnNoZWV0X3RvX2pzb24oc2hlZXQsIHsgZGVmdmFsOiAiIiwgcmF3OiBmYWxzZSB9KTsKICAgIHJhdy5mb3JFYWNoKChyb3cpID0+IHsKICAgICAgY29uc3Qgb2JqID0ge307CiAgICAgIE9iamVjdC5rZXlzKHJvdykuZm9yRWFjaCgoaykgPT4geyBvYmpbbm9ybUhlYWRlcihrKV0gPSByb3dba107IH0pOwogICAgICBhbGxSb3dzLnB1c2gob2JqKTsKICAgIH0pOwogIH0pOwogIHJldHVybiBhbGxSb3dzOwp9CgpmdW5jdGlvbiBmaW5kS2V5KG9iaiwgY2FuZGlkYXRlcykgewogIGNvbnN0IGtleXMgPSBPYmplY3Qua2V5cyhvYmopOwogIGZvciAoY29uc3QgYyBvZiBjYW5kaWRhdGVzKSB7CiAgICBjb25zdCBoaXQgPSBrZXlzLmZpbmQoKGspID0+IGsuaW5jbHVkZXMoYykpOwogICAgaWYgKGhpdCkgcmV0dXJuIGhpdDsKICB9CiAgcmV0dXJuIG51bGw7Cn0KCmZ1bmN0aW9uIG51bSh2KSB7CiAgaWYgKHYgPT09IG51bGwgfHwgdiA9PT0gdW5kZWZpbmVkKSByZXR1cm4gTmFOOwogIHJldHVybiBwYXJzZUZsb2F0KFN0cmluZyh2KS5yZXBsYWNlKC8sL2csICIiKS50cmltKCkpOwp9CgovLyBEZXRlY3Qgd2hpY2ggb2YgdGhlIGtub3duIGZvcm1hdHMgYSBiYXRjaCBvZiBub3JtYWxpemVkLWhlYWRlciByb3dzIG1hdGNoZXMKZnVuY3Rpb24gZGV0ZWN0Rm9ybWF0KHJvd3MpIHsKICBpZiAoIXJvd3MubGVuZ3RoKSByZXR1cm4gInVua25vd24iOwogIGNvbnN0IGtleXMgPSBPYmplY3Qua2V5cyhyb3dzWzBdKTsKICBjb25zdCBoYXMgPSAoYykgPT4ga2V5cy5zb21lKChrKSA9PiBrLmluY2x1ZGVzKGMpKTsKICBpZiAoaGFzKCJidXlzZWxsIikgJiYgaGFzKCJ0cmFkZXF0eSIpICYmIChoYXMoInByaWNlbnByIikgfHwgaGFzKCJwcmljZSIpKSkgcmV0dXJuICJ0bXMiOwogIGlmIChoYXMoImNyZWRpdHF1YW50aXR5IikgJiYgaGFzKCJkZWJpdHF1YW50aXR5IikpIHJldHVybiAibWVyb3NoYXJlLWhpc3RvcnkiOwogIGlmIChoYXMoIndhY2MiKSB8fCAoaGFzKCJzY3JpcCIpICYmIGhhcygiYmFsYW5jZSIpKSkgcmV0dXJuICJ3YWNjIjsKICByZXR1cm4gInVua25vd24iOwp9CgovLyBUTVMgdHJhZGUgZGF0ZSBpcyBlbWJlZGRlZCBhcyB0aGUgZmlyc3QgOCBkaWdpdHMgKFlZWVlNTUREKSBvZiB0aGUgRXhjaGFuZ2UgVHJhZGUgSUQKZnVuY3Rpb24gZGF0ZUZyb21UcmFkZUlkKHRyYWRlSWQpIHsKICBjb25zdCBzID0gU3RyaW5nKHRyYWRlSWQgfHwgIiIpOwogIGNvbnN0IG0gPSBzLm1hdGNoKC9eKFxkezR9KShcZHsyfSkoXGR7Mn0pLyk7CiAgaWYgKCFtKSByZXR1cm4gbnVsbDsKICByZXR1cm4gYCR7bVsxXX0tJHttWzJdfS0ke21bM119YDsKfQoKZnVuY3Rpb24gZXh0cmFjdFRtc1RyYWRlcyhyb3dzKSB7CiAgcmV0dXJuIHJvd3MubWFwKChyKSA9PiB7CiAgICBjb25zdCBzeW1LZXkgPSBmaW5kS2V5KHIsIFsic3ltYm9sIiwgInNjcmlwIl0pOwogICAgY29uc3Qgc2lkZUtleSA9IGZpbmRLZXkociwgWyJidXlzZWxsIl0pOwogICAgY29uc3QgcXR5S2V5ID0gZmluZEtleShyLCBbInRyYWRlcXR5IiwgInF1YW50aXR5IiwgInF0eSJdKTsKICAgIGNvbnN0IHByaWNlS2V5ID0gZmluZEtleShyLCBbInByaWNlbnByIiwgInByaWNlIl0pOwogICAgY29uc3QgaWRLZXkgPSBmaW5kS2V5KHIsIFsiZXhjaGFuZ2V0cmFkZWlkIiwgInRyYWRlaWQiXSk7CiAgICBjb25zdCBjbGllbnRJZEtleSA9IGZpbmRLZXkociwgWyJjbGllbnQiXSkgJiYgIWZpbmRLZXkociwgWyJjbGllbnRuYW1lIl0pID8gZmluZEtleShyLCBbImNsaWVudCJdKSA6IGZpbmRLZXkociwgWyJjbGllbnRpZCJdKTsKICAgIGNvbnN0IGNsaWVudE5hbWVLZXkgPSBmaW5kS2V5KHIsIFsiY2xpZW50bmFtZSIsICJuYW1lIl0pOwogICAgY29uc3Qgc3ltYm9sID0gc3ltS2V5ID8gU3RyaW5nKHJbc3ltS2V5XSB8fCAiIikudG9VcHBlckNhc2UoKS50cmltKCkgOiBudWxsOwogICAgY29uc3Qgc2lkZSA9IHNpZGVLZXkgPyBTdHJpbmcocltzaWRlS2V5XSB8fCAiIikudG9Mb3dlckNhc2UoKS50cmltKCkgOiBudWxsOwogICAgY29uc3QgcXR5ID0gcXR5S2V5ID8gbnVtKHJbcXR5S2V5XSkgOiBOYU47CiAgICBjb25zdCBwcmljZSA9IHByaWNlS2V5ID8gbnVtKHJbcHJpY2VLZXldKSA6IE5hTjsKICAgIGNvbnN0IGRhdGUgPSBpZEtleSA/IGRhdGVGcm9tVHJhZGVJZChyW2lkS2V5XSkgOiBudWxsOwogICAgY29uc3QgY2xpZW50SWQgPSBjbGllbnRJZEtleSA/IFN0cmluZyhyW2NsaWVudElkS2V5XSB8fCAiIikudHJpbSgpIDogIiI7CiAgICBjb25zdCBjbGllbnROYW1lID0gY2xpZW50TmFtZUtleSA/IFN0cmluZyhyW2NsaWVudE5hbWVLZXldIHx8ICIiKS50cmltKCkgOiAiIjsKICAgIHJldHVybiB7IHN5bWJvbCwgc2lkZSwgcXR5LCBwcmljZSwgZGF0ZSwgY2xpZW50SWQsIGNsaWVudE5hbWUgfTsKICB9KS5maWx0ZXIoKHQpID0+IHQuc3ltYm9sICYmIHQuc2lkZSAmJiAhTnVtYmVyLmlzTmFOKHQucXR5KSAmJiAhTnVtYmVyLmlzTmFOKHQucHJpY2UpKTsKfQoKZnVuY3Rpb24gZXh0cmFjdE1lcm9zaGFyZUhpc3Rvcnkocm93cykgewogIHJldHVybiByb3dzLm1hcCgocikgPT4gewogICAgY29uc3Qgc3ltS2V5ID0gZmluZEtleShyLCBbInNjcmlwIiwgInN5bWJvbCJdKTsKICAgIGNvbnN0IGNyS2V5ID0gZmluZEtleShyLCBbImNyZWRpdHF1YW50aXR5Il0pOwogICAgY29uc3QgZHJLZXkgPSBmaW5kS2V5KHIsIFsiZGViaXRxdWFudGl0eSJdKTsKICAgIGNvbnN0IGRhdGVLZXkgPSBmaW5kS2V5KHIsIFsidHJhbnNhY3Rpb25kYXRlIiwgImRhdGUiXSk7CiAgICBjb25zdCBiYWxLZXkgPSBmaW5kS2V5KHIsIFsiYmFsYW5jZWFmdGVydHJhbnNhY3Rpb24iLCAiYmFsYW5jZSJdKTsKICAgIGNvbnN0IHN5bWJvbCA9IHN5bUtleSA/IFN0cmluZyhyW3N5bUtleV0gfHwgIiIpLnRvVXBwZXJDYXNlKCkudHJpbSgpIDogbnVsbDsKICAgIGNvbnN0IGNyID0gY3JLZXkgPyBudW0ocltjcktleV0pIDogTmFOOwogICAgY29uc3QgZHIgPSBkcktleSA/IG51bShyW2RyS2V5XSkgOiBOYU47CiAgICBjb25zdCBkYXRlID0gZGF0ZUtleSA/IFN0cmluZyhyW2RhdGVLZXldIHx8ICIiKS50cmltKCkgOiBudWxsOwogICAgY29uc3QgYmFsYW5jZSA9IGJhbEtleSA/IG51bShyW2JhbEtleV0pIDogTmFOOwogICAgcmV0dXJuIHsgc3ltYm9sLCBjcjogTnVtYmVyLmlzTmFOKGNyKSA/IDAgOiBjciwgZHI6IE51bWJlci5pc05hTihkcikgPyAwIDogZHIsIGRhdGUsIGJhbGFuY2UgfTsKICB9KS5maWx0ZXIoKHQpID0+IHQuc3ltYm9sKTsKfQoKLy8gRklGTyBsb3QgbWF0Y2hpbmc6IGJ1eXMgcHVzaCBsb3RzLCBzZWxscyBjb25zdW1lIG9sZGVzdCBsb3RzIGZpcnN0LgovLyBSZXR1cm5zIGhvbGRpbmdzIGtleWVkIGJ5IHN5bWJvbCB3aXRoIHdlaWdodGVkIGF2ZyBjb3N0IGFjcm9zcyByZW1haW5pbmcgbG90cwovLyBhbmQgdGhlIG9sZGVzdCByZW1haW5pbmcgbG90J3MgZGF0ZSAoY29uc2VydmF0aXZlIGZvciBsb25nL3Nob3J0LXRlcm0gdGF4IGNsYXNzaWZpY2F0aW9uKS4KZnVuY3Rpb24gYnVpbGRIb2xkaW5nc0Zyb21UcmFkZXModHJhZGVzKSB7CiAgY29uc3QgYnlTeW1ib2wgPSB7fTsKICBjb25zdCBzb3J0ZWQgPSBbLi4udHJhZGVzXS5zb3J0KChhLCBiKSA9PiAoYS5kYXRlIHx8ICIiKS5sb2NhbGVDb21wYXJlKGIuZGF0ZSB8fCAiIikpOwogIHNvcnRlZC5mb3JFYWNoKCh0KSA9PiB7CiAgICBpZiAoIWJ5U3ltYm9sW3Quc3ltYm9sXSkgYnlTeW1ib2xbdC5zeW1ib2xdID0gW107CiAgICBjb25zdCBsb3RzID0gYnlTeW1ib2xbdC5zeW1ib2xdOwogICAgaWYgKHQuc2lkZS5zdGFydHNXaXRoKCJiIikpIHsKICAgICAgbG90cy5wdXNoKHsgcXR5OiB0LnF0eSwgcHJpY2U6IHQucHJpY2UsIGRhdGU6IHQuZGF0ZSB9KTsKICAgIH0gZWxzZSBpZiAodC5zaWRlLnN0YXJ0c1dpdGgoInMiKSkgewogICAgICBsZXQgcmVtYWluaW5nID0gdC5xdHk7CiAgICAgIHdoaWxlIChyZW1haW5pbmcgPiAwICYmIGxvdHMubGVuZ3RoKSB7CiAgICAgICAgY29uc3QgbG90ID0gbG90c1swXTsKICAgICAgICBjb25zdCB0YWtlID0gTWF0aC5taW4obG90LnF0eSwgcmVtYWluaW5nKTsKICAgICAgICBsb3QucXR5IC09IHRha2U7CiAgICAgICAgcmVtYWluaW5nIC09IHRha2U7CiAgICAgICAgaWYgKGxvdC5xdHkgPD0gMCkgbG90cy5zaGlmdCgpOwogICAgICB9CiAgICB9CiAgfSk7CgogIGNvbnN0IHJlc3VsdCA9IHt9OwogIE9iamVjdC5rZXlzKGJ5U3ltYm9sKS5mb3JFYWNoKChzeW1ib2wpID0+IHsKICAgIGNvbnN0IGxvdHMgPSBieVN5bWJvbFtzeW1ib2xdLmZpbHRlcigobCkgPT4gbC5xdHkgPiAwKTsKICAgIGlmICghbG90cy5sZW5ndGgpIHJldHVybjsgLy8gZnVsbHkgc29sZCBvdXQsIG5vIGN1cnJlbnQgaG9sZGluZwogICAgY29uc3QgcXR5ID0gbG90cy5yZWR1Y2UoKHMsIGwpID0+IHMgKyBsLnF0eSwgMCk7CiAgICBjb25zdCBjb3N0ID0gbG90cy5yZWR1Y2UoKHMsIGwpID0+IHMgKyBsLnF0eSAqIGwucHJpY2UsIDApOwogICAgY29uc3QgYXZnQ29zdCA9IGNvc3QgLyBxdHk7CiAgICBjb25zdCBwdXJjaGFzZURhdGUgPSBsb3RzLnJlZHVjZSgobWluLCBsKSA9PiAoIW1pbiB8fCBsLmRhdGUgPCBtaW4gPyBsLmRhdGUgOiBtaW4pLCBudWxsKTsKICAgIHJlc3VsdFtzeW1ib2xdID0geyBzeW1ib2wsIHF0eSwgYXZnQ29zdCwgcHVyY2hhc2VEYXRlIH07CiAgfSk7CiAgcmV0dXJuIHJlc3VsdDsKfQoKZnVuY3Rpb24gZ2V0RGlzdGluY3RDbGllbnRzKHRtc1RyYWRlcykgewogIGNvbnN0IG1hcCA9IG5ldyBNYXAoKTsKICB0bXNUcmFkZXMuZm9yRWFjaCgodCkgPT4gewogICAgaWYgKCF0LmNsaWVudElkICYmICF0LmNsaWVudE5hbWUpIHJldHVybjsKICAgIGNvbnN0IGtleSA9IHQuY2xpZW50SWQgfHwgdC5jbGllbnROYW1lOwogICAgaWYgKCFtYXAuaGFzKGtleSkpIG1hcC5zZXQoa2V5LCB7IGlkOiB0LmNsaWVudElkLCBuYW1lOiB0LmNsaWVudE5hbWUgfSk7CiAgfSk7CiAgcmV0dXJuIEFycmF5LmZyb20obWFwLnZhbHVlcygpKTsKfQoKbGV0IHBlbmRpbmdUbXNUcmFkZXMgPSBbXTsKbGV0IHBlbmRpbmdNZXJvc2hhcmVSb3dzID0gW107CmxldCBwZW5kaW5nV2FjY1Jvd3MgPSBbXTsKCmZ1bmN0aW9uIGZpbmFsaXplSW1wb3J0KHNlbGVjdGVkQ2xpZW50SWQpIHsKICBjb25zdCBzdGF0dXMgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiaW1wb3J0U3RhdHVzIik7CiAgbGV0IHRyYWRlcyA9IHBlbmRpbmdUbXNUcmFkZXM7CiAgaWYgKHNlbGVjdGVkQ2xpZW50SWQpIHsKICAgIHRyYWRlcyA9IHRyYWRlcy5maWx0ZXIoKHQpID0+ICh0LmNsaWVudElkIHx8IHQuY2xpZW50TmFtZSkgPT09IHNlbGVjdGVkQ2xpZW50SWQpOwogIH0KCiAgY29uc3QgZnJvbVRyYWRlcyA9IGJ1aWxkSG9sZGluZ3NGcm9tVHJhZGVzKHRyYWRlcyk7CiAgY29uc3Qgbm90ZXMgPSBbXTsKCiAgLy8gV0FDQy1yZXBvcnQgc3R5bGUgcm93cyAobGVnYWN5IFNoYXJlIFZhbHVlcyAvIFdBQ0MgQ1NWKSBzdGlsbCBzdXBwb3J0ZWQgZGlyZWN0bHkKICBjb25zdCBieVN5bWJvbFdhY2MgPSB7fTsKICBwZW5kaW5nV2FjY1Jvd3MuZm9yRWFjaCgocikgPT4gewogICAgY29uc3Qgc3ltS2V5ID0gZmluZEtleShyLCBbInNjcmlwIiwgInN5bWJvbCIsICJzY3JpcHQiXSk7CiAgICBjb25zdCBxdHlLZXkgPSBmaW5kS2V5KHIsIFsiY3VycmVudGJhbGFuY2UiLCAicXVhbnRpdHkiLCAicXR5IiwgImJhbGFuY2UiXSk7CiAgICBjb25zdCB3YWNjS2V5ID0gZmluZEtleShyLCBbIndhY2NyYXRlIiwgIndhY2MiLCAiYXZnY29zdCIsICJhdmdyYXRlIiwgInB1cmNoYXNlcmF0ZSIsICJwdXJjaGFzZXByaWNlIl0pOwogICAgY29uc3QgZGF0ZUtleSA9IGZpbmRLZXkociwgWyJwdXJjaGFzZWRhdGUiLCAiZGF0ZSJdKTsKICAgIGNvbnN0IHN5bWJvbCA9IHN5bUtleSA/IChyW3N5bUtleV0gfHwgIiIpLnRvVXBwZXJDYXNlKCkudHJpbSgpIDogbnVsbDsKICAgIGlmICghc3ltYm9sKSByZXR1cm47CiAgICBpZiAoIWJ5U3ltYm9sV2FjY1tzeW1ib2xdKSBieVN5bWJvbFdhY2Nbc3ltYm9sXSA9IHsgc3ltYm9sLCBxdHk6IG51bGwsIGF2Z0Nvc3Q6IG51bGwsIHB1cmNoYXNlRGF0ZTogbnVsbCB9OwogICAgaWYgKHF0eUtleSAmJiByW3F0eUtleV0pIHsgY29uc3QgcSA9IG51bShyW3F0eUtleV0pOyBpZiAoIU51bWJlci5pc05hTihxKSkgYnlTeW1ib2xXYWNjW3N5bWJvbF0ucXR5ID0gcTsgfQogICAgaWYgKHdhY2NLZXkgJiYgclt3YWNjS2V5XSkgeyBjb25zdCB3ID0gbnVtKHJbd2FjY0tleV0pOyBpZiAoIU51bWJlci5pc05hTih3KSkgYnlTeW1ib2xXYWNjW3N5bWJvbF0uYXZnQ29zdCA9IHc7IH0KICAgIGlmIChkYXRlS2V5ICYmIHJbZGF0ZUtleV0pIHsgY29uc3QgZCA9IG5ldyBEYXRlKHJbZGF0ZUtleV0pOyBpZiAoIWlzTmFOKGQpKSBieVN5bWJvbFdhY2Nbc3ltYm9sXS5wdXJjaGFzZURhdGUgPSBkLnRvSVNPU3RyaW5nKCkuc2xpY2UoMCwgMTApOyB9CiAgfSk7CgogIC8vIE1lcmdlOiB0cmFkZS1ib29rLWRlcml2ZWQgaG9sZGluZ3MgdGFrZSBwcmlvcml0eSAocmVhbCBhdmcgY29zdCk7IFdBQ0Mgcm93cyBmaWxsIGFueSBnYXBzCiAgY29uc3QgbWVyZ2VkID0geyAuLi5ieVN5bWJvbFdhY2MgfTsKICBPYmplY3Qua2V5cyhmcm9tVHJhZGVzKS5mb3JFYWNoKChzeW0pID0+IHsgbWVyZ2VkW3N5bV0gPSBmcm9tVHJhZGVzW3N5bV07IH0pOwoKICAvLyBSZWNvbmNpbGUgYWdhaW5zdCBNZXJvc2hhcmUgdHJhbnNhY3Rpb24gaGlzdG9yeTogZmxhZyBzeW1ib2xzIHByZXNlbnQgdGhlcmUKICAvLyB3aXRoIG5vIGNvc3QgYmFzaXMgYXZhaWxhYmxlIHlldCAoZS5nLiBib251cy9yaWdodHMgbm90IGluIHRoZSB0cmFkZSBib29rKQogIGNvbnN0IG1lcm9zaGFyZUJhbGFuY2VCeVN5bWJvbCA9IHt9OwogIHBlbmRpbmdNZXJvc2hhcmVSb3dzLmZvckVhY2goKHIpID0+IHsKICAgIG1lcm9zaGFyZUJhbGFuY2VCeVN5bWJvbFtyLnN5bWJvbF0gPSByOyAvLyBsYXN0IHJvdyAob2xkZXN0LCBzaW5jZSBmaWxlIGlzIHVzdWFsbHkgbmV3ZXN0LWZpcnN0KSDigJQganVzdCB0cmFjayBwcmVzZW5jZQogIH0pOwogIE9iamVjdC5rZXlzKG1lcm9zaGFyZUJhbGFuY2VCeVN5bWJvbCkuZm9yRWFjaCgoc3ltKSA9PiB7CiAgICBpZiAoIW1lcmdlZFtzeW1dKSB7CiAgICAgIG1lcmdlZFtzeW1dID0geyBzeW1ib2w6IHN5bSwgcXR5OiBudWxsLCBhdmdDb3N0OiBudWxsLCBwdXJjaGFzZURhdGU6IG51bGwgfTsKICAgICAgbm90ZXMucHVzaChgJHtzeW19OiBhcHBlYXJzIGluIHRyYW5zYWN0aW9uIGhpc3RvcnkgYnV0IG5vdCBpbiB0aGUgdHJhZGUgYm9vayAoZS5nLiBib251cy9yaWdodHMvSVBPKSDigJQgc2V0IHF0eSAmIGF2ZyBjb3N0IG1hbnVhbGx5LmApOwogICAgfQogIH0pOwoKICBjb25zdCBmaW5hbFJvd3MgPSBPYmplY3QudmFsdWVzKG1lcmdlZCkuZmlsdGVyKChoKSA9PiBoLnF0eSk7CiAgY29uc3QgbWlzc2luZ0Nvc3QgPSBmaW5hbFJvd3MuZmlsdGVyKChoKSA9PiAhaC5hdmdDb3N0KTsKICBjb25zdCB1c2FibGUgPSBmaW5hbFJvd3MuZmlsdGVyKChoKSA9PiBoLnF0eSAmJiBoLmF2Z0Nvc3QpOwoKICBpZiAoZmluYWxSb3dzLmxlbmd0aCA9PT0gMCkgewogICAgc3RhdHVzLmNsYXNzTmFtZSA9ICJpbXBvcnQtc3RhdHVzIGVyciI7CiAgICBzdGF0dXMudGV4dENvbnRlbnQgPSAiQ291bGRuJ3QgZmluZCByZWNvZ25pemFibGUgY29sdW1ucyBpbiB0aGUgZmlsZShzKS4gQ2hlY2sgdGhlIGZvcm1hdCBvciB0cnkgbWFudWFsIGVudHJ5IGJlbG93LiI7CiAgICByZXR1cm47CiAgfQoKICB1c2FibGUuZm9yRWFjaCgobSkgPT4gewogICAgY29uc3QgZXhpc3RpbmcgPSBob2xkaW5ncy5maW5kKChoKSA9PiBoLnN5bWJvbCA9PT0gbS5zeW1ib2wpOwogICAgaWYgKGV4aXN0aW5nKSB7CiAgICAgIGV4aXN0aW5nLnF0eSA9IG0ucXR5OwogICAgICBleGlzdGluZy5hdmdDb3N0ID0gbS5hdmdDb3N0OwogICAgICBpZiAobS5wdXJjaGFzZURhdGUpIGV4aXN0aW5nLnB1cmNoYXNlRGF0ZSA9IG0ucHVyY2hhc2VEYXRlOwogICAgfSBlbHNlIHsKICAgICAgaG9sZGluZ3MucHVzaCh7IGlkOiBEYXRlLm5vdygpICsgTWF0aC5yYW5kb20oKSwgc3ltYm9sOiBtLnN5bWJvbCwgcXR5OiBtLnF0eSwgYXZnQ29zdDogbS5hdmdDb3N0LCBwdXJjaGFzZURhdGU6IG0ucHVyY2hhc2VEYXRlIH0pOwogICAgfQogIH0pOwoKICBzdGF0dXMuY2xhc3NOYW1lID0gImltcG9ydC1zdGF0dXMgb2siOwogIGxldCBtc2cgPSBgSW1wb3J0ZWQgJHt1c2FibGUubGVuZ3RofSBob2xkaW5nKHMpOiAke3VzYWJsZS5tYXAoKG0pID0+IG0uc3ltYm9sKS5qb2luKCIsICIpfS5gOwogIGlmIChtaXNzaW5nQ29zdC5sZW5ndGgpIG1zZyArPSBgICR7bWlzc2luZ0Nvc3QubGVuZ3RofSBzeW1ib2wocykgbmVlZCBtYW51YWwgcXR5L2Nvc3Q6ICR7bWlzc2luZ0Nvc3QubWFwKChtKSA9PiBtLnN5bWJvbCkuam9pbigiLCAiKX0uYDsKICBpZiAobm90ZXMubGVuZ3RoKSBtc2cgKz0gIiAiICsgbm90ZXMuam9pbigiICIpOwogIHN0YXR1cy50ZXh0Q29udGVudCA9IG1zZzsKCiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImNsaWVudFBpY2tlciIpLnN0eWxlLmRpc3BsYXkgPSAibm9uZSI7CiAgcGVuZGluZ1Rtc1RyYWRlcyA9IFtdOyBwZW5kaW5nTWVyb3NoYXJlUm93cyA9IFtdOyBwZW5kaW5nV2FjY1Jvd3MgPSBbXTsKICByZWZyZXNoKCk7Cn0KCmZ1bmN0aW9uIGhhbmRsZUZpbGVzKGZpbGVMaXN0KSB7CiAgY29uc3Qgc3RhdHVzID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImltcG9ydFN0YXR1cyIpOwogIHN0YXR1cy5jbGFzc05hbWUgPSAiaW1wb3J0LXN0YXR1cyI7CiAgc3RhdHVzLnRleHRDb250ZW50ID0gIlJlYWRpbmcgZmlsZXPigKYiOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjbGllbnRQaWNrZXIiKS5zdHlsZS5kaXNwbGF5ID0gIm5vbmUiOwoKICBjb25zdCBmaWxlcyA9IEFycmF5LmZyb20oZmlsZUxpc3QpOwogIGNvbnN0IHJlYWRlcnMgPSBmaWxlcy5tYXAoKGYpID0+IHsKICAgIGNvbnN0IGlzWGxzeCA9IC9cLnhsc3g/JC9pLnRlc3QoZi5uYW1lKTsKICAgIHJldHVybiBpc1hsc3gKICAgICAgPyBmLmFycmF5QnVmZmVyKCkudGhlbigoYnVmKSA9PiAoeyByb3dzOiBwYXJzZVhMU1goYnVmKSwgaXNYbHN4OiB0cnVlIH0pKQogICAgICA6IGYudGV4dCgpLnRoZW4oKHQpID0+ICh7IHJvd3M6IHBhcnNlQ1NWKHQpLCBpc1hsc3g6IGZhbHNlIH0pKTsKICB9KTsKCiAgUHJvbWlzZS5hbGwocmVhZGVycykudGhlbigocmVzdWx0cykgPT4gewogICAgcGVuZGluZ1Rtc1RyYWRlcyA9IFtdOyBwZW5kaW5nTWVyb3NoYXJlUm93cyA9IFtdOyBwZW5kaW5nV2FjY1Jvd3MgPSBbXTsKCiAgICByZXN1bHRzLmZvckVhY2goKHsgcm93cyB9KSA9PiB7CiAgICAgIGNvbnN0IGZtdCA9IGRldGVjdEZvcm1hdChyb3dzKTsKICAgICAgaWYgKGZtdCA9PT0gInRtcyIpIHsKICAgICAgICBwZW5kaW5nVG1zVHJhZGVzID0gcGVuZGluZ1Rtc1RyYWRlcy5jb25jYXQoZXh0cmFjdFRtc1RyYWRlcyhyb3dzKSk7CiAgICAgIH0gZWxzZSBpZiAoZm10ID09PSAibWVyb3NoYXJlLWhpc3RvcnkiKSB7CiAgICAgICAgcGVuZGluZ01lcm9zaGFyZVJvd3MgPSBwZW5kaW5nTWVyb3NoYXJlUm93cy5jb25jYXQoZXh0cmFjdE1lcm9zaGFyZUhpc3Rvcnkocm93cykpOwogICAgICB9IGVsc2UgaWYgKGZtdCA9PT0gIndhY2MiKSB7CiAgICAgICAgcGVuZGluZ1dhY2NSb3dzID0gcGVuZGluZ1dhY2NSb3dzLmNvbmNhdChyb3dzKTsKICAgICAgfQogICAgICAvLyB1bmtub3duIGZvcm1hdCByb3dzIGFyZSBzaWxlbnRseSBza2lwcGVkOyBmaW5hbCAibm8gcmVjb2duaXphYmxlIGNvbHVtbnMiIGNoZWNrIGhhcHBlbnMgaW4gZmluYWxpemVJbXBvcnQKICAgIH0pOwoKICAgIGlmICghcGVuZGluZ1Rtc1RyYWRlcy5sZW5ndGggJiYgIXBlbmRpbmdNZXJvc2hhcmVSb3dzLmxlbmd0aCAmJiAhcGVuZGluZ1dhY2NSb3dzLmxlbmd0aCkgewogICAgICBzdGF0dXMuY2xhc3NOYW1lID0gImltcG9ydC1zdGF0dXMgZXJyIjsKICAgICAgc3RhdHVzLnRleHRDb250ZW50ID0gIkNvdWxkbid0IGRldGVjdCBhIGtub3duIGZvcm1hdCAoVHJhZGUgQm9vaywgVHJhbnNhY3Rpb24gSGlzdG9yeSwgb3IgU2hhcmUgVmFsdWVzL1dBQ0MgQ1NWKS4gQ2hlY2sgdGhlIGZpbGUgb3IgdHJ5IG1hbnVhbCBlbnRyeSBiZWxvdy4iOwogICAgICByZXR1cm47CiAgICB9CgogICAgY29uc3QgY2xpZW50cyA9IGdldERpc3RpbmN0Q2xpZW50cyhwZW5kaW5nVG1zVHJhZGVzKTsKICAgIGlmIChjbGllbnRzLmxlbmd0aCA+IDEpIHsKICAgICAgY29uc3QgcGlja2VyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImNsaWVudFBpY2tlciIpOwogICAgICBjb25zdCBzZWxlY3QgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiY2xpZW50U2VsZWN0Iik7CiAgICAgIHNlbGVjdC5pbm5lckhUTUwgPSAiIjsKICAgICAgY2xpZW50cy5mb3JFYWNoKChjKSA9PiB7CiAgICAgICAgY29uc3Qgb3B0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgib3B0aW9uIik7CiAgICAgICAgb3B0LnZhbHVlID0gYy5pZCB8fCBjLm5hbWU7CiAgICAgICAgb3B0LnRleHRDb250ZW50ID0gYy5uYW1lID8gYCR7Yy5uYW1lfSAoJHtjLmlkfSlgIDogYy5pZDsKICAgICAgICBzZWxlY3QuYXBwZW5kQ2hpbGQob3B0KTsKICAgICAgfSk7CiAgICAgIHBpY2tlci5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsKICAgICAgc3RhdHVzLnRleHRDb250ZW50ID0gYFRyYWRlIGJvb2sgaGFzICR7Y2xpZW50cy5sZW5ndGh9IGNsaWVudHMg4oCUIHBpY2sgb25lIGFib3ZlIHRvIGltcG9ydC5gOwogICAgICByZXR1cm47CiAgICB9CgogICAgZmluYWxpemVJbXBvcnQoY2xpZW50cy5sZW5ndGggPT09IDEgPyAoY2xpZW50c1swXS5pZCB8fCBjbGllbnRzWzBdLm5hbWUpIDogbnVsbCk7CiAgfSkuY2F0Y2goKGVycikgPT4gewogICAgc3RhdHVzLmNsYXNzTmFtZSA9ICJpbXBvcnQtc3RhdHVzIGVyciI7CiAgICBzdGF0dXMudGV4dENvbnRlbnQgPSAiU29tZXRoaW5nIHdlbnQgd3JvbmcgcmVhZGluZyB0aG9zZSBmaWxlcy4iOwogICAgY29uc29sZS5lcnJvcihlcnIpOwogIH0pOwp9Cgpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiY2xpZW50SW1wb3J0QnRuIikuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLCAoKSA9PiB7CiAgY29uc3Qgc2VsZWN0ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImNsaWVudFNlbGVjdCIpOwogIGZpbmFsaXplSW1wb3J0KHNlbGVjdC52YWx1ZSk7Cn0pOwoKLyogLS0tLS0tLS0tLSBQcmljZSByZWZyZXNoIC0tLS0tLS0tLS0gKi8KYXN5bmMgZnVuY3Rpb24gcmVmcmVzaCgpIHsKICBjb25zdCBlcnJvckJveCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJlcnJvckJveCIpOwogIGVycm9yQm94LnN0eWxlLmRpc3BsYXkgPSAibm9uZSI7CiAgaWYgKGhvbGRpbmdzLmxlbmd0aCA9PT0gMCkgeyByZW5kZXIoKTsgcmV0dXJuOyB9CiAgY29uc3Qgd29ya2VyVXJsID0gZ2V0V29ya2VyVXJsKCk7CiAgdHJ5IHsKICAgIGNvbnN0IHJlc3VsdHMgPSBhd2FpdCBQcm9taXNlLmFsbCgKICAgICAgaG9sZGluZ3MubWFwKGFzeW5jIChoKSA9PiB7CiAgICAgICAgY29uc3QgcmVzID0gYXdhaXQgZmV0Y2goYCR7d29ya2VyVXJsfS8/c3ltYm9sPSR7ZW5jb2RlVVJJQ29tcG9uZW50KGguc3ltYm9sKX1gKTsKICAgICAgICBpZiAoIXJlcy5vaykgdGhyb3cgbmV3IEVycm9yKGAke2guc3ltYm9sfTogJHtyZXMuc3RhdHVzfWApOwogICAgICAgIHJldHVybiByZXMuanNvbigpOwogICAgICB9KQogICAgKTsKICAgIGNvbnN0IG5leHQgPSB7fTsKICAgIHJlc3VsdHMuZm9yRWFjaCgocikgPT4geyBpZiAoci5zeW1ib2wpIG5leHRbci5zeW1ib2xdID0gcjsgfSk7CiAgICBwcmV2UHJpY2VzID0geyAuLi5wcmljZXMgfTsKICAgIHByaWNlcyA9IG5leHQ7CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibGFzdFVwZGF0ZWQiKS50ZXh0Q29udGVudCA9IG5ldyBEYXRlKCkudG9Mb2NhbGVUaW1lU3RyaW5nKCkgKyAiIMK3IHJlZnJlc2hlcyBldmVyeSAzMHMiOwogICAgcmVuZGVyKCk7CiAgfSBjYXRjaCAoZSkgewogICAgZXJyb3JCb3guc3R5bGUuZGlzcGxheSA9ICJibG9jayI7CiAgfQp9CgovKiAtLS0tLS0tLS0tIFJlbmRlciAtLS0tLS0tLS0tICovCmZ1bmN0aW9uIHJlbmRlcigpIHsKICBjb25zdCBsaXN0ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImhvbGRpbmdzTGlzdCIpOwogIGxpc3QuaW5uZXJIVE1MID0gIiI7CgogIGlmIChob2xkaW5ncy5sZW5ndGggPT09IDApIHsKICAgIGxpc3QuaW5uZXJIVE1MID0gJzxkaXYgY2xhc3M9ImVtcHR5LXN0YXRlIj5ObyBob2xkaW5ncyB5ZXQg4oCUIGltcG9ydCBmcm9tIE1lcm9zaGFyZSBvciBhZGQgb25lIG1hbnVhbGx5IGJlbG93LjwvZGl2Pic7CiAgfQoKICBjb25zdCByYXRlcyA9IGdldFJhdGVzKCk7CiAgbGV0IHRvdGFsVmFsdWUgPSAwLCB0b3RhbENvc3QgPSAwLCB0b3RhbEdhaW4gPSAwLCB0b3RhbFRheCA9IDA7CgogIGhvbGRpbmdzLmZvckVhY2goKGgpID0+IHsKICAgIGNvbnN0IHAgPSBwcmljZXNbaC5zeW1ib2xdOwogICAgY29uc3QgbHRwID0gcCA/IHAubHRwIDogbnVsbDsKICAgIGNvbnN0IHZhbHVlID0gbHRwID8gbHRwICogaC5xdHkgOiBudWxsOwogICAgY29uc3QgY29zdCA9IGguYXZnQ29zdCAqIGgucXR5OwogICAgY29uc3QgcGwgPSB2YWx1ZSAhPT0gbnVsbCA/IHZhbHVlIC0gY29zdCA6IG51bGw7CiAgICBjb25zdCBwbFBjdCA9IHBsICE9PSBudWxsID8gKHBsIC8gY29zdCkgKiAxMDAgOiBudWxsOwoKICAgIGNvbnN0IGRheXMgPSBob2xkaW5nRGF5cyhoLnB1cmNoYXNlRGF0ZSk7CiAgICBjb25zdCBpc0xvbmdUZXJtID0gZGF5cyAhPT0gbnVsbCAmJiBkYXlzID4gcmF0ZXMudGhyZXNob2xkRGF5czsKICAgIGNvbnN0IHJhdGUgPSBkYXlzID09PSBudWxsID8gbnVsbCA6IChpc0xvbmdUZXJtID8gcmF0ZXMubHQgOiByYXRlcy5zdCk7CiAgICBjb25zdCBlc3RUYXggPSBwbCAhPT0gbnVsbCAmJiBwbCA+IDAgJiYgcmF0ZSAhPT0gbnVsbCA/IHBsICogcmF0ZSA6IChwbCAhPT0gbnVsbCAmJiBwbCA+IDAgPyBwbCAqIHJhdGVzLnN0IDogMCk7CgogICAgaWYgKHZhbHVlKSB0b3RhbFZhbHVlICs9IHZhbHVlOwogICAgdG90YWxDb3N0ICs9IGNvc3Q7CiAgICBpZiAocGwgIT09IG51bGwpIHRvdGFsR2FpbiArPSBwbDsKICAgIGlmIChwbCA+IDApIHRvdGFsVGF4ICs9IGVzdFRheDsKCiAgICBsZXQgZmxhc2hDbGFzcyA9ICIiOwogICAgaWYgKHByZXZQcmljZXNbaC5zeW1ib2xdICYmIGx0cCAhPT0gbnVsbCAmJiBwcmV2UHJpY2VzW2guc3ltYm9sXS5sdHAgIT09IGx0cCkgewogICAgICBmbGFzaENsYXNzID0gbHRwID4gcHJldlByaWNlc1toLnN5bWJvbF0ubHRwID8gImZsYXNoLXVwIiA6ICJmbGFzaC1kb3duIjsKICAgIH0KCiAgICBjb25zdCB0ZXJtVGFnID0gZGF5cyA9PT0gbnVsbAogICAgICA/ICc8c3BhbiBjbGFzcz0iZmFpbnQgbGFiZWwiPuKAlDwvc3Bhbj4nCiAgICAgIDogaXNMb25nVGVybQogICAgICAgID8gJzxzcGFuIGNsYXNzPSJ0YWcgbHQgbGFiZWwiPkxUIMK3ICcgKyBkYXlzICsgJ2Q8L3NwYW4+JwogICAgICAgIDogJzxzcGFuIGNsYXNzPSJ0YWcgc3QgbGFiZWwiPlNUIMK3ICcgKyBkYXlzICsgJ2Q8L3NwYW4+JzsKCiAgICBjb25zdCByb3cgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCJkaXYiKTsKICAgIHJvdy5jbGFzc05hbWUgPSAicm93IjsKICAgIHJvdy5pbm5lckhUTUwgPSBgCiAgICAgIDxzcGFuIGNsYXNzPSJzeW0iPiR7aC5zeW1ib2x9PC9zcGFuPgogICAgICA8c3BhbiBjbGFzcz0ibXV0ZWQiPiR7aC5xdHl9PC9zcGFuPgogICAgICA8c3BhbiBjbGFzcz0ibXV0ZWQiPiR7Zm10KGguYXZnQ29zdCwgMil9PC9zcGFuPgogICAgICA8c3BhbiBjbGFzcz0iJHtmbGFzaENsYXNzfSI+JHtsdHAgIT09IG51bGwgPyBmbXQobHRwLCAyKSA6ICLigJQifTwvc3Bhbj4KICAgICAgPHNwYW4+JHt2YWx1ZSAhPT0gbnVsbCA/ICJScyAiICsgZm10KHZhbHVlLCAwKSA6ICLigJQifTwvc3Bhbj4KICAgICAgPHNwYW4gY2xhc3M9IiR7cGwgPT09IG51bGwgPyAnJyA6IChwbCA+PSAwID8gJ3VwJyA6ICdkb3duJyl9Ij4ke3BsID09PSBudWxsID8gIuKAlCIgOiAocGwgPj0gMCA/ICIrIiA6ICIiKSArIGZtdChwbFBjdCwgMSkgKyAiJSJ9PC9zcGFuPgogICAgICA8c3Bhbj4ke3Rlcm1UYWd9PC9zcGFuPgogICAgICA8c3BhbiBjbGFzcz0ibXV0ZWQiPiR7cGwgPiAwID8gIlJzICIgKyBmbXQoZXN0VGF4LCAwKSA6ICLigJQifTwvc3Bhbj4KICAgICAgPHNwYW4gY2xhc3M9ImZhaW50IGxhYmVsIj4ke2gucHVyY2hhc2VEYXRlIHx8ICJub3Qgc2V0In08L3NwYW4+CiAgICAgIDxidXR0b24gY2xhc3M9InJlbW92ZS1idG4iIGRhdGEtaWQ9IiR7aC5pZH0iPuKclTwvYnV0dG9uPgogICAgYDsKICAgIGxpc3QuYXBwZW5kQ2hpbGQocm93KTsKICB9KTsKCiAgbGlzdC5xdWVyeVNlbGVjdG9yQWxsKCIucmVtb3ZlLWJ0biIpLmZvckVhY2goKGJ0bikgPT4gewogICAgYnRuLmFkZEV2ZW50TGlzdGVuZXIoImNsaWNrIiwgKCkgPT4gewogICAgICBob2xkaW5ncyA9IGhvbGRpbmdzLmZpbHRlcigoaCkgPT4gaC5pZCAhPSBidG4uZGF0YXNldC5pZCk7CiAgICAgIHJlbmRlcigpOwogICAgfSk7CiAgfSk7CgogIGNvbnN0IHRvdGFsUEwgPSB0b3RhbFZhbHVlIC0gdG90YWxDb3N0OwogIGNvbnN0IHRvdGFsUExQY3QgPSB0b3RhbENvc3QgPyAodG90YWxQTCAvIHRvdGFsQ29zdCkgKiAxMDAgOiAwOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJ0b3RhbFZhbHVlIikudGV4dENvbnRlbnQgPSAiUnMgIiArIGZtdCh0b3RhbFZhbHVlLCAwKTsKICBjb25zdCBwbFJvdyA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJ0b3RhbFBMIik7CiAgcGxSb3cuY2xhc3NOYW1lID0gInBsLXJvdyAiICsgKHRvdGFsUEwgPj0gMCA/ICJ1cCIgOiAiZG93biIpOwogIHBsUm93LnRleHRDb250ZW50ID0gKHRvdGFsUEwgPj0gMCA/ICLilrIgKyIgOiAi4pa8ICIpICsgZm10KHRvdGFsUEwsIDApICsgIiAoIiArICh0b3RhbFBMID49IDAgPyAiKyIgOiAiIikgKyBmbXQodG90YWxQTFBjdCwgMikgKyAiJSkiOwoKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgic3RhdENvc3QiKS50ZXh0Q29udGVudCA9ICJScyAiICsgZm10KHRvdGFsQ29zdCwgMCk7CiAgY29uc3QgZ2FpbkVsID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInN0YXRHYWluIik7CiAgZ2FpbkVsLnRleHRDb250ZW50ID0gKHRvdGFsR2FpbiA+PSAwID8gIisiIDogIiIpICsgIlJzICIgKyBmbXQodG90YWxHYWluLCAwKTsKICBnYWluRWwuY2xhc3NOYW1lID0gInN0YXQtdmFsdWUgIiArICh0b3RhbEdhaW4gPj0gMCA/ICJ1cCIgOiAiZG93biIpOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJzdGF0VGF4IikudGV4dENvbnRlbnQgPSAiUnMgIiArIGZtdCh0b3RhbFRheCwgMCk7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInN0YXROZXQiKS50ZXh0Q29udGVudCA9ICJScyAiICsgZm10KHRvdGFsR2FpbiAtIHRvdGFsVGF4LCAwKTsKCiAgc2V0VGltZW91dCgoKSA9PiB7CiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCIuZmxhc2gtdXAsIC5mbGFzaC1kb3duIikuZm9yRWFjaCgoZWwpID0+IGVsLmNsYXNzTGlzdC5yZW1vdmUoImZsYXNoLXVwIiwgImZsYXNoLWRvd24iKSk7CiAgfSwgMTIwMCk7Cn0KCi8qIC0tLS0tLS0tLS0gRXZlbnRzIC0tLS0tLS0tLS0gKi8KZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInJlZnJlc2hCdG4iKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsIHJlZnJlc2gpOwpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgic2V0dGluZ3NCdG4iKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsICgpID0+IHsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgic2V0dGluZ3NCb3giKS5jbGFzc0xpc3QudG9nZ2xlKCJzaG93Iik7Cn0pOwpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiaW1wb3J0QnRuIikuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLCAoKSA9PiB7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImltcG9ydFBhbmVsIikuY2xhc3NMaXN0LnRvZ2dsZSgic2hvdyIpOwp9KTsKCmNvbnN0IGRyb3Bab25lID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImRyb3Bab25lIik7CmNvbnN0IGZpbGVJbnB1dCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJmaWxlSW5wdXQiKTsKZHJvcFpvbmUuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLCAoKSA9PiBmaWxlSW5wdXQuY2xpY2soKSk7CmZpbGVJbnB1dC5hZGRFdmVudExpc3RlbmVyKCJjaGFuZ2UiLCAoZSkgPT4gaGFuZGxlRmlsZXMoZS50YXJnZXQuZmlsZXMpKTsKZHJvcFpvbmUuYWRkRXZlbnRMaXN0ZW5lcigiZHJhZ292ZXIiLCAoZSkgPT4geyBlLnByZXZlbnREZWZhdWx0KCk7IGRyb3Bab25lLmNsYXNzTGlzdC5hZGQoImRyYWdvdmVyIik7IH0pOwpkcm9wWm9uZS5hZGRFdmVudExpc3RlbmVyKCJkcmFnbGVhdmUiLCAoKSA9PiBkcm9wWm9uZS5jbGFzc0xpc3QucmVtb3ZlKCJkcmFnb3ZlciIpKTsKZHJvcFpvbmUuYWRkRXZlbnRMaXN0ZW5lcigiZHJvcCIsIChlKSA9PiB7CiAgZS5wcmV2ZW50RGVmYXVsdCgpOwogIGRyb3Bab25lLmNsYXNzTGlzdC5yZW1vdmUoImRyYWdvdmVyIik7CiAgaGFuZGxlRmlsZXMoZS5kYXRhVHJhbnNmZXIuZmlsZXMpOwp9KTsKClsibHRSYXRlIiwgInN0UmF0ZSIsICJob2xkaW5nVGhyZXNob2xkIl0uZm9yRWFjaCgoaWQpID0+IHsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChpZCkuYWRkRXZlbnRMaXN0ZW5lcigiaW5wdXQiLCByZW5kZXIpOwp9KTsKCmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJhZGRCdG4iKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsICgpID0+IHsKICBjb25zdCBzeW1ib2wgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgic3ltYm9sSW5wdXQiKS52YWx1ZS50cmltKCkudG9VcHBlckNhc2UoKTsKICBjb25zdCBxdHkgPSBOdW1iZXIoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInF0eUlucHV0IikudmFsdWUpOwogIGNvbnN0IGNvc3QgPSBOdW1iZXIoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImNvc3RJbnB1dCIpLnZhbHVlKTsKICBjb25zdCBkYXRlID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImRhdGVJbnB1dCIpLnZhbHVlIHx8IG51bGw7CiAgaWYgKCFzeW1ib2wgfHwgIXF0eSB8fCAhY29zdCkgcmV0dXJuOwogIGhvbGRpbmdzLnB1c2goeyBpZDogRGF0ZS5ub3coKSwgc3ltYm9sLCBxdHksIGF2Z0Nvc3Q6IGNvc3QsIHB1cmNoYXNlRGF0ZTogZGF0ZSB9KTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgic3ltYm9sSW5wdXQiKS52YWx1ZSA9ICIiOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJxdHlJbnB1dCIpLnZhbHVlID0gIiI7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImNvc3RJbnB1dCIpLnZhbHVlID0gIiI7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImRhdGVJbnB1dCIpLnZhbHVlID0gIiI7CiAgcmVmcmVzaCgpOwp9KTsKCnJlbmRlcigpOwpyZWZyZXNoKCk7CnNldEludGVydmFsKHJlZnJlc2gsIDMwMDAwKTsKPC9zY3JpcHQ+CjwvYm9keT4KPC9odG1sPgo=";
+  function loadPortfolioFrame(){
+    var frame = document.getElementById("portfolio-frame");
+    if(!frame || frame.dataset.loaded) return;
+    frame.dataset.loaded = "1";
+    var html = decodeURIComponent(escape(atob(PORTFOLIO_B64)));
+    frame.srcdoc = html;
+  }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", loadPortfolioFrame);
+  } else {
+    loadPortfolioFrame();
+  }
+})();
+</script>
+</body>
+</html>
+

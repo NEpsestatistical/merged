@@ -24,6 +24,28 @@
   .total { font-size: 38px; font-weight: 600; letter-spacing: -.01em; }
   .pl-row { display: flex; gap: 10px; align-items: center; margin-top: 6px; font-size: 14px; }
   .up { color: #3FA796; } .down { color: #C4553D; }
+
+  /* Daily gain/loss bars */
+  .day-pl-strip { background: #1A1F24; border: 1px solid #2A3138; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .day-pl-strip .label-col { font-family: 'Inter', sans-serif; }
+  .day-pl-strip .stat-label { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .1em; color: #6B7680; text-transform: uppercase; margin-bottom: 4px; }
+  .day-pl-strip .amt-row { display: flex; align-items: baseline; gap: 8px; }
+  .day-pl-strip .amt { font-size: 20px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+  .day-pl-strip .pct { font-size: 13px; font-family: 'Inter', sans-serif; }
+  .day-pl-bar-track { flex: 1 1 160px; height: 8px; background: #14181C; border-radius: 4px; overflow: hidden; position: relative; min-width: 120px; }
+  .day-pl-bar-fill { position: absolute; top: 0; bottom: 0; border-radius: 4px; transition: width .3s ease; }
+  .day-pl-bar-fill.up { background: #3FA796; left: 50%; }
+  .day-pl-bar-fill.down { background: #C4553D; right: 50%; }
+  .day-pl-bar-track .mid-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #2A3138; }
+
+  .sym-cell { display: flex; flex-direction: column; gap: 4px; }
+  .day-chg-mini { display: flex; align-items: center; gap: 5px; }
+  .day-chg-mini .mini-track { width: 42px; height: 4px; background: #14181C; border-radius: 2px; overflow: hidden; }
+  .day-chg-mini .mini-fill { height: 100%; border-radius: 2px; }
+  .day-chg-mini .mini-fill.up { background: #3FA796; }
+  .day-chg-mini .mini-fill.down { background: #C4553D; }
+  .day-chg-mini .mini-pct { font-family: 'Inter', sans-serif; font-size: 10px; }
+  .day-chg-mini .mini-pct.up { color: #3FA796; } .day-chg-mini .mini-pct.down { color: #C4553D; }
   button { font-family: inherit; cursor: pointer; }
   .btn { display: flex; align-items: center; gap: 6px; background: #1D2329; border: 1px solid #2A3138; color: #EDEFF1; padding: 9px 14px; border-radius: 7px; font-size: 13px; }
   .btn:hover { border-color: #3A424B; }
@@ -241,6 +263,20 @@
     </div>
   </div>
 
+
+  <div class="day-pl-strip" id="dayPlStrip" style="display:none;">
+    <div class="label-col">
+      <div class="stat-label">Today's Gain / Loss</div>
+      <div class="amt-row">
+        <span class="amt" id="dayPlAmt">Rs 0</span>
+        <span class="pct" id="dayPlPct"></span>
+      </div>
+    </div>
+    <div class="day-pl-bar-track">
+      <div class="mid-line"></div>
+      <div class="day-pl-bar-fill" id="dayPlBarFill"></div>
+    </div>
+  </div>
 
   <div class="table">
     <div class="row head">
@@ -794,6 +830,31 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && document.getElementById("tradeModalOverlay").classList.contains("show")) closeTradeModal();
 });
 
+/* ---------- Daily change helper ----------
+   Reads today's point/percent change from whatever field names the price feed
+   happens to send back (varies by source) — returns null if none are present,
+   so callers can just skip the bar instead of showing bad data. */
+function getDayChange(p, ltp) {
+  if (!p) return null;
+  const pct = [p.percentChange, p.perChange, p.changePercent, p.percChange, p.pctChange]
+    .find((v) => v !== undefined && v !== null && !Number.isNaN(Number(v)));
+  const amtRaw = [p.pointChange, p.change, p.netChange, p.diff, p.priceChange]
+    .find((v) => v !== undefined && v !== null && !Number.isNaN(Number(v)));
+
+  let amt = amtRaw !== undefined ? Number(amtRaw) : null;
+  let pctNum = pct !== undefined ? Number(pct) : null;
+
+  if (amt === null && pctNum !== null && ltp !== null) {
+    amt = ltp - ltp / (1 + pctNum / 100);
+  } else if (pctNum === null && amt !== null && ltp !== null) {
+    const prevClose = ltp - amt;
+    pctNum = prevClose ? (amt / prevClose) * 100 : 0;
+  }
+
+  if (amt === null || pctNum === null || Number.isNaN(amt) || Number.isNaN(pctNum)) return null;
+  return { amt, pct: pctNum };
+}
+
 /* ---------- Render ---------- */
 function render() {
   const list = document.getElementById("holdingsList");
@@ -805,6 +866,7 @@ function render() {
 
   const rates = getRates();
   let totalValue = 0, totalCost = 0, totalGain = 0, totalTax = 0;
+  let totalDayChange = 0, totalDayChangeBase = 0, anyDayChange = false;
 
   holdings.forEach((h) => {
     const p = prices[h.symbol];
@@ -813,6 +875,13 @@ function render() {
     const cost = h.avgCost * h.qty;
     const pl = value !== null ? value - cost : null;
     const plPct = pl !== null ? (pl / cost) * 100 : null;
+
+    const dayChg = getDayChange(p, ltp);
+    if (dayChg && h.qty) {
+      anyDayChange = true;
+      totalDayChange += dayChg.amt * h.qty;
+      totalDayChangeBase += (ltp - dayChg.amt) * h.qty; // yesterday's close, for portfolio-level %
+    }
 
     const days = holdingDays(h.purchaseDate);
     const isLongTerm = days !== null && days > rates.thresholdDays;
@@ -835,10 +904,17 @@ function render() {
         ? '<span class="tag lt label">LT · ' + days + 'd</span>'
         : '<span class="tag st label">ST · ' + days + 'd</span>';
 
+    const dayChgHtml = dayChg
+      ? `<div class="day-chg-mini">
+           <div class="mini-track"><div class="mini-fill ${dayChg.pct >= 0 ? 'up' : 'down'}" style="width:${Math.min(Math.abs(dayChg.pct) * 20, 100)}%;"></div></div>
+           <span class="mini-pct ${dayChg.pct >= 0 ? 'up' : 'down'}">${dayChg.pct >= 0 ? '+' : ''}${fmt(dayChg.pct, 2)}%</span>
+         </div>`
+      : "";
+
     const row = document.createElement("div");
     row.className = "row";
     row.innerHTML = `
-      <span class="sym">${h.symbol}</span>
+      <span class="sym-cell"><span class="sym">${h.symbol}</span>${dayChgHtml}</span>
       <span class="muted">${h.qty}</span>
       <span class="muted">${fmt(h.avgCost, 2)}</span>
       <span class="${flashClass}">${ltp !== null ? fmt(ltp, 2) : "—"}</span>
@@ -884,6 +960,24 @@ function render() {
   gainEl.className = "stat-value " + (totalGain >= 0 ? "up" : "down");
   document.getElementById("statTax").textContent = "Rs " + fmt(totalTax, 0);
   document.getElementById("statNet").textContent = "Rs " + fmt(totalGain - totalTax, 0);
+
+  const dayPlStrip = document.getElementById("dayPlStrip");
+  if (anyDayChange) {
+    dayPlStrip.style.display = "flex";
+    const dayPlPct = totalDayChangeBase ? (totalDayChange / totalDayChangeBase) * 100 : 0;
+    const amtEl = document.getElementById("dayPlAmt");
+    const pctEl = document.getElementById("dayPlPct");
+    const fillEl = document.getElementById("dayPlBarFill");
+    const up = totalDayChange >= 0;
+    amtEl.textContent = (up ? "+" : "") + "Rs " + fmt(totalDayChange, 0);
+    amtEl.className = "amt " + (up ? "up" : "down");
+    pctEl.textContent = "(" + (up ? "+" : "") + fmt(dayPlPct, 2) + "%)";
+    pctEl.className = "pct " + (up ? "up" : "down");
+    fillEl.className = "day-pl-bar-fill " + (up ? "up" : "down");
+    fillEl.style.width = Math.min(Math.abs(dayPlPct) * 10, 50) + "%";
+  } else {
+    dayPlStrip.style.display = "none";
+  }
 
   setTimeout(() => {
     document.querySelectorAll(".flash-up, .flash-down").forEach((el) => el.classList.remove("flash-up", "flash-down"));

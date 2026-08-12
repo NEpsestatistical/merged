@@ -1,0 +1,123 @@
+:root {
+  --bg: #0f1420;
+  --card-bg: #1a2233;
+  --border: #2a3450;
+  --text: #e6e9ef;
+  --muted: #8b95ac;
+  --green: #22c55e;
+  --red: #ef4444;
+  --accent: #3b82f6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar h1 { font-size: 20px; }
+
+.topbar nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+.topbar nav a.active,
+.topbar nav a:hover {
+  color: var(--accent);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 24px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.card h2 {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.index-card { grid-column: span 2; }
+
+.index-summary {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.index-summary .stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.index-summary .stat .value {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.index-summary .stat .label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+th { color: var(--muted); font-weight: 500; font-size: 12px; }
+
+.up { color: var(--green); }
+.down { color: var(--red); }
+
+.loading { color: var(--muted); font-style: italic; }
+
+.view-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 20px;
+}
+
+@media (max-width: 700px) {
+  .index-card { grid-column: span 1; }
+}

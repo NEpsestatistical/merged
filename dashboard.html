@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEPSE Dashboard</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>NEPSE Dashboard</h1>
+    <nav>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="portfolio.html">Portfolio</a>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+
+    <!-- Market Summary -->
+    <section class="card index-card">
+      <h2>Market Summary</h2>
+      <div id="indexSummary" class="index-summary">
+        <p class="loading">Loading index...</p>
+      </div>
+    </section>
+
+    <!-- Top Gainers -->
+    <section class="card">
+      <h2>Top Gainers</h2>
+      <table id="gainersTable">
+        <thead>
+          <tr><th>Symbol</th><th>LTP</th><th>Change %</th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="loading">Loading...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Top Losers -->
+    <section class="card">
+      <h2>Top Losers</h2>
+      <table id="losersTable">
+        <thead>
+          <tr><th>Symbol</th><th>LTP</th><th>Change %</th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="loading">Loading...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Portfolio Snapshot (pulls summary only, full detail lives in portfolio.js/html) -->
+    <section class="card">
+      <h2>Portfolio Snapshot</h2>
+      <div id="portfolioSnapshot">
+        <p class="loading">Loading portfolio...</p>
+      </div>
+      <a href="portfolio.html" class="view-link">View full portfolio →</a>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Data refreshed manually / via script. Not real-time.</p>
+  </footer>
+
+  <!-- Separate files: dashboard.js handles market data, portfolio.js (your existing file) handles portfolio -->
+  <script src="dashboard.js"></script>
+  <script src="portfolio.js"></script>
+</body>
+</html>

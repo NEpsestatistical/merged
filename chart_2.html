@@ -46,6 +46,8 @@
   #drawCanvas { position: absolute; top: 0; left: 0; pointer-events: none; }
   .chart-stack { position: relative; }
   .chart-stack.drawing-mode #drawCanvas { pointer-events: auto; cursor: crosshair; }
+  #chartStatus { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: #1A1F24; z-index: 5; }
+  #chartStatus.show { display: flex; }
 
   .price-info { font-family: 'Inter', sans-serif; }
   .price-info .last { font-size: 28px; font-weight: 600; }
@@ -115,6 +117,7 @@
     <div class="chart-stack" id="chartStack">
       <div id="chart"></div>
       <canvas id="drawCanvas"></canvas>
+      <div id="chartStatus"><div class="status" id="chartStatusText"></div></div>
     </div>
     <div id="volChart"></div>
   </div>
@@ -427,13 +430,22 @@ function applyRange() {
   }
 }
 
+function showChartStatus(html, isErr) {
+  const box = document.getElementById("chartStatus");
+  const text = document.getElementById("chartStatusText");
+  text.className = "status" + (isErr ? " err" : "");
+  text.innerHTML = html;
+  box.classList.add("show");
+}
+function hideChartStatus() {
+  document.getElementById("chartStatus").classList.remove("show");
+}
+
 async function loadSymbol() {
   const symbol = document.getElementById("symbolInput").value.trim().toUpperCase();
   if (!symbol) return;
 
-  const chartEl = document.getElementById("chart");
-  chartEl.innerHTML = '<div class="status">Loading ' + symbol + '…</div>';
-  document.getElementById("volChart").innerHTML = "";
+  showChartStatus("Loading " + symbol + "…", false);
 
   try {
     const res = await fetch(`${WORKER_URL}/?symbol=${encodeURIComponent(symbol)}`);
@@ -441,7 +453,6 @@ async function loadSymbol() {
     if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
     if (!data.candles || !data.candles.length) throw new Error("No data returned for this symbol.");
 
-    chartEl.innerHTML = "";
     allCandles = data.candles;
     currentSymbol = symbol;
     if (!chart) initCharts();
@@ -449,8 +460,9 @@ async function loadSymbol() {
     loadDrawings(symbol);
     setActiveTool("cursor");
     resizeCanvas();
+    hideChartStatus();
   } catch (err) {
-    chartEl.innerHTML = '<div class="status err">Couldn\'t load ' + symbol + ': ' + err.message + '</div>';
+    showChartStatus("Couldn't load " + symbol + ": " + err.message, true);
     document.getElementById("lastPrice").textContent = "—";
     document.getElementById("chgLine").textContent = "";
   }

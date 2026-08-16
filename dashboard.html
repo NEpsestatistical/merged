@@ -70,5 +70,46 @@
   <!-- Separate files: dashboard.js handles market data, portfolio.js (your existing file) handles portfolio -->
   <script src="dashboard.js"></script>
   <script src="portfolio.js"></script>
+
+  <!-- Purely presentational: subtle 3D tilt for glass cards. Does not touch data/logic. -->
+  <script>
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (window.matchMedia('(hover: none)').matches) return; // skip on touch devices
+
+      var cards = document.querySelectorAll('.card');
+
+      cards.forEach(function (card) {
+        var frame = null;
+
+        card.addEventListener('mousemove', function (e) {
+          if (frame) return;
+          frame = requestAnimationFrame(function () {
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+
+            var px = x / rect.width;
+            var py = y / rect.height;
+
+            var rotateY = (px - 0.5) * 6;   // max ~3deg either side
+            var rotateX = (0.5 - py) * 6;
+
+            card.style.transform =
+              'translateY(-6px) translateZ(18px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg)';
+
+            card.style.setProperty('--mouse-x', (px * 100).toFixed(1) + '%');
+            card.style.setProperty('--mouse-y', (py * 100).toFixed(1) + '%');
+
+            frame = null;
+          });
+        });
+
+        card.addEventListener('mouseleave', function () {
+          card.style.transform = '';
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

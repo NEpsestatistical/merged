@@ -141,6 +141,34 @@
   @media (max-width: 640px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
   }
+
+  /* Portfolio tabs */
+  .portfolio-tabs { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; font-family: 'Inter', sans-serif; }
+  .p-tab { display: flex; align-items: center; gap: 8px; background: #1A1F24; border: 1px solid #2A3138; color: #9BA3AB; padding: 7px 12px; border-radius: 7px; font-size: 12.5px; cursor: pointer; }
+  .p-tab:hover { border-color: #3A424B; color: #EDEFF1; }
+  .p-tab.active { background: #1D2329; border-color: #3FA796; color: #EDEFF1; font-weight: 600; }
+  .p-tab .p-edit, .p-tab .p-del { color: #6B7680; font-size: 12px; opacity: .8; }
+  .p-tab .p-edit:hover { color: #3FA796; } .p-tab .p-del:hover { color: #C4553D; }
+  .p-tab-add { background: none; border: 1px dashed #3A424B; color: #6B7680; padding: 7px 12px; border-radius: 7px; font-size: 12.5px; }
+  .p-tab-add:hover { border-color: #3FA796; color: #3FA796; }
+
+  /* Transactions panel */
+  .tx-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tx-table th { text-align: left; font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .06em; color: #6B7680; text-transform: uppercase; padding: 8px 8px; border-bottom: 1px solid #2A3138; }
+  .tx-table td { padding: 8px 8px; border-bottom: 1px solid #20262C; }
+  .tx-table input, .tx-table select { width: 100%; background: #14181C; border: 1px solid #2A3138; border-radius: 5px; padding: 6px 7px; color: #EDEFF1; font-family: inherit; font-size: 12px; }
+  .tx-side { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; }
+  .tx-side.buy { background: rgba(63,167,150,.15); color: #3FA796; }
+  .tx-side.sell { background: rgba(196,85,61,.15); color: #C4553D; }
+  .tx-actions { display: flex; gap: 6px; white-space: nowrap; }
+  .tx-actions button { background: none; border: none; color: #6B7680; font-size: 12px; font-family: 'Inter', sans-serif; }
+  .tx-actions button:hover { color: #EDEFF1; }
+  .tx-actions .tx-save { color: #3FA796; } .tx-actions .tx-del:hover { color: #C4553D; }
+  .tx-add-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .tx-add-row input, .tx-add-row select { background: #14181C; border: 1px solid #2A3138; border-radius: 6px; padding: 9px 10px; color: #EDEFF1; font-family: inherit; font-size: 12.5px; }
+  .settings-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .btn.danger { border-color: rgba(196,85,61,.4); color: #E8998A; }
+  .btn.danger:hover { border-color: #C4553D; }
 </style>
 </head>
 <body>
@@ -149,14 +177,17 @@
     <div class="ee-mark">EE</div>
     <div class="ee-brand-text"><b>Elite Elliott</b> · Portfolio</div>
   </div>
+  <div class="portfolio-tabs" id="portfolioTabs"></div>
+
   <div class="header">
     <div>
-      <div class="eyebrow label">NEPSE Portfolio</div>
+      <div class="eyebrow label" id="portfolioNameLabel">NEPSE Portfolio</div>
       <div class="total" id="totalValue">Rs 0</div>
       <div class="pl-row" id="totalPL"></div>
     </div>
     <div style="display:flex; gap:8px; flex-wrap: wrap;">
       <button class="btn primary label" id="importBtn">⇪ Import from Meroshare</button>
+      <button class="btn label" id="txBtn">🧾 Transactions</button>
       <button class="btn label" id="refreshBtn">↻ Refresh</button>
       <button class="btn label" id="settingsBtn">⚙</button>
     </div>
@@ -220,9 +251,33 @@
     <div class="tax-note">🔒 Tax rates and holding threshold are fixed and cannot be edited. Nepal taxes capital gains on listed shares only when sold — final tax deducted by your broker at the point of sale. These figures are illustrative "if sold today" estimates, not tax advice.</div>
   </div>
 
+  <div class="panel" id="txPanel">
+    <h3>Transaction History</h3>
+    <p>Every buy, sell, and import that built your current holdings, for this portfolio. Fix a mistake by editing or deleting an entry below — holdings and realized P/L recalculate automatically.</p>
+    <table class="tx-table">
+      <thead>
+        <tr><th>Date</th><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th></th></tr>
+      </thead>
+      <tbody id="txTableBody"></tbody>
+    </table>
+    <div class="tx-add-row">
+      <input type="date" id="txDateInput" title="Date" />
+      <input id="txSymbolInput" placeholder="SYMBOL" style="width:90px;" />
+      <select id="txSideInput"><option value="buy">Buy</option><option value="sell">Sell</option></select>
+      <input id="txQtyInput" type="number" placeholder="Qty" style="width:80px;" />
+      <input id="txPriceInput" type="number" placeholder="Price" style="width:90px;" />
+      <button class="add-btn label" id="txAddBtn">+ Add Transaction</button>
+    </div>
+  </div>
+
   <div class="settings-box" id="settingsBox">
-    <div class="label" style="font-size:12px; color:#6B7680; margin-bottom:8px;">WORKER URL (live price feed)</div>
-    <input type="text" id="workerUrlInput" value="https://shiny-term-f599.bharatiaashish43.workers.dev" />
+    <div class="label" style="font-size:12px; color:#6B7680; margin-bottom:8px;">CURRENT PORTFOLIO</div>
+    <input type="text" id="renamePortfolioInput" placeholder="Portfolio name" />
+    <div class="settings-actions">
+      <button class="btn label" id="renamePortfolioBtn">Rename</button>
+      <button class="btn danger label" id="clearPortfolioBtn">🗑 Clear This Portfolio's Data</button>
+      <button class="btn danger label" id="deletePortfolioBtn">✕ Delete This Portfolio</button>
+    </div>
   </div>
 
   <div class="error-box" id="errorBox">Couldn't reach the price feed. Check the Worker URL in settings.</div>
@@ -300,10 +355,15 @@
 </div>
 
 <script>
-let holdings = [
-  { id: 1, symbol: "NABIL", qty: 50, avgCost: 780, purchaseDate: "2025-03-15" },
-  { id: 2, symbol: "NICA", qty: 100, avgCost: 410, purchaseDate: null },
-];
+/* Live price feed — not exposed in the UI on purpose. */
+const WORKER_URL = "https://shiny-term-f599.bharatiaashish43.workers.dev";
+function getWorkerUrl() { return WORKER_URL; }
+
+/* ---------- Multi-portfolio state ---------- */
+let portfolios = [];
+let currentPortfolioId = null;
+let holdings = [];      // derived each recompute() for the active portfolio
+let realizedPL = 0;     // derived each recompute() for the active portfolio
 let prices = {};
 let prevPrices = {};
 
@@ -312,8 +372,115 @@ function fmt(n, d = 2) {
   return n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
-function getWorkerUrl() {
-  return document.getElementById("workerUrlInput").value.trim().replace(/\/$/, "");
+function uid() { return Date.now() + Math.random().toString(36).slice(2, 8); }
+
+function defaultPortfolios() {
+  return [{
+    id: uid(),
+    name: "My Portfolio",
+    transactions: [
+      { id: uid(), symbol: "NABIL", side: "buy", qty: 50, price: 780, date: "2025-03-15", note: "" },
+      { id: uid(), symbol: "NICA", side: "buy", qty: 100, price: 410, date: null, note: "" },
+    ],
+  }];
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem("eePortfoliosV2");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) portfolios = parsed;
+    }
+  } catch (e) {}
+  if (!portfolios.length) portfolios = defaultPortfolios();
+
+  try {
+    currentPortfolioId = localStorage.getItem("eeCurrentPortfolioId");
+  } catch (e) {}
+  if (!currentPortfolioId || !portfolios.find((p) => p.id === currentPortfolioId)) {
+    currentPortfolioId = portfolios[0].id;
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem("eePortfoliosV2", JSON.stringify(portfolios));
+    localStorage.setItem("eeCurrentPortfolioId", currentPortfolioId);
+  } catch (e) {}
+}
+
+function getCurrentPortfolio() {
+  return portfolios.find((p) => p.id === currentPortfolioId) || portfolios[0];
+}
+
+function switchPortfolio(id) {
+  currentPortfolioId = id;
+  saveState();
+  recompute();
+  renderPortfolioTabs();
+  refresh();
+  renderTransactions();
+}
+
+function createPortfolio() {
+  const name = prompt("Name for the new portfolio:", "New Portfolio");
+  if (!name) return;
+  const p = { id: uid(), name: name.trim(), transactions: [] };
+  portfolios.push(p);
+  switchPortfolio(p.id);
+}
+
+function renamePortfolioTo(name) {
+  if (!name || !name.trim()) return;
+  const p = getCurrentPortfolio();
+  p.name = name.trim();
+  saveState();
+  renderPortfolioTabs();
+}
+
+function deleteCurrentPortfolio() {
+  if (portfolios.length <= 1) {
+    alert("You need at least one portfolio — clear its data instead if you want to reset it.");
+    return;
+  }
+  const p = getCurrentPortfolio();
+  if (!confirm(`Delete portfolio "${p.name}" and all its transactions? This can't be undone.`)) return;
+  portfolios = portfolios.filter((x) => x.id !== p.id);
+  currentPortfolioId = portfolios[0].id;
+  saveState();
+  recompute();
+  renderPortfolioTabs();
+  refresh();
+  renderTransactions();
+}
+
+function clearCurrentPortfolioData() {
+  const p = getCurrentPortfolio();
+  if (!confirm(`Clear all holdings and transaction history for "${p.name}"? This can't be undone.`)) return;
+  p.transactions = [];
+  saveState();
+  recompute();
+  refresh();
+  renderTransactions();
+}
+
+/* ---------- Recompute holdings + realized P/L from the transaction ledger ---------- */
+function recompute() {
+  const p = getCurrentPortfolio();
+  const trades = (p.transactions || []).filter((t) => t.symbol && t.side && t.qty > 0 && t.price >= 0);
+  const { holdings: bySymbol, realizedPL: rpl } = buildHoldingsFromTrades(trades);
+  const prevById = {};
+  holdings.forEach((h) => { prevById[h.symbol] = h.id; });
+  holdings = Object.values(bySymbol).map((h) => ({
+    id: prevById[h.symbol] || h.symbol,
+    symbol: h.symbol,
+    qty: h.qty,
+    avgCost: h.avgCost,
+    purchaseDate: h.purchaseDate,
+  }));
+  realizedPL = rpl;
+  document.getElementById("portfolioNameLabel").textContent = p.name;
 }
 
 function getRates() {
@@ -502,7 +669,7 @@ function finalizeImport(selectedClientId) {
     trades = trades.filter((t) => (t.clientId || t.clientName) === selectedClientId);
   }
 
-  const { holdings: fromTrades, realizedPL: importRealizedPL } = buildHoldingsFromTrades(trades);
+  const { holdings: fromTrades } = buildHoldingsFromTrades(trades);
   const notes = [];
 
   // WACC-report style rows (legacy Share Values / WACC CSV) still supported directly
@@ -547,42 +714,33 @@ function finalizeImport(selectedClientId) {
     return;
   }
 
+  const p = getCurrentPortfolio();
+  const symbolsFromTradeBook = new Set(Object.keys(fromTrades));
+
+  // Real trade-book trades go into the ledger as-is (full buy/sell history, best source).
+  trades.forEach((t) => {
+    p.transactions.push({ id: uid(), symbol: t.symbol, side: t.side.startsWith("b") ? "buy" : "sell", qty: t.qty, price: t.price, date: t.date, note: "Trade Book import" });
+  });
+
+  // WACC/Share-Values rows have no per-trade history, only a balance — logged as a
+  // single "opening balance" buy so it still shows up in the ledger and is editable.
   usable.forEach((m) => {
-    const existing = holdings.find((h) => h.symbol === m.symbol);
-    if (existing) {
-      existing.qty = m.qty;
-      existing.avgCost = m.avgCost;
-      if (m.purchaseDate) existing.purchaseDate = m.purchaseDate;
-    } else {
-      holdings.push({ id: Date.now() + Math.random(), symbol: m.symbol, qty: m.qty, avgCost: m.avgCost, purchaseDate: m.purchaseDate });
-    }
+    if (symbolsFromTradeBook.has(m.symbol)) return; // trade book already gave real trades for this symbol
+    p.transactions.push({ id: uid(), symbol: m.symbol, side: "buy", qty: m.qty, price: m.avgCost, date: m.purchaseDate, note: "Opening balance (imported)" });
   });
 
   status.className = "import-status ok";
   let msg = `Imported ${usable.length} holding(s): ${usable.map((m) => m.symbol).join(", ")}.`;
-  if (missingCost.length) msg += ` ${missingCost.length} symbol(s) need manual qty/cost: ${missingCost.map((m) => m.symbol).join(", ")}.`;
+  if (missingCost.length) msg += ` ${missingCost.length} symbol(s) need manual qty/cost — add them in Transactions: ${missingCost.map((m) => m.symbol).join(", ")}.`;
   if (notes.length) msg += " " + notes.join(" ");
   status.textContent = msg;
 
   document.getElementById("clientPicker").style.display = "none";
   pendingTmsTrades = []; pendingMeroshareRows = []; pendingWaccRows = [];
-  if (trades.length) {
-    try { localStorage.setItem("eeRealizedPL", String(importRealizedPL)); } catch (e) {}
-    updateRealizedStat();
-  }
+  saveState();
+  recompute();
   refresh();
-}
-
-function updateRealizedStat() {
-  let realized = 0;
-  try {
-    const stored = localStorage.getItem("eeRealizedPL");
-    if (stored !== null) realized = Number(stored) || 0;
-  } catch (e) {}
-  const el = document.getElementById("statRealized");
-  if (!el) return;
-  el.textContent = (realized >= 0 ? "+" : "") + "Rs " + fmt(realized, 0);
-  el.className = "stat-value " + (realized >= 0 ? "up" : "down");
+  renderTransactions();
 }
 
 function handleFiles(fileList) {
@@ -675,17 +833,6 @@ async function refresh() {
 }
 
 /* ---------- Manual Buy / Sell on existing holdings (styled modal) ---------- */
-function addRealizedPL(amount) {
-  let realized = 0;
-  try {
-    const stored = localStorage.getItem("eeRealizedPL");
-    if (stored !== null) realized = Number(stored) || 0;
-  } catch (e) {}
-  realized += amount;
-  try { localStorage.setItem("eeRealizedPL", String(realized)); } catch (e) {}
-  updateRealizedStat();
-}
-
 let tradeModalState = { mode: null, holdingId: null };
 
 function openTradeModal(mode, id) {
@@ -795,24 +942,20 @@ function confirmTrade() {
     return;
   }
 
+  const p = getCurrentPortfolio();
   if (mode === "buy") {
-    const dateStr = document.getElementById("tradeDate").value;
-    const newQty = h.qty + qty;
-    const newCost = h.avgCost * h.qty + price * qty;
-    h.avgCost = newCost / newQty;
-    h.qty = newQty;
-    if (dateStr) h.purchaseDate = dateStr;
+    const dateStr = document.getElementById("tradeDate").value || null;
+    p.transactions.push({ id: uid(), symbol: h.symbol, side: "buy", qty, price, date: dateStr, note: "" });
   } else {
-    const realizedGain = (price - h.avgCost) * qty;
-    h.qty -= qty;
-    if (h.qty <= 0) {
-      holdings = holdings.filter((x) => x.id != holdingId);
-    }
-    addRealizedPL(realizedGain);
+    const todayStr = new Date().toISOString().slice(0, 10);
+    p.transactions.push({ id: uid(), symbol: h.symbol, side: "sell", qty, price, date: todayStr, note: "" });
   }
+  saveState();
+  recompute();
 
   closeTradeModal();
   refresh();
+  renderTransactions();
 }
 
 function buyHolding(id) { openTradeModal("buy", id); }
@@ -934,8 +1077,15 @@ function render() {
 
   list.querySelectorAll(".remove-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      holdings = holdings.filter((h) => h.id != btn.dataset.id);
-      render();
+      const h = holdings.find((x) => x.id == btn.dataset.id);
+      if (!h) return;
+      if (!confirm(`Remove ${h.symbol} and delete all its transactions from this portfolio?`)) return;
+      const p = getCurrentPortfolio();
+      p.transactions = p.transactions.filter((t) => t.symbol !== h.symbol);
+      saveState();
+      recompute();
+      refresh();
+      renderTransactions();
     });
   });
 
@@ -960,6 +1110,10 @@ function render() {
   gainEl.className = "stat-value " + (totalGain >= 0 ? "up" : "down");
   document.getElementById("statTax").textContent = "Rs " + fmt(totalTax, 0);
   document.getElementById("statNet").textContent = "Rs " + fmt(totalGain - totalTax, 0);
+
+  const realizedEl = document.getElementById("statRealized");
+  realizedEl.textContent = (realizedPL >= 0 ? "+" : "") + "Rs " + fmt(realizedPL, 0);
+  realizedEl.className = "stat-value " + (realizedPL >= 0 ? "up" : "down");
 
   const dayPlStrip = document.getElementById("dayPlStrip");
   if (anyDayChange) {
@@ -1015,17 +1169,152 @@ document.getElementById("addBtn").addEventListener("click", () => {
   const cost = Number(document.getElementById("costInput").value);
   const date = document.getElementById("dateInput").value || null;
   if (!symbol || !qty || !cost) return;
-  holdings.push({ id: Date.now(), symbol, qty, avgCost: cost, purchaseDate: date });
+  const p = getCurrentPortfolio();
+  p.transactions.push({ id: uid(), symbol, side: "buy", qty, price: cost, date, note: "" });
+  saveState();
+  recompute();
   document.getElementById("symbolInput").value = "";
   document.getElementById("qtyInput").value = "";
   document.getElementById("costInput").value = "";
   document.getElementById("dateInput").value = "";
   refresh();
+  renderTransactions();
 });
 
+/* ---------- Portfolio tabs ---------- */
+function renderPortfolioTabs() {
+  const wrap = document.getElementById("portfolioTabs");
+  wrap.innerHTML = "";
+  portfolios.forEach((p) => {
+    const tab = document.createElement("div");
+    tab.className = "p-tab" + (p.id === currentPortfolioId ? " active" : "");
+    tab.innerHTML = `<span class="p-tab-name">${p.name}</span>`;
+    tab.addEventListener("click", () => switchPortfolio(p.id));
+    wrap.appendChild(tab);
+  });
+  const addBtn = document.createElement("button");
+  addBtn.className = "p-tab-add";
+  addBtn.textContent = "+ New Portfolio";
+  addBtn.addEventListener("click", createPortfolio);
+  wrap.appendChild(addBtn);
+}
+
+/* ---------- Transactions panel ---------- */
+function renderTransactions() {
+  const body = document.getElementById("txTableBody");
+  if (!body) return;
+  const p = getCurrentPortfolio();
+  body.innerHTML = "";
+  if (!p.transactions.length) {
+    body.innerHTML = '<tr><td colspan="6" class="empty-state">No transactions yet.</td></tr>';
+    return;
+  }
+  const sorted = [...p.transactions].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  sorted.forEach((t) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${t.date || "not set"}</td>
+      <td class="sym">${t.symbol}</td>
+      <td><span class="tx-side ${t.side}">${t.side}</span></td>
+      <td>${t.qty}</td>
+      <td>${fmt(t.price, 2)}</td>
+      <td class="tx-actions">
+        <button class="tx-edit" data-id="${t.id}">✎ Edit</button>
+        <button class="tx-del" data-id="${t.id}">✕ Delete</button>
+      </td>
+    `;
+    body.appendChild(row);
+  });
+
+  body.querySelectorAll(".tx-del").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!confirm("Delete this transaction?")) return;
+      const p = getCurrentPortfolio();
+      p.transactions = p.transactions.filter((t) => t.id != btn.dataset.id);
+      saveState();
+      recompute();
+      refresh();
+      renderTransactions();
+    });
+  });
+
+  body.querySelectorAll(".tx-edit").forEach((btn) => {
+    btn.addEventListener("click", () => editTransactionRow(btn.dataset.id));
+  });
+}
+
+function editTransactionRow(id) {
+  const p = getCurrentPortfolio();
+  const t = p.transactions.find((x) => x.id == id);
+  if (!t) return;
+  const row = document.querySelector(`.tx-del[data-id="${id}"]`)?.closest("tr");
+  if (!row) return;
+  row.innerHTML = `
+    <td><input type="date" value="${t.date || ""}" class="edit-date" /></td>
+    <td><input value="${t.symbol}" class="edit-symbol" style="text-transform:uppercase;" /></td>
+    <td><select class="edit-side"><option value="buy" ${t.side === "buy" ? "selected" : ""}>Buy</option><option value="sell" ${t.side === "sell" ? "selected" : ""}>Sell</option></select></td>
+    <td><input type="number" value="${t.qty}" class="edit-qty" /></td>
+    <td><input type="number" value="${t.price}" class="edit-price" /></td>
+    <td class="tx-actions">
+      <button class="tx-save">✓ Save</button>
+      <button class="tx-cancel">✕ Cancel</button>
+    </td>
+  `;
+  row.querySelector(".tx-cancel").addEventListener("click", renderTransactions);
+  row.querySelector(".tx-save").addEventListener("click", () => {
+    const symbol = row.querySelector(".edit-symbol").value.trim().toUpperCase();
+    const side = row.querySelector(".edit-side").value;
+    const qty = Number(row.querySelector(".edit-qty").value);
+    const price = Number(row.querySelector(".edit-price").value);
+    const date = row.querySelector(".edit-date").value || null;
+    if (!symbol || !qty || qty <= 0 || price < 0) { alert("Enter a valid symbol, quantity, and price."); return; }
+    t.symbol = symbol; t.side = side; t.qty = qty; t.price = price; t.date = date;
+    saveState();
+    recompute();
+    refresh();
+    renderTransactions();
+  });
+}
+
+document.getElementById("txBtn").addEventListener("click", () => {
+  document.getElementById("txPanel").classList.toggle("show");
+  renderTransactions();
+});
+
+document.getElementById("txAddBtn").addEventListener("click", () => {
+  const symbol = document.getElementById("txSymbolInput").value.trim().toUpperCase();
+  const side = document.getElementById("txSideInput").value;
+  const qty = Number(document.getElementById("txQtyInput").value);
+  const price = Number(document.getElementById("txPriceInput").value);
+  const date = document.getElementById("txDateInput").value || null;
+  if (!symbol || !qty || qty <= 0 || price < 0) { alert("Enter a valid symbol, quantity, and price."); return; }
+  const p = getCurrentPortfolio();
+  p.transactions.push({ id: uid(), symbol, side, qty, price, date, note: "" });
+  saveState();
+  recompute();
+  document.getElementById("txSymbolInput").value = "";
+  document.getElementById("txQtyInput").value = "";
+  document.getElementById("txPriceInput").value = "";
+  document.getElementById("txDateInput").value = "";
+  refresh();
+  renderTransactions();
+});
+
+/* ---------- Settings: rename / clear / delete portfolio ---------- */
+document.getElementById("renamePortfolioBtn").addEventListener("click", () => {
+  renamePortfolioTo(document.getElementById("renamePortfolioInput").value);
+  document.getElementById("renamePortfolioInput").value = "";
+});
+document.getElementById("clearPortfolioBtn").addEventListener("click", clearCurrentPortfolioData);
+document.getElementById("deletePortfolioBtn").addEventListener("click", deleteCurrentPortfolio);
+
+/* ---------- Init ---------- */
+loadState();
+recompute();
+renderPortfolioTabs();
 render();
 refresh();
-updateRealizedStat();
+renderTransactions();
 setInterval(refresh, 30000);
 </script>
 </body>

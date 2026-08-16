@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a0d">
+  <title>NEPSE | Portfolio Intelligence</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <header class="terminal-header">
+    <a class="brand" href="dashboard.html" aria-label="NEPSE Dashboard"><span class="brand-mark">N</span><span>NEPSE<span class="brand-muted"> / terminal</span></span></a>
+    <nav aria-label="Primary navigation">
+      <a class="active" href="dashboard.html">Overview</a><a href="portfolio.html">Portfolio</a><a href="chart_2.html">Markets</a><a href="index.html">Community</a>
+    </nav>
+    <div class="header-meta"><span class="live-dot"></span><span>Data on demand</span></div>
+  </header>
+
+  <main class="terminal">
+    <section class="eyebrow-row"><p>Portfolio / <strong>Overview</strong></p><p id="terminalClock">Live pricing via connected worker</p></section>
+
+    <section class="portfolio-hero" aria-labelledby="portfolio-heading">
+      <div class="hero-copy">
+        <p class="section-kicker">Portfolio value</p>
+        <div id="portfolioSnapshot" class="index-summary"><p class="loading">Calculating portfolio…</p></div>
+        <div class="hero-actions"><a class="primary-action" href="portfolio.html">Open portfolio <span>↗</span></a><a class="quiet-action" href="#holdings">Review holdings</a></div>
+      </div>
+      <div class="hero-context">
+        <div><span class="section-kicker">Performance</span><p>Live valuation of your open positions, calculated from your stored transactions.</p></div>
+        <div class="hero-rule"></div>
+        <div class="context-links"><a href="chart_2.html">Technical chart <span>↗</span></a><a href="#watchlist">Market monitor <span>↓</span></a></div>
+      </div>
+    </section>
+
+    <section class="market-stage" aria-labelledby="market-visual-heading">
+      <div class="stage-head"><div><p class="section-kicker">Market visual</p><h1 id="market-visual-heading">Read the tape.</h1></div><a class="stage-link" href="chart_2.html">Open full chart <span>↗</span></a></div>
+      <div class="chart-shell"><iframe title="NEPSE technical chart" src="chart_2.html" loading="lazy"></iframe></div>
+      <p class="stage-note">The existing chart and its data source remain unchanged. Use the full chart for detailed indicators and controls.</p>
+    </section>
+
+    <section class="intelligence-grid" aria-label="Market intelligence">
+      <article class="intel-intro"><p class="section-kicker">Market intelligence</p><h2>What your data can tell you today.</h2><p>The connected source provides precise single-symbol quotes. Broader market modules are ready for a full-market feed without invented numbers.</p></article>
+      <article class="intel-list"><div class="intel-heading"><span>Watchlist momentum</span><span>Live</span></div><p>Track individual instruments below, with LTP and daily movement refreshed from the existing worker.</p><a href="#watchlist">Open market monitor <span>↓</span></a></article>
+      <article class="intel-list muted-module"><div class="intel-heading"><span>Discovery queue</span><span>Planned</span></div><p>Top gainers, most active, sector breadth, and screener results appear here once a market-wide data source is connected.</p><span class="source-note">No mock market data</span></article>
+    </section>
+
+    <section class="monitor-grid">
+      <article class="panel watch-panel" id="watchlist"><div class="panel-head"><div><p class="section-kicker">Market monitor</p><h2>Watchlist</h2></div><span class="panel-index">01</span></div>
+        <div class="watch-add-row"><input id="watchInput" class="watch-input" placeholder="Add symbol e.g. NABIL" autocomplete="off" spellcheck="false"><button id="watchAddBtn" class="watch-add-btn" type="button">Add symbol</button></div>
+        <div class="table-scroll"><table id="watchTable"><thead><tr><th>Symbol</th><th>LTP</th><th>Change</th><th></th></tr></thead><tbody><tr><td colspan="4" class="loading">No symbols yet — add one above.</td></tr></tbody></table></div>
+      </article>
+
+      <aside class="source-panel"><p class="section-kicker">Data coverage</p><h2>Built honestly.</h2><p>NEPSE index, market breadth, sector performance, and rankings need a full-market data feed. This terminal leaves that space clean until the data is available.</p><div class="source-tags"><span>Single-symbol quotes</span><span>Portfolio FIFO</span><span>Local import/export</span></div></aside>
+    </section>
+
+    <section class="panel holdings-panel" id="holdings"><div class="panel-head"><div><p class="section-kicker">Portfolio analysis</p><h2>Current holdings</h2></div><a href="portfolio.html" class="table-link">Manage portfolio <span>↗</span></a></div><div class="table-scroll"><table id="holdingsTable"><thead><tr><th>Symbol</th><th>Qty</th><th>Avg cost</th><th>LTP</th><th>P/L</th></tr></thead><tbody><tr><td colspan="5" class="loading">Loading holdings…</td></tr></tbody></table></div></section>
+  </main>
+  <footer>NEPSE Portfolio Intelligence <span>•</span> Quotes are refreshed on demand and may not be real-time.</footer>
+  <script src="js/dashboard.js"></script>
+  <script>document.addEventListener('DOMContentLoaded',function(){var e=document.getElementById('terminalClock');if(e)e.textContent='Session '+new Date().toLocaleString('en-NP',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'});});</script>
+</body>
+</html>

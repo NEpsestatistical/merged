@@ -13,52 +13,63 @@
     <nav>
       <a href="dashboard.html" class="active">Dashboard</a>
       <a href="portfolio.html">Portfolio</a>
+      <a href="chart.html">Chart</a>
+      <a href="index.html">Community</a>
     </nav>
   </header>
 
   <main class="dashboard-grid">
 
-    <!-- Market Summary -->
+    <!-- Portfolio Snapshot (hero) — computed live from your stored transactions + worker LTPs -->
     <section class="card index-card">
-      <h2>Market Summary</h2>
-      <div id="indexSummary" class="index-summary">
-        <p class="loading">Loading index...</p>
-      </div>
-    </section>
-
-    <!-- Top Gainers -->
-    <section class="card">
-      <h2>Top Gainers</h2>
-      <table id="gainersTable">
-        <thead>
-          <tr><th>Symbol</th><th>LTP</th><th>Change %</th></tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="loading">Loading...</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Top Losers -->
-    <section class="card">
-      <h2>Top Losers</h2>
-      <table id="losersTable">
-        <thead>
-          <tr><th>Symbol</th><th>LTP</th><th>Change %</th></tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3" class="loading">Loading...</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Portfolio Snapshot (pulls summary only, full detail lives in portfolio.js/html) -->
-    <section class="card">
       <h2>Portfolio Snapshot</h2>
-      <div id="portfolioSnapshot">
+      <div id="portfolioSnapshot" class="index-summary">
         <p class="loading">Loading portfolio...</p>
       </div>
-      <a href="portfolio.html" class="view-link">View full portfolio →</a>
+      <a href="portfolio.html" class="view-link">Manage full portfolio →</a>
+    </section>
+
+    <!-- Watchlist — symbols you track, each a live single-symbol lookup -->
+    <section class="card">
+      <h2>Watchlist</h2>
+      <div class="watch-add-row">
+        <input id="watchInput" class="watch-input" placeholder="Add symbol e.g. NABIL" autocomplete="off" spellcheck="false" />
+        <button id="watchAddBtn" class="watch-add-btn" type="button">Add</button>
+      </div>
+      <table id="watchTable">
+        <thead>
+          <tr><th>Symbol</th><th>LTP</th><th>Change</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4" class="loading">No symbols yet — add one above.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Holdings detail -->
+    <section class="card">
+      <h2>Current Holdings</h2>
+      <table id="holdingsTable">
+        <thead>
+          <tr><th>Symbol</th><th>Qty</th><th>Avg Cost</th><th>LTP</th><th>P/L</th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" class="loading">Loading...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Honest note about what's not available -->
+    <section class="card">
+      <h2>Market-Wide Data</h2>
+      <p class="unavailable-note">
+        NEPSE index, market-wide top gainers/losers, most-active, and screener
+        require a full-market data feed. The connected data source
+        (<code>shiny-term-f599.bharatiaashish43.workers.dev</code>) only supports
+        single-symbol lookups, so these views aren't shown here to avoid
+        displaying fabricated numbers. Use the watchlist above to track
+        specific symbols instead, or the Chart page for per-stock technicals.
+      </p>
     </section>
 
   </main>
@@ -67,9 +78,7 @@
     <p>Data refreshed manually / via script. Not real-time.</p>
   </footer>
 
-  <!-- Separate files: dashboard.js handles market data, portfolio.js (your existing file) handles portfolio -->
   <script src="dashboard.js"></script>
-  <script src="portfolio.js"></script>
 
   <!-- Purely presentational: subtle 3D tilt for glass cards. Does not touch data/logic. -->
   <script>

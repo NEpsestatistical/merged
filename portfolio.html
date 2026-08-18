@@ -62,9 +62,18 @@
   .panel.show { display: block; }
   .panel h3 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; margin: 0 0 4px; }
   .panel p { font-family: 'Inter', sans-serif; font-size: 12px; color: #6B7680; margin: 0 0 14px; line-height: 1.5; }
-  .drop-zone { border: 1.5px dashed #3A424B; border-radius: 8px; padding: 28px; text-align: center; font-family: 'Inter', sans-serif; font-size: 13px; color: #9BA3AB; cursor: pointer; transition: border-color .15s; }
-  .drop-zone:hover, .drop-zone.dragover { border-color: #3FA796; color: #EDEFF1; }
+  .drop-zone { border: 1.5px dashed #3A424B; border-radius: 10px; padding: 32px 20px; text-align: center; font-family: 'Inter', sans-serif; font-size: 13px; color: #9BA3AB; cursor: pointer; transition: border-color .15s, background .15s; background: #14181C; }
+  .drop-zone:hover, .drop-zone.dragover { border-color: #3FA796; color: #EDEFF1; background: rgba(63,167,150,.06); }
   .drop-zone input { display: none; }
+  .drop-zone-icon { font-size: 26px; margin-bottom: 8px; opacity: .85; }
+  .drop-zone-title { font-size: 14px; font-weight: 600; color: #EDEFF1; margin-bottom: 4px; }
+  .drop-zone-sub { font-size: 12px; color: #6B7680; }
+
+  /* Import modal (styled like the trade modal, centered popup instead of inline panel) */
+  .import-modal-box { max-width: 480px; }
+  .import-icon { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 7px; background: rgba(63,167,150,.15); color: #3FA796; font-size: 13px; margin-right: 4px; }
+  .import-modal-desc { font-family: 'Inter', sans-serif; font-size: 12px; color: #6B7680; margin: 0 0 16px; line-height: 1.55; }
+  .import-modal-box .modal-title { font-size: 14px; }
   .import-status { margin-top: 12px; font-family: 'Inter', sans-serif; font-size: 12px; }
   .import-status.ok { color: #3FA796; }
   .import-status.err { color: #C4553D; }
@@ -210,6 +219,26 @@
   .reconcile-note.ok { color: #3FA796; }
   .reconcile-note.bad { color: #C4553D; }
   .fee-note { font-family: 'Inter', sans-serif; font-size: 11px; color: #4A5158; margin: -8px 0 14px; }
+
+  /* Generic app modal (replaces native prompt/confirm/alert) */
+  .app-modal-overlay { position: fixed; inset: 0; background: rgba(6,8,10,0.65); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+  .app-modal-overlay.show { display: flex; }
+  .app-modal-box { background: #1A1F24; border: 1px solid #2A3138; border-radius: 12px; padding: 22px; width: 100%; max-width: 340px; font-family: 'Inter', sans-serif; animation: modalPop .15s ease-out; }
+  @keyframes modalPop { from { opacity: 0; transform: scale(.96) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .app-modal-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 12px; }
+  .app-modal-icon.warn { background: rgba(196,85,61,.15); color: #C4553D; }
+  .app-modal-icon.ask { background: rgba(63,167,150,.15); color: #3FA796; }
+  .app-modal-icon.info { background: rgba(107,118,128,.18); color: #9BA3AB; }
+  .app-modal-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: #EDEFF1; }
+  .app-modal-msg { font-size: 13px; color: #9BA3AB; line-height: 1.5; margin-bottom: 16px; }
+  .app-modal-box input[type=text] { width: 100%; background: #14181C; border: 1px solid #2A3138; border-radius: 7px; padding: 10px 12px; color: #EDEFF1; font-size: 14px; font-family: inherit; margin-bottom: 16px; }
+  .app-modal-box input[type=text]:focus { outline: none; border-color: #3FA796; }
+  .app-modal-actions { display: flex; gap: 10px; }
+  .app-modal-actions button { flex: 1; padding: 11px; border-radius: 7px; font-family: inherit; font-size: 13px; font-weight: 600; border: 1px solid #2A3138; background: #1D2329; color: #EDEFF1; cursor: pointer; }
+  .app-modal-actions button:hover { border-color: #3A424B; }
+  .app-modal-actions .app-modal-ok { background: #3FA796; border-color: #3FA796; color: #0D1210; }
+  .app-modal-actions .app-modal-ok.danger { background: #C4553D; border-color: #C4553D; color: #17110F; }
+  .app-modal-actions.single button { flex: none; min-width: 120px; margin-left: auto; }
 </style>
 </head>
 <body>
@@ -264,33 +293,40 @@
     Realized P/L reflects gains/losses locked in from shares already sold, based on imported Trade Book history using FIFO lot matching. It does not include current holdings' unrealized gain/loss shown above. This figure is gross (before any selling charges) unless charges were entered on the sell transaction — see Realized Performance for a net breakdown where available.
   </div>
 
-  <div class="panel" id="importPanel">
-    <h3>Import from Meroshare / Broker (TMS)</h3>
-    <p>
-      Drop any combination of: Meroshare <b>Share Values</b> CSV, Meroshare <b>WACC Report</b> CSV,
-      Meroshare <b>Transaction History</b> CSV, or your broker's <b>Trade Book</b> (.xlsx, from TMS) —
-      formats are auto-detected and merged by symbol. The Trade Book is the best source since it has
-      actual buy/sell prices; holdings are rebuilt from full trade history using FIFO lot matching, so
-      avg cost and holding period reflect what's actually still in your account.
-    </p>
-    <div class="drop-zone" id="dropZone">
-      Drop file(s) here, or click to browse
-      <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" multiple />
-    </div>
-    <div class="import-status" id="importStatus"></div>
-    <div class="client-picker" id="clientPicker" style="display:none; margin-top:12px;">
-      <div style="font-family:'Inter',sans-serif; font-size:12px; color:#9BA3AB; margin-bottom:8px;">
-        This trade book has multiple clients — pick one to import:
+  <div class="modal-overlay import-modal-overlay" id="importModalOverlay">
+    <div class="modal-box import-modal-box">
+      <div class="modal-head">
+        <div class="modal-title" style="color:#EDEFF1;"><span class="import-icon">⇪</span><span>Import from Meroshare / Broker (TMS)</span></div>
+        <button class="modal-close" id="importModalClose">&times;</button>
       </div>
-      <select id="clientSelect" style="background:#14181C; border:1px solid #2A3138; border-radius:6px; padding:8px 10px; color:#EDEFF1; font-family:inherit; font-size:13px;"></select>
-      <button class="btn primary label" id="clientImportBtn" style="margin-left:8px;">Import for this client</button>
+      <p class="import-modal-desc">
+        Drop any combination of: Meroshare <b>Share Values</b> CSV, Meroshare <b>WACC Report</b> CSV,
+        Meroshare <b>Transaction History</b> CSV, or your broker's <b>Trade Book</b> (.xlsx, from TMS) —
+        formats are auto-detected and merged by symbol. The Trade Book is the best source since it has
+        actual buy/sell prices; holdings are rebuilt from full trade history using FIFO lot matching, so
+        avg cost and holding period reflect what's actually still in your account.
+      </p>
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-zone-icon">📄</div>
+        <div class="drop-zone-title">Drop file(s) here</div>
+        <div class="drop-zone-sub">or click to browse · .csv, .xlsx, .xls</div>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" multiple />
+      </div>
+      <div class="import-status" id="importStatus"></div>
+      <div class="client-picker" id="clientPicker" style="display:none; margin-top:12px;">
+        <div style="font-family:'Inter',sans-serif; font-size:12px; color:#9BA3AB; margin-bottom:8px;">
+          This trade book has multiple clients — pick one to import:
+        </div>
+        <select id="clientSelect" style="background:#14181C; border:1px solid #2A3138; border-radius:6px; padding:8px 10px; color:#EDEFF1; font-family:inherit; font-size:13px;"></select>
+        <button class="btn primary label" id="clientImportBtn" style="margin-left:8px;">Import for this client</button>
+      </div>
+      <div class="rate-row">
+        <div class="rate-field"><span>Long-term rate (%)</span><input type="number" id="ltRate" value="7.5" step="0.1" readonly disabled /></div>
+        <div class="rate-field"><span>Short-term rate (%)</span><input type="number" id="stRate" value="10" step="0.1" readonly disabled /></div>
+        <div class="rate-field"><span>Holding threshold (days)</span><input type="number" id="holdingThreshold" value="365" readonly disabled /></div>
+      </div>
+      <div class="tax-note">🔒 Tax rates and holding threshold are fixed and cannot be edited. Nepal taxes capital gains on listed shares only when sold — final tax deducted by your broker at the point of sale. These figures are illustrative "if sold today" estimates, not tax advice.</div>
     </div>
-    <div class="rate-row">
-      <div class="rate-field"><span>Long-term rate (%)</span><input type="number" id="ltRate" value="7.5" step="0.1" readonly disabled /></div>
-      <div class="rate-field"><span>Short-term rate (%)</span><input type="number" id="stRate" value="10" step="0.1" readonly disabled /></div>
-      <div class="rate-field"><span>Holding threshold (days)</span><input type="number" id="holdingThreshold" value="365" readonly disabled /></div>
-    </div>
-    <div class="tax-note">🔒 Tax rates and holding threshold are fixed and cannot be edited. Nepal taxes capital gains on listed shares only when sold — final tax deducted by your broker at the point of sale. These figures are illustrative "if sold today" estimates, not tax advice.</div>
   </div>
 
   <div class="panel" id="txPanel">
@@ -341,6 +377,19 @@
   </div>
 
   <div class="error-box" id="errorBox">Couldn't reach the price feed. Check the Worker URL in settings.</div>
+
+  <div class="app-modal-overlay" id="appModalOverlay">
+    <div class="app-modal-box">
+      <div class="app-modal-icon" id="appModalIcon">!</div>
+      <div class="app-modal-title" id="appModalTitle">Title</div>
+      <div class="app-modal-msg" id="appModalMsg">Message</div>
+      <input type="text" id="appModalInput" style="display:none;" />
+      <div class="app-modal-actions" id="appModalActions">
+        <button id="appModalCancel">Cancel</button>
+        <button id="appModalOk" class="app-modal-ok">OK</button>
+      </div>
+    </div>
+  </div>
 
   <div class="modal-overlay" id="tradeModalOverlay">
     <div class="modal-box">
@@ -489,11 +538,17 @@ function switchPortfolio(id) {
 }
 
 function createPortfolio() {
-  const name = prompt("Name for the new portfolio:", "New Portfolio");
-  if (!name) return;
-  const p = { id: uid(), name: name.trim(), transactions: [] };
-  portfolios.push(p);
-  switchPortfolio(p.id);
+  appPrompt({
+    title: "New Portfolio",
+    placeholder: "Portfolio name",
+    defaultValue: "New Portfolio",
+    confirmText: "Create",
+    onSubmit: (name) => {
+      const p = { id: uid(), name: name.trim(), transactions: [] };
+      portfolios.push(p);
+      switchPortfolio(p.id);
+    },
+  });
 }
 
 function renamePortfolioTo(name) {
@@ -506,30 +561,44 @@ function renamePortfolioTo(name) {
 
 function deleteCurrentPortfolio() {
   if (portfolios.length <= 1) {
-    alert("You need at least one portfolio — clear its data instead if you want to reset it.");
+    appAlert({ title: "Can't delete", message: "You need at least one portfolio — clear its data instead if you want to reset it." });
     return;
   }
   const p = getCurrentPortfolio();
-  if (!confirm(`Delete portfolio "${p.name}" and all its transactions? This can't be undone.`)) return;
-  portfolios = portfolios.filter((x) => x.id !== p.id);
-  currentPortfolioId = portfolios[0].id;
-  saveState();
-  recompute();
-  renderPortfolioTabs();
-  refresh();
-  renderTransactions();
-  renderPerformancePanel();
+  appConfirm({
+    title: "Delete portfolio?",
+    message: `Delete portfolio "${p.name}" and all its transactions? This can't be undone.`,
+    confirmText: "Delete",
+    danger: true,
+    onConfirm: () => {
+      portfolios = portfolios.filter((x) => x.id !== p.id);
+      currentPortfolioId = portfolios[0].id;
+      saveState();
+      recompute();
+      renderPortfolioTabs();
+      refresh();
+      renderTransactions();
+      renderPerformancePanel();
+    },
+  });
 }
 
 function clearCurrentPortfolioData() {
   const p = getCurrentPortfolio();
-  if (!confirm(`Clear all holdings and transaction history for "${p.name}"? This can't be undone.`)) return;
-  p.transactions = [];
-  saveState();
-  recompute();
-  refresh();
-  renderTransactions();
-  renderPerformancePanel();
+  appConfirm({
+    title: "Clear portfolio data?",
+    message: `Clear all holdings and transaction history for "${p.name}"? This can't be undone.`,
+    confirmText: "Clear",
+    danger: true,
+    onConfirm: () => {
+      p.transactions = [];
+      saveState();
+      recompute();
+      refresh();
+      renderTransactions();
+      renderPerformancePanel();
+    },
+  });
 }
 
 /* ---------- Recompute holdings + realized P/L from the transaction ledger ---------- */
@@ -1032,6 +1101,101 @@ async function refresh() {
   }
 }
 
+/* ---------- Generic app modal (replaces native prompt/confirm/alert) ---------- */
+function closeAppModal() {
+  document.getElementById("appModalOverlay").classList.remove("show");
+}
+
+function appConfirm({ title, message, confirmText = "Confirm", danger = false, onConfirm }) {
+  const overlay = document.getElementById("appModalOverlay");
+  const icon = document.getElementById("appModalIcon");
+  const input = document.getElementById("appModalInput");
+  const actions = document.getElementById("appModalActions");
+  const okBtn = document.getElementById("appModalOk");
+  const cancelBtn = document.getElementById("appModalCancel");
+
+  document.getElementById("appModalTitle").textContent = title;
+  document.getElementById("appModalMsg").textContent = message;
+  icon.className = "app-modal-icon " + (danger ? "warn" : "ask");
+  icon.textContent = danger ? "⚠" : "?";
+  input.style.display = "none";
+  actions.className = "app-modal-actions";
+  okBtn.className = "app-modal-ok" + (danger ? " danger" : "");
+  okBtn.textContent = confirmText;
+  cancelBtn.style.display = "block";
+
+  const cleanup = () => { okBtn.onclick = null; cancelBtn.onclick = null; closeAppModal(); };
+  okBtn.onclick = () => { cleanup(); onConfirm && onConfirm(); };
+  cancelBtn.onclick = cleanup;
+  overlay.classList.add("show");
+}
+
+function appAlert({ title = "Notice", message, danger = true }) {
+  const overlay = document.getElementById("appModalOverlay");
+  const icon = document.getElementById("appModalIcon");
+  const input = document.getElementById("appModalInput");
+  const actions = document.getElementById("appModalActions");
+  const okBtn = document.getElementById("appModalOk");
+  const cancelBtn = document.getElementById("appModalCancel");
+
+  document.getElementById("appModalTitle").textContent = title;
+  document.getElementById("appModalMsg").textContent = message;
+  icon.className = "app-modal-icon " + (danger ? "warn" : "info");
+  icon.textContent = danger ? "⚠" : "i";
+  input.style.display = "none";
+  actions.className = "app-modal-actions single";
+  okBtn.className = "app-modal-ok";
+  okBtn.textContent = "Got it";
+  cancelBtn.style.display = "none";
+
+  const cleanup = () => { okBtn.onclick = null; closeAppModal(); };
+  okBtn.onclick = cleanup;
+  overlay.classList.add("show");
+}
+
+function appPrompt({ title, message, defaultValue = "", placeholder = "", confirmText = "Save", onSubmit }) {
+  const overlay = document.getElementById("appModalOverlay");
+  const icon = document.getElementById("appModalIcon");
+  const input = document.getElementById("appModalInput");
+  const actions = document.getElementById("appModalActions");
+  const okBtn = document.getElementById("appModalOk");
+  const cancelBtn = document.getElementById("appModalCancel");
+
+  document.getElementById("appModalTitle").textContent = title;
+  document.getElementById("appModalMsg").textContent = message || "";
+  document.getElementById("appModalMsg").style.display = message ? "block" : "none";
+  icon.className = "app-modal-icon ask";
+  icon.textContent = "?";
+  input.style.display = "block";
+  input.value = defaultValue;
+  input.placeholder = placeholder;
+  actions.className = "app-modal-actions";
+  okBtn.className = "app-modal-ok";
+  okBtn.textContent = confirmText;
+  cancelBtn.style.display = "block";
+
+  const submit = () => {
+    const val = input.value.trim();
+    cleanup();
+    if (val) onSubmit && onSubmit(val);
+  };
+  const cleanup = () => {
+    okBtn.onclick = null; cancelBtn.onclick = null; input.onkeydown = null;
+    document.getElementById("appModalMsg").style.display = "block";
+    closeAppModal();
+  };
+  okBtn.onclick = submit;
+  cancelBtn.onclick = cleanup;
+  input.onkeydown = (e) => { if (e.key === "Enter") submit(); if (e.key === "Escape") cleanup(); };
+
+  overlay.classList.add("show");
+  setTimeout(() => { input.focus(); input.select(); }, 30);
+}
+
+document.getElementById("appModalOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "appModalOverlay") closeAppModal();
+});
+
 /* ---------- Manual Buy / Sell on existing holdings (styled modal) ---------- */
 let tradeModalState = { mode: null, holdingId: null };
 
@@ -1287,14 +1451,21 @@ function render() {
     btn.addEventListener("click", () => {
       const h = holdings.find((x) => x.id == btn.dataset.id);
       if (!h) return;
-      if (!confirm(`Remove ${h.symbol} and delete all its transactions from this portfolio?`)) return;
-      const p = getCurrentPortfolio();
-      p.transactions = p.transactions.filter((t) => t.symbol !== h.symbol);
-      saveState();
-      recompute();
-      refresh();
-      renderTransactions();
-      renderPerformancePanel();
+      appConfirm({
+        title: "Remove holding?",
+        message: `Remove ${h.symbol} and delete all its transactions from this portfolio?`,
+        confirmText: "Remove",
+        danger: true,
+        onConfirm: () => {
+          const p = getCurrentPortfolio();
+          p.transactions = p.transactions.filter((t) => t.symbol !== h.symbol);
+          saveState();
+          recompute();
+          refresh();
+          renderTransactions();
+          renderPerformancePanel();
+        },
+      });
     });
   });
 
@@ -1352,8 +1523,19 @@ document.getElementById("refreshBtn").addEventListener("click", refresh);
 document.getElementById("settingsBtn").addEventListener("click", () => {
   document.getElementById("settingsBox").classList.toggle("show");
 });
-document.getElementById("importBtn").addEventListener("click", () => {
-  document.getElementById("importPanel").classList.toggle("show");
+function openImportModal() {
+  document.getElementById("importModalOverlay").classList.add("show");
+}
+function closeImportModal() {
+  document.getElementById("importModalOverlay").classList.remove("show");
+}
+document.getElementById("importBtn").addEventListener("click", openImportModal);
+document.getElementById("importModalClose").addEventListener("click", closeImportModal);
+document.getElementById("importModalOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "importModalOverlay") closeImportModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && document.getElementById("importModalOverlay").classList.contains("show")) closeImportModal();
 });
 
 const dropZone = document.getElementById("dropZone");
@@ -1528,14 +1710,21 @@ function renderTransactions() {
 
   body.querySelectorAll(".tx-del").forEach((btn) => {
     btn.addEventListener("click", () => {
-      if (!confirm("Delete this transaction?")) return;
-      const p = getCurrentPortfolio();
-      p.transactions = p.transactions.filter((t) => t.id != btn.dataset.id);
-      saveState();
-      recompute();
-      refresh();
-      renderTransactions();
-      renderPerformancePanel();
+      appConfirm({
+        title: "Delete transaction?",
+        message: "Delete this transaction? Holdings and realized P/L will recalculate automatically.",
+        confirmText: "Delete",
+        danger: true,
+        onConfirm: () => {
+          const p = getCurrentPortfolio();
+          p.transactions = p.transactions.filter((t) => t.id != btn.dataset.id);
+          saveState();
+          recompute();
+          refresh();
+          renderTransactions();
+          renderPerformancePanel();
+        },
+      });
     });
   });
 
@@ -1571,7 +1760,7 @@ function editTransactionRow(id) {
     const date = row.querySelector(".edit-date").value || null;
     const feesRaw = row.querySelector(".edit-fees").value;
     const fees = feesRaw !== "" && !Number.isNaN(Number(feesRaw)) ? Number(feesRaw) : null;
-    if (!symbol || !qty || qty <= 0 || price < 0) { alert("Enter a valid symbol, quantity, and price."); return; }
+    if (!symbol || !qty || qty <= 0 || price < 0) { appAlert({ title: "Missing info", message: "Enter a valid symbol, quantity, and price." }); return; }
     t.symbol = symbol; t.side = side; t.qty = qty; t.price = price; t.date = date; t.fees = fees;
     saveState();
     recompute();
@@ -1594,7 +1783,7 @@ document.getElementById("txAddBtn").addEventListener("click", () => {
   const date = document.getElementById("txDateInput").value || null;
   const feesRaw = document.getElementById("txFeesInput").value;
   const fees = feesRaw !== "" && !Number.isNaN(Number(feesRaw)) ? Number(feesRaw) : null;
-  if (!symbol || !qty || qty <= 0 || price < 0) { alert("Enter a valid symbol, quantity, and price."); return; }
+  if (!symbol || !qty || qty <= 0 || price < 0) { appAlert({ title: "Missing info", message: "Enter a valid symbol, quantity, and price." }); return; }
   const p = getCurrentPortfolio();
   p.transactions.push({ id: uid(), symbol, side, qty, price, date, fees, note: "" });
   saveState();

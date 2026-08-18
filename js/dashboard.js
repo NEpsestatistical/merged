@@ -1,193 +1,291 @@
 /* =========================================================
-   Market-wide modules: Top Gainers/Losers, Index Movers.
-   Requires the Worker's new ?all=1 endpoint (see worker-all-endpoint.js).
-   Loaded alongside the existing dashboard.js — does not modify it.
+   NEPSE Dashboard — data layer
+   Uses ONLY the existing single-symbol worker
+   (https://shiny-term-f599.bharatiaashish43.workers.dev/?symbol=XXX)
+   and the portfolio data already stored in localStorage by
+   portfolio.html (key "eePortfoliosV2"). Market-wide gainers/
+   losers/sector data is handled separately by dashboard-market.js.
    ========================================================= */
 
-const MARKET_ALL_URL = `${WORKER_URL}/?all=1`;
+const WORKER_URL = "https://shiny-term-f599.bharatiaashish43.workers.dev";
+const WATCHLIST_KEY = "eeDashboardWatchlist";
 
-async function fetchAllQuotes() {
-  const res = await fetch(MARKET_ALL_URL);
-  if (!res.ok) throw new Error(`Market feed: HTTP ${res.status}`);
-  return res.json(); // [{ symbol, ltp, changePercent, changeAmount, marketCap }, ...]
+function fmt(n, d = 2) {
+  if (n === null || n === undefined || Number.isNaN(n)) return "—";
+  return Number(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
-function renderGainersLosers(quotes) {
-  const gainersBody = document.querySelector("#gainersTable tbody");
-  const losersBody = document.querySelector("#losersTable tbody");
-  if (!gainersBody || !losersBody) return;
-
-  const valid = quotes.filter((q) => q.symbol && !Number.isNaN(q.changePercent));
-  const sorted = [...valid].sort((a, b) => b.changePercent - a.changePercent);
-
-  const topGainers = sorted.slice(0, 10);
-  const topLosers = sorted.slice(-10).reverse();
-
-  const rowHtml = (q) => `
-    <tr>
-      <td>${q.symbol}</td>
-      <td>Rs ${fmt(q.ltp, 2)}</td>
-      <td class="${q.changePercent >= 0 ? "up" : "down"}">${q.changePercent >= 0 ? "+" : ""}${fmt(q.changePercent, 2)}%</td>
-    </tr>
-  `;
-
-  gainersBody.innerHTML = topGainers.length
-    ? topGainers.map(rowHtml).join("")
-    : `<tr><td colspan="3" class="loading">No data.</td></tr>`;
-
-  losersBody.innerHTML = topLosers.length
-    ? topLosers.map(rowHtml).join("")
-    : `<tr><td colspan="3" class="loading">No data.</td></tr>`;
+/* ---------- Fetch a single symbol quote from the worker ---------- */
+async function fetchQuote(symbol) {
+  const res = await fetch(`${WORKER_URL}/?symbol=${encodeURIComponent(symbol)}`);
+  if (!res.ok) throw new Error(`${symbol}: HTTP ${res.status}`);
+  return res.json();
 }
 
-function renderIndexMovers(quotes) {
-  const body = document.querySelector("#moversTable tbody");
-  const noteEl = document.getElementById("moversNote");
-  if (!body) return;
+/* ---------- Same defensive day-change reader as portfolio.html,
+   since the worker's field names for change aren't documented. ---------- */
+function getDayChange(p, ltp) {
+  if (!p) return null;
+  const pct = [p.percentChange, p.perChange, p.changePercent, p.percChange, p.pctChange]
+    .find((v) => v !== undefined && v !== null && !Number.isNaN(Number(v)));
+  const amtRaw = [p.pointChange, p.change, p.netChange, p.diff, p.priceChange]
+    .find((v) => v !== undefined && v !== null && !Number.isNaN(Number(v)));
 
-  const withCaps = quotes.filter(
-    (q) => q.symbol && q.marketCap && !Number.isNaN(q.marketCap) && !Number.isNaN(q.changePercent)
-  );
+  let amt = amtRaw !== undefined ? Number(amtRaw) : null;
+  let pctNum = pct !== undefined ? Number(pct) : null;
 
-  if (!withCaps.length) {
-    body.innerHTML = `<tr><td colspan="3" class="loading">Market-cap data unavailable — check the Worker's marketCap field.</td></tr>`;
-    if (noteEl) noteEl.textContent = "";
-    return;
+  if (amt === null && pctNum !== null && ltp !== null) {
+    amt = ltp - ltp / (1 + pctNum / 100);
+  } else if (pctNum === null && amt !== null && ltp !== null) {
+    const prevClose = ltp - amt;
+    pctNum = prevClose ? (amt / prevClose) * 100 : 0;
   }
 
-  const totalFloatCap = withCaps.reduce((s, q) => s + q.marketCap, 0);
-
-  // Contribution to index move, in index points, approximated as:
-  // (stock's market cap / total float market cap) × stock's % change × current index level.
-  // NEPSE doesn't publish exact float-adjusted weights per stock via this feed, so this
-  // is a full-market-cap-weighted approximation, not the exchange's own official figure.
-  const withContribution = withCaps.map((q) => ({
-    ...q,
-    weight: q.marketCap / totalFloatCap,
-    contributionPct: (q.marketCap / totalFloatCap) * q.changePercent,
-  }));
-
-  const sorted = [...withContribution].sort((a, b) => Math.abs(b.contributionPct) - Math.abs(a.contributionPct));
-  const top = sorted.slice(0, 12);
-
-  body.innerHTML = top.map((q) => `
-    <tr>
-      <td>${q.symbol}</td>
-      <td class="${q.changePercent >= 0 ? "up" : "down"}">${q.changePercent >= 0 ? "+" : ""}${fmt(q.changePercent, 2)}%</td>
-      <td class="${q.contributionPct >= 0 ? "up" : "down"}">${q.contributionPct >= 0 ? "+" : ""}${fmt(q.contributionPct, 4)} pts (approx.)</td>
-    </tr>
-  `).join("");
-
-  if (noteEl) {
-    noteEl.textContent = "Contribution is market-cap-weighted, calculated from this feed — not NEPSE's official float-adjusted index weighting.";
-  }
+  if (amt === null || pctNum === null || Number.isNaN(amt) || Number.isNaN(pctNum)) return null;
+  return { amt, pct: pctNum };
 }
 
-/* ---------------------------------------------------------
-   Sector impact: how much each NEPSE sector moved, and which
-   particular stocks inside that sector drove the move.
-   Requires `sector` on each quote (added by the updated Worker)
-   and, for the "index effect" column, `marketCap`.
-   --------------------------------------------------------- */
-function renderSectorImpact(quotes) {
-  const body = document.querySelector("#sectorTable tbody");
-  const noteEl = document.getElementById("sectorNote");
-  if (!body) return;
+/* =========================================================
+   PORTFOLIO — read the same localStorage the portfolio page writes,
+   rebuild holdings with the identical FIFO logic, then fetch live LTPs.
+   ========================================================= */
 
-  const valid = quotes.filter((q) => q.symbol && !Number.isNaN(q.changePercent));
-  if (!valid.length) {
-    body.innerHTML = `<tr><td colspan="5" class="loading">No data.</td></tr>`;
-    return;
-  }
+function loadPortfolios() {
+  try {
+    const raw = localStorage.getItem("eePortfoliosV2");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  } catch (e) {}
+  return [];
+}
 
-  const hasCaps = valid.some((q) => q.marketCap && !Number.isNaN(q.marketCap));
-  const totalCap = hasCaps
-    ? valid.reduce((s, q) => s + (q.marketCap || 0), 0)
-    : 0;
+function getCurrentPortfolio(portfolios) {
+  if (!portfolios.length) return null;
+  let currentId = null;
+  try { currentId = localStorage.getItem("eeCurrentPortfolioId"); } catch (e) {}
+  return portfolios.find((p) => p.id === currentId) || portfolios[0];
+}
 
-  // Group by sector.
-  const bySector = {};
-  for (const q of valid) {
-    const sector = q.sector || "Others";
-    if (!bySector[sector]) bySector[sector] = [];
-    bySector[sector].push(q);
-  }
-
-  const sectorRows = Object.entries(bySector).map(([sector, stocks]) => {
-    // Simple average % change across constituents (unweighted — a straightforward
-    // read on "how did this sector do today").
-    const avgChange = stocks.reduce((s, q) => s + q.changePercent, 0) / stocks.length;
-
-    // Market-cap-weighted contribution to the overall index, summed across the
-    // sector's constituents — same approximation basis as the index-movers panel.
-    const sectorContribution = hasCaps
-      ? stocks.reduce((s, q) => {
-          if (!q.marketCap || Number.isNaN(q.marketCap)) return s;
-          return s + (q.marketCap / totalCap) * q.changePercent;
-        }, 0)
-      : null;
-
-    // The specific stock(s) dragging the sector down (or up) the most.
-    const worst = [...stocks].sort((a, b) => a.changePercent - b.changePercent).slice(0, 2);
-    const declinersCount = stocks.filter((q) => q.changePercent < 0).length;
-
-    return {
-      sector,
-      count: stocks.length,
-      avgChange,
-      sectorContribution,
-      declinersCount,
-      worst,
-    };
+// FIFO lot matching — identical to portfolio.html's buildHoldingsFromTrades.
+function buildHoldingsFromTrades(trades) {
+  const bySymbol = {};
+  const sorted = [...trades].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+  sorted.forEach((t) => {
+    if (!bySymbol[t.symbol]) bySymbol[t.symbol] = [];
+    const lots = bySymbol[t.symbol];
+    if (t.side.startsWith("b")) {
+      lots.push({ qty: t.qty, price: t.price, date: t.date });
+    } else if (t.side.startsWith("s")) {
+      let remaining = t.qty;
+      while (remaining > 0 && lots.length) {
+        const lot = lots[0];
+        const take = Math.min(lot.qty, remaining);
+        lot.qty -= take;
+        remaining -= take;
+        if (lot.qty <= 0) lots.shift();
+      }
+    }
   });
 
-  sectorRows.sort((a, b) => a.avgChange - b.avgChange); // worst-hit sectors first
+  const result = {};
+  Object.keys(bySymbol).forEach((symbol) => {
+    const lots = bySymbol[symbol].filter((l) => l.qty > 0);
+    if (!lots.length) return;
+    const qty = lots.reduce((s, l) => s + l.qty, 0);
+    const cost = lots.reduce((s, l) => s + l.qty * l.price, 0);
+    result[symbol] = { symbol, qty, avgCost: cost / qty };
+  });
+  return result;
+}
 
-  body.innerHTML = sectorRows.map((r) => {
-    const worstList = r.worst
-      .map((q) => `${q.symbol} (${q.changePercent >= 0 ? "+" : ""}${fmt(q.changePercent, 2)}%)`)
-      .join(", ");
+async function loadPortfolioSnapshot() {
+  const snapshotEl = document.getElementById("portfolioSnapshot");
+  const holdingsBody = document.querySelector("#holdingsTable tbody");
+
+  const portfolios = loadPortfolios();
+  const current = getCurrentPortfolio(portfolios);
+
+  if (!current || !current.transactions || !current.transactions.length) {
+    snapshotEl.innerHTML = `<p class="loading">No portfolio data yet. Add holdings on the Portfolio page.</p>`;
+    holdingsBody.innerHTML = `<tr><td colspan="5" class="loading">No holdings yet.</td></tr>`;
+    return;
+  }
+
+  const holdings = Object.values(buildHoldingsFromTrades(current.transactions));
+
+  if (!holdings.length) {
+    snapshotEl.innerHTML = `<p class="loading">No open positions in "${current.name}".</p>`;
+    holdingsBody.innerHTML = `<tr><td colspan="5" class="loading">No open positions.</td></tr>`;
+    return;
+  }
+
+  let quotes = {};
+  let fetchFailed = false;
+  try {
+    const results = await Promise.all(
+      holdings.map(async (h) => {
+        try { return await fetchQuote(h.symbol); }
+        catch (e) { return null; }
+      })
+    );
+    results.forEach((r) => { if (r && r.symbol) quotes[r.symbol] = r; });
+  } catch (e) {
+    fetchFailed = true;
+  }
+
+  let totalInvested = 0, totalValue = 0, todayPL = 0, haveAnyLtp = false;
+
+  holdings.forEach((h) => {
+    const q = quotes[h.symbol];
+    const ltp = q ? Number(q.ltp) : null;
+    totalInvested += h.qty * h.avgCost;
+    if (ltp !== null && !Number.isNaN(ltp)) {
+      totalValue += h.qty * ltp;
+      haveAnyLtp = true;
+      const chg = getDayChange(q, ltp);
+      if (chg) todayPL += h.qty * chg.amt;
+    } else {
+      totalValue += h.qty * h.avgCost; // fall back to cost basis if no live price
+    }
+  });
+
+  const totalPL = totalValue - totalInvested;
+  const totalPLPct = totalInvested ? (totalPL / totalInvested) * 100 : 0;
+
+  const plClass = totalPL >= 0 ? "up" : "down";
+  const dayClass = todayPL >= 0 ? "up" : "down";
+
+  snapshotEl.innerHTML = `
+   <div class="stat">
+      <div class="value">Rs ${fmt(totalValue, 0)}</div>
+      <div class="label">Portfolio Value${haveAnyLtp ? "" : " (live price unavailable)"}</div>
+   </div>
+   <div class="stat">
+      <div class="value ${plClass}" style="font-size:22px">Rs ${fmt(Math.abs(totalPL), 0)}</div>
+      <div class="label">Total P/L (${fmt(totalPLPct, 1)}%)</div>
+   </div>
+   <div class="stat">
+      <div class="value ${dayClass}" style="font-size:22px">Rs ${fmt(Math.abs(todayPL), 0)}</div>
+      <div class="label">Today's P/L</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="font-size:22px">Rs ${fmt(totalInvested, 0)}</div>
+      <div class="label">Invested</div>
+   </div>
+ `;
+
+  holdingsBody.innerHTML = holdings.map((h) => {
+    const q = quotes[h.symbol];
+    const ltp = q ? Number(q.ltp) : null;
+    const pl = ltp !== null && !Number.isNaN(ltp) ? (ltp - h.avgCost) * h.qty : null;
+    const plClass2 = pl === null ? "" : (pl >= 0 ? "up" : "down");
     return `
       <tr>
-        <td>${r.sector}</td>
-        <td class="${r.avgChange >= 0 ? "up" : "down"}">${r.avgChange >= 0 ? "+" : ""}${fmt(r.avgChange, 2)}%</td>
-        <td>${r.declinersCount}/${r.count} falling</td>
-        <td>${r.sectorContribution === null ? "—" : `${r.sectorContribution >= 0 ? "+" : ""}${fmt(r.sectorContribution, 4)} pts`}</td>
-        <td>${worstList}</td>
+        <td>${h.symbol}</td>
+        <td>${fmt(h.qty, 0)}</td>
+        <td>${fmt(h.avgCost, 2)}</td>
+        <td>${ltp !== null ? "Rs " + fmt(ltp, 2) : "—"}</td>
+        <td class="${plClass2}">${pl !== null ? "Rs " + fmt(Math.abs(pl), 0) : "Data unavailable"}</td>
       </tr>
     `;
   }).join("");
 
-  if (noteEl) {
-    noteEl.textContent = hasCaps
-      ? "Sector change is the unweighted average of its constituents; index-point contribution is market-cap-weighted, calculated from this feed — not NEPSE's official float-adjusted weighting."
-      : "Sector change is the unweighted average of its constituents. Index-point contribution needs the Worker's marketCap field, which isn't populated yet.";
+  if (fetchFailed) {
+    holdingsBody.insertAdjacentHTML("beforeend",
+      `<tr><td colspan="5" class="loading">Some live prices failed to load — showing cost basis where unavailable.</td></tr>`);
   }
 }
 
-async function loadMarketModules() {
-  const gainersBody = document.querySelector("#gainersTable tbody");
-  const losersBody = document.querySelector("#losersTable tbody");
-  const moversBody = document.querySelector("#moversTable tbody");
-  const sectorBody = document.querySelector("#sectorTable tbody");
-  if (gainersBody) gainersBody.innerHTML = `<tr><td colspan="3" class="loading">Loading market data…</td></tr>`;
-  if (losersBody) losersBody.innerHTML = `<tr><td colspan="3" class="loading">Loading market data…</td></tr>`;
-  if (moversBody) moversBody.innerHTML = `<tr><td colspan="3" class="loading">Loading market data…</td></tr>`;
-  if (sectorBody) sectorBody.innerHTML = `<tr><td colspan="5" class="loading">Loading market data…</td></tr>`;
+/* =========================================================
+   WATCHLIST — user-managed symbol list, each fetched individually.
+   ========================================================= */
 
+function loadWatchlist() {
   try {
-    const quotes = await fetchAllQuotes();
-    renderGainersLosers(quotes);
-    renderIndexMovers(quotes);
-    renderSectorImpact(quotes);
-  } catch (e) {
-    const msg3 = `<tr><td colspan="3" class="loading">Couldn't load market data — check the Worker's ?all=1 endpoint.</td></tr>`;
-    const msg5 = `<tr><td colspan="5" class="loading">Couldn't load market data — check the Worker's ?all=1 endpoint.</td></tr>`;
-    if (gainersBody) gainersBody.innerHTML = msg3;
-    if (losersBody) losersBody.innerHTML = msg3;
-    if (moversBody) moversBody.innerHTML = msg3;
-    if (sectorBody) sectorBody.innerHTML = msg5;
-  }
+    const raw = localStorage.getItem(WATCHLIST_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return [];
 }
 
-document.addEventListener("DOMContentLoaded", loadMarketModules);
+function saveWatchlist(list) {
+  try { localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list)); } catch (e) {}
+}
+
+async function renderWatchlist() {
+  const body = document.querySelector("#watchTable tbody");
+  const list = loadWatchlist();
+
+  if (!list.length) {
+    body.innerHTML = `<tr><td colspan="4" class="loading">No symbols yet — add one above.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = list.map((s) => `<tr><td>${s}</td><td colspan="2" class="loading">Loading...</td><td></td></tr>`).join("");
+
+  const results = await Promise.all(list.map(async (symbol) => {
+    try { return { symbol, data: await fetchQuote(symbol) }; }
+    catch (e) { return { symbol, data: null, error: true }; }
+  }));
+
+  body.innerHTML = results.map(({ symbol, data, error }) => {
+    if (error || !data) {
+      return `
+        <tr>
+          <td>${symbol}</td>
+          <td colspan="2" class="loading">Data unavailable</td>
+          <td><button class="watch-remove-btn" data-symbol="${symbol}" type="button">✕</button></td>
+        </tr>`;
+    }
+    const ltp = data.ltp !== undefined ? Number(data.ltp) : null;
+    const chg = getDayChange(data, ltp);
+    const chgClass = chg ? (chg.amt >= 0 ? "up" : "down") : "";
+    const chgText = chg ? `${fmt(chg.amt, 2)} (${fmt(chg.pct, 2)}%)` : "—";
+    return `
+      <tr>
+        <td>${symbol}</td>
+        <td>${ltp !== null ? "Rs " + fmt(ltp, 2) : "—"}</td>
+        <td class="${chgClass}">${chgText}</td>
+        <td><button class="watch-remove-btn" data-symbol="${symbol}" type="button">✕</button></td>
+      </tr>`;
+  }).join("");
+}
+
+function setupWatchlistControls() {
+  const input = document.getElementById("watchInput");
+  const addBtn = document.getElementById("watchAddBtn");
+  const body = document.querySelector("#watchTable tbody");
+
+  function addSymbol() {
+    const symbol = input.value.trim().toUpperCase();
+    if (!symbol) return;
+    const list = loadWatchlist();
+    if (!list.includes(symbol)) {
+      list.push(symbol);
+      saveWatchlist(list);
+      renderWatchlist();
+    }
+    input.value = "";
+  }
+
+  addBtn.addEventListener("click", addSymbol);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") addSymbol(); });
+
+  body.addEventListener("click", (e) => {
+    const btn = e.target.closest(".watch-remove-btn");
+    if (!btn) return;
+    const symbol = btn.dataset.symbol;
+    const list = loadWatchlist().filter((s) => s !== symbol);
+    saveWatchlist(list);
+    renderWatchlist();
+  });
+}
+
+/* ---------- init ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  loadPortfolioSnapshot();
+  setupWatchlistControls();
+  renderWatchlist();
+});

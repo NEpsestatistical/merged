@@ -164,6 +164,16 @@
   .tx-actions button { background: none; border: none; color: #6B7680; font-size: 12px; font-family: 'Inter', sans-serif; }
   .tx-actions button:hover { color: #EDEFF1; }
   .tx-actions .tx-save { color: #3FA796; } .tx-actions .tx-del:hover { color: #C4553D; }
+  .tx-fifo-toggle { background: none; border: none; color: #6B7680; font-family: 'Inter', sans-serif; font-size: 11px; cursor: pointer; padding: 0; text-align: left; }
+  .tx-fifo-toggle:hover { color: #9BA3AB; }
+  .tx-fifo-row td { padding: 0; border-bottom: 1px solid #20262C; }
+  .tx-fifo-detail { background: #14181C; padding: 12px 16px; font-family: 'Inter', sans-serif; font-size: 12px; }
+  .tx-fifo-detail .fifo-title { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #6B7680; margin-bottom: 8px; }
+  .tx-fifo-match { display: grid; grid-template-columns: 90px 1fr 1fr 1fr 1fr 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #20262C; align-items: center; }
+  .tx-fifo-match:last-of-type { border-bottom: none; }
+  .tx-fifo-match .m-label { color: #6B7680; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .tx-fifo-total { display: grid; grid-template-columns: 90px 1fr 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0 2px; margin-top: 4px; border-top: 1px solid #2A3138; font-weight: 600; }
+  .row-side-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; }
   .tx-add-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .tx-add-row input, .tx-add-row select { background: #14181C; border: 1px solid #2A3138; border-radius: 6px; padding: 9px 10px; color: #EDEFF1; font-family: inherit; font-size: 12.5px; }
   .settings-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
@@ -256,7 +266,7 @@
     <p>Every buy, sell, and import that built your current holdings, for this portfolio. Fix a mistake by editing or deleting an entry below — holdings and realized P/L recalculate automatically.</p>
     <table class="tx-table">
       <thead>
-        <tr><th>Date</th><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th></th></tr>
+        <tr><th>Date</th><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th>Cost Basis</th><th>Proceeds</th><th>Gain/Loss</th><th>Return</th><th></th></tr>
       </thead>
       <tbody id="txTableBody"></tbody>
     </table>
@@ -611,27 +621,87 @@ function extractMeroshareHistory(rows) {
 }
 
 // FIFO lot matching: buys push lots, sells consume oldest lots first.
-// Returns holdings keyed by symbol with weighted avg cost across remaining lots
-// and the oldest remaining lot's date (conservative for long/short-term tax classification).
-function buildHoldingsFromTrades(trades) {
-  const bySymbol = {};
+// buildFIFOAnalysis is the single source of truth for FIFO accounting: it returns
+// current holdings, total realized P/L, AND a per-transaction breakdown (with the
+// exact buy lot(s) matched to every sell) so holdings, lifetime realized P/L, and
+// the transaction history table can never disagree with each other.
+//
+// Chronological order = transaction date, with original ledger position (array index
+// in the *unsorted* `trades` input) as a deterministic tie-breaker for same-date trades.
+// This is independent of however the Transaction History table chooses to display rows.
+function buildFIFOAnalysis(trades) {
+  const indexed = trades.map((t, i) => ({ t, i }));
+  indexed.sort((a, b) => {
+    const d = (a.t.date || "").localeCompare(b.t.date || "");
+    if (d !== 0) return d;
+    return a.i - b.i;
+  });
+
+  const bySymbol = {}; // symbol -> array of remaining lots {qty, price, date, transactionId}
   let realizedPL = 0;
-  const sorted = [...trades].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
-  sorted.forEach((t) => {
+  const perTransaction = {}; // transactionId -> analysis record
+
+  indexed.forEach(({ t }) => {
     if (!bySymbol[t.symbol]) bySymbol[t.symbol] = [];
     const lots = bySymbol[t.symbol];
+
     if (t.side.startsWith("b")) {
-      lots.push({ qty: t.qty, price: t.price, date: t.date });
+      lots.push({ qty: t.qty, price: t.price, date: t.date, transactionId: t.id });
+      perTransaction[t.id] = {
+        transactionId: t.id,
+        symbol: t.symbol,
+        side: "buy",
+        qty: t.qty,
+        price: t.price,
+        date: t.date,
+        costBasis: t.qty * t.price,
+        proceeds: null,
+        realizedPL: null,
+        realizedPLPercent: null,
+        matches: [],
+      };
     } else if (t.side.startsWith("s")) {
       let remaining = t.qty;
+      const matches = [];
+      let costBasis = 0;
       while (remaining > 0 && lots.length) {
         const lot = lots[0];
         const take = Math.min(lot.qty, remaining);
-        realizedPL += take * (t.price - lot.price);
+        const cost = take * lot.price;
+        const proceeds = take * t.price;
+        const matchPL = proceeds - cost;
+        realizedPL += matchPL;
+        costBasis += cost;
+        matches.push({
+          buyTransactionId: lot.transactionId,
+          buyDate: lot.date,
+          buyPrice: lot.price,
+          qty: take,
+          cost,
+          proceeds,
+          realizedPL: matchPL,
+          realizedPLPercent: cost > 0 ? (matchPL / cost) * 100 : 0,
+        });
         lot.qty -= take;
         remaining -= take;
         if (lot.qty <= 0) lots.shift();
       }
+      const proceedsTotal = (t.qty - remaining) * t.price; // matched qty only (unmatched shares have no cost basis)
+      const totalPL = proceedsTotal - costBasis;
+      perTransaction[t.id] = {
+        transactionId: t.id,
+        symbol: t.symbol,
+        side: "sell",
+        qty: t.qty,
+        price: t.price,
+        date: t.date,
+        costBasis,
+        proceeds: proceedsTotal,
+        realizedPL: totalPL,
+        realizedPLPercent: costBasis > 0 ? (totalPL / costBasis) * 100 : 0,
+        matches,
+        unmatchedQty: remaining > 0 ? remaining : 0, // sold more than ever bought (bad data / short) - flagged, not silently dropped
+      };
     }
   });
 
@@ -645,7 +715,16 @@ function buildHoldingsFromTrades(trades) {
     const purchaseDate = lots.reduce((min, l) => (!min || l.date < min ? l.date : min), null);
     result[symbol] = { symbol, qty, avgCost, purchaseDate };
   });
-  return { holdings: result, realizedPL };
+
+  return { holdings: result, realizedPL, perTransaction };
+}
+
+// Thin wrapper kept for backward compatibility with existing callers (recompute(), etc.)
+// that only need holdings + total realized P/L. Delegates to buildFIFOAnalysis so there is
+// exactly one FIFO implementation in the app.
+function buildHoldingsFromTrades(trades) {
+  const { holdings, realizedPL } = buildFIFOAnalysis(trades);
+  return { holdings, realizedPL };
 }
 
 function getDistinctClients(tmsTrades) {
@@ -1206,24 +1285,108 @@ function renderTransactions() {
   const p = getCurrentPortfolio();
   body.innerHTML = "";
   if (!p.transactions.length) {
-    body.innerHTML = '<tr><td colspan="6" class="empty-state">No transactions yet.</td></tr>';
+    body.innerHTML = '<tr><td colspan="10" class="empty-state">No transactions yet.</td></tr>';
     return;
   }
+
+  // Same FIFO source of truth used by recompute() for holdings/realizedPL, so the
+  // transaction table numbers always reconcile with the header stats.
+  const validTrades = (p.transactions || []).filter((t) => t.symbol && t.side && t.qty > 0 && t.price >= 0);
+  const { perTransaction, realizedPL: rplFromTrades } = buildFIFOAnalysis(validTrades);
+
+  // Dev-time reconciliation check: sum of per-sale realized P/L must equal the
+  // lifetime realized P/L used elsewhere in the app (small tolerance for float rounding).
+  const sumTxPL = Object.values(perTransaction)
+    .filter((a) => a.side === "sell")
+    .reduce((s, a) => s + a.realizedPL, 0);
+  if (Math.abs(sumTxPL - rplFromTrades) > 0.01) {
+    console.warn("FIFO reconciliation mismatch: sum(transaction realized P/L) =", sumTxPL, "vs realizedPL =", rplFromTrades);
+  }
+
   const sorted = [...p.transactions].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
   sorted.forEach((t) => {
+    const a = perTransaction[t.id]; // undefined if transaction fails the valid-trade filter
     const row = document.createElement("tr");
+
+    let costBasisCell = "—", proceedsCell = "—", plCell = "—", pctCell = "—", plClass = "";
+    let fifoToggleHtml = "";
+
+    if (a && a.side === "buy") {
+      costBasisCell = "Rs " + fmt(a.costBasis, 2);
+    } else if (a && a.side === "sell") {
+      costBasisCell = "Rs " + fmt(a.costBasis, 2);
+      proceedsCell = "Rs " + fmt(a.proceeds, 2);
+      plClass = a.realizedPL > 0 ? "up" : a.realizedPL < 0 ? "down" : "";
+      plCell = (a.realizedPL >= 0 ? "+" : "") + "Rs " + fmt(a.realizedPL, 2);
+      pctCell = (a.realizedPLPercent >= 0 ? "+" : "") + fmt(a.realizedPLPercent, 2) + "%";
+      if (a.matches.length) {
+        fifoToggleHtml = `<button class="tx-fifo-toggle" data-id="${t.id}">▸ FIFO Details (${a.matches.length} match${a.matches.length > 1 ? "es" : ""})</button>`;
+      }
+      if (a.unmatchedQty > 0) {
+        fifoToggleHtml += `<div class="faint" style="margin-top:4px;">⚠ ${a.unmatchedQty} shares sold with no matching buy lot</div>`;
+      }
+    }
+
     row.innerHTML = `
       <td>${t.date || "not set"}</td>
       <td class="sym">${t.symbol}</td>
       <td><span class="tx-side ${t.side}">${t.side}</span></td>
       <td>${t.qty}</td>
       <td>${fmt(t.price, 2)}</td>
+      <td>${costBasisCell}</td>
+      <td>${proceedsCell}</td>
+      <td class="${plClass}">${plCell}${fifoToggleHtml}</td>
+      <td class="${plClass}">${pctCell}</td>
       <td class="tx-actions">
         <button class="tx-edit" data-id="${t.id}">✎ Edit</button>
         <button class="tx-del" data-id="${t.id}">✕ Delete</button>
       </td>
     `;
     body.appendChild(row);
+
+    if (a && a.side === "sell" && a.matches.length) {
+      const detailRow = document.createElement("tr");
+      detailRow.className = "tx-fifo-row";
+      detailRow.style.display = "none";
+      detailRow.dataset.fifoFor = t.id;
+      const matchRows = a.matches.map((m) => `
+        <div class="tx-fifo-match">
+          <div class="muted">${m.qty} sh</div>
+          <div><span class="m-label">Bought</span><br>${m.buyDate || "not set"}</div>
+          <div><span class="m-label">Buy Price</span><br>Rs ${fmt(m.buyPrice, 2)}</div>
+          <div><span class="m-label">Cost</span><br>Rs ${fmt(m.cost, 2)}</div>
+          <div><span class="m-label">Sale Value</span><br>Rs ${fmt(m.proceeds, 2)}</div>
+          <div class="${m.realizedPL > 0 ? "up" : m.realizedPL < 0 ? "down" : ""}"><span class="m-label">Gain</span><br>${m.realizedPL >= 0 ? "+" : ""}Rs ${fmt(m.realizedPL, 2)}</div>
+        </div>
+      `).join("");
+      detailRow.innerHTML = `
+        <td colspan="10">
+          <div class="tx-fifo-detail">
+            <div class="fifo-title">FIFO Matches</div>
+            ${matchRows}
+            <div class="tx-fifo-total">
+              <div></div>
+              <div class="m-label">Total</div>
+              <div></div>
+              <div>Cost Basis<br>Rs ${fmt(a.costBasis, 2)}</div>
+              <div>Sale Proceeds<br>Rs ${fmt(a.proceeds, 2)}</div>
+              <div class="${plClass}">Realized Gain<br>${plCell}<br>Return: ${pctCell}</div>
+            </div>
+          </div>
+        </td>
+      `;
+      body.appendChild(detailRow);
+    }
+  });
+
+  body.querySelectorAll(".tx-fifo-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const detailRow = body.querySelector(`.tx-fifo-row[data-fifo-for="${btn.dataset.id}"]`);
+      if (!detailRow) return;
+      const isHidden = detailRow.style.display === "none";
+      detailRow.style.display = isHidden ? "table-row" : "none";
+      btn.textContent = btn.textContent.replace(isHidden ? "▸" : "▾", isHidden ? "▾" : "▸");
+    });
   });
 
   body.querySelectorAll(".tx-del").forEach((btn) => {
@@ -1255,7 +1418,7 @@ function editTransactionRow(id) {
     <td><select class="edit-side"><option value="buy" ${t.side === "buy" ? "selected" : ""}>Buy</option><option value="sell" ${t.side === "sell" ? "selected" : ""}>Sell</option></select></td>
     <td><input type="number" value="${t.qty}" class="edit-qty" /></td>
     <td><input type="number" value="${t.price}" class="edit-price" /></td>
-    <td class="tx-actions">
+    <td class="tx-actions" colspan="5">
       <button class="tx-save">✓ Save</button>
       <button class="tx-cancel">✕ Cancel</button>
     </td>

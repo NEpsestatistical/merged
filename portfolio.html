@@ -259,6 +259,7 @@
       <button class="btn primary label" id="importBtn">⇪ Import from Meroshare</button>
       <button class="btn label" id="txBtn">🧾 Transactions</button>
       <button class="btn label" id="perfBtn">📊 Realized Performance</button>
+      <button class="btn label" id="divBtn">💰 Dividends</button>
       <button class="btn label" id="refreshBtn">↻ Refresh</button>
       <button class="btn label" id="settingsBtn">⚙</button>
     </div>
@@ -347,6 +348,25 @@
       <input id="txFeesInput" type="number" placeholder="Charges (optional)" style="width:140px;" />
       <button class="add-btn label" id="txAddBtn">+ Add Transaction</button>
     </div>
+  </div>
+
+  <div class="panel" id="divPanel">
+    <h3>Dividends</h3>
+    <p>Cash dividends received, tracked separately from your buy/sell ledger. Doesn't affect cost basis, FIFO lots, or capital gains tax — purely for total-return tracking.</p>
+    <table class="tx-table">
+      <thead>
+        <tr><th>Date</th><th>Symbol</th><th>Amount (Rs)</th><th>Note</th><th></th></tr>
+      </thead>
+      <tbody id="divTableBody"></tbody>
+    </table>
+    <div class="tx-add-row">
+      <input type="date" id="divDateInput" title="Date" />
+      <input id="divSymbolInput" placeholder="SYMBOL" style="width:90px;" />
+      <input id="divAmountInput" type="number" placeholder="Amount (Rs)" style="width:130px;" />
+      <input id="divNoteInput" placeholder="Note (optional)" style="width:160px;" />
+      <button class="add-btn label" id="divAddBtn">+ Add Dividend</button>
+    </div>
+    <div class="stat-label label" style="margin-top:14px;">Total dividends received (this portfolio): <span id="divTotal" style="color:#EDEFF1; font-weight:600;">Rs 0</span></div>
   </div>
 
   <div class="perf-panel" id="perfPanel">
@@ -560,6 +580,7 @@ function switchPortfolio(id) {
   refresh();
   renderTransactions();
   renderPerformancePanel();
+  renderDividends();
 }
 
 function createPortfolio() {
@@ -628,6 +649,7 @@ function deleteCurrentPortfolio() {
       refresh();
       renderTransactions();
       renderPerformancePanel();
+  renderDividends();
     },
   });
 }
@@ -647,6 +669,7 @@ function clearCurrentPortfolioData() {
       refresh();
       renderTransactions();
       renderPerformancePanel();
+  renderDividends();
     },
   });
 }
@@ -1060,6 +1083,7 @@ function finalizeImport(selectedClientId) {
   refresh();
   renderTransactions();
   renderPerformancePanel();
+  renderDividends();
 }
 
 function handleFiles(fileList) {
@@ -1416,6 +1440,7 @@ function confirmTrade() {
   refresh();
   renderTransactions();
   renderPerformancePanel();
+  renderDividends();
 }
 
 function buyHolding(id) { openTradeModal("buy", id); }
@@ -1552,6 +1577,7 @@ function render() {
           refresh();
           renderTransactions();
           renderPerformancePanel();
+  renderDividends();
         },
       });
     });
@@ -1665,6 +1691,7 @@ document.getElementById("addBtn").addEventListener("click", () => {
   refresh();
   renderTransactions();
   renderPerformancePanel();
+  renderDividends();
 });
 
 /* ---------- Portfolio tabs ---------- */
@@ -1817,6 +1844,7 @@ function renderTransactions() {
           refresh();
           renderTransactions();
           renderPerformancePanel();
+  renderDividends();
         },
       });
     });
@@ -1861,6 +1889,7 @@ function editTransactionRow(id) {
     refresh();
     renderTransactions();
     renderPerformancePanel();
+  renderDividends();
   });
 }
 
@@ -1890,12 +1919,84 @@ document.getElementById("txAddBtn").addEventListener("click", () => {
   refresh();
   renderTransactions();
   renderPerformancePanel();
+  renderDividends();
 });
 
 /* ---------- Realized Performance Summary panel ---------- */
 document.getElementById("perfBtn").addEventListener("click", () => {
   document.getElementById("perfPanel").classList.toggle("show");
   renderPerformancePanel();
+  renderDividends();
+});
+
+/* ---------- Dividends (separate log, never touches FIFO/cost basis) ---------- */
+function getDividends() {
+  const p = getCurrentPortfolio();
+  if (!p.dividends) p.dividends = [];
+  return p.dividends;
+}
+
+function renderDividends() {
+  const divs = getDividends();
+  const body = document.getElementById("divTableBody");
+  if (!divs.length) {
+    body.innerHTML = '<tr><td colspan="5" class="empty-state">No dividends logged yet for this portfolio.</td></tr>';
+  } else {
+    const sorted = [...divs].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    body.innerHTML = sorted.map((d) => `
+      <tr>
+        <td>${d.date || "not set"}</td>
+        <td class="sym">${d.symbol}</td>
+        <td class="up">Rs ${fmt(d.amount, 2)}</td>
+        <td class="muted">${d.note || ""}</td>
+        <td><button class="remove-btn" data-id="${d.id}" title="Delete">✕</button></td>
+      </tr>
+    `).join("");
+    body.querySelectorAll(".remove-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        appConfirm({
+          title: "Delete dividend entry?",
+          message: "This only removes the dividend record — it doesn't affect your holdings or cost basis.",
+          confirmText: "Delete",
+          danger: true,
+          onConfirm: () => {
+            const p = getCurrentPortfolio();
+            p.dividends = p.dividends.filter((x) => x.id !== btn.dataset.id);
+            saveState();
+            renderDividends();
+          },
+        });
+      });
+    });
+  }
+  const total = divs.reduce((s, d) => s + (Number(d.amount) || 0), 0);
+  document.getElementById("divTotal").textContent = "Rs " + fmt(total, 2);
+}
+
+document.getElementById("divBtn").addEventListener("click", () => {
+  document.getElementById("divPanel").classList.toggle("show");
+  renderDividends();
+});
+
+document.getElementById("divAddBtn").addEventListener("click", () => {
+  const date = document.getElementById("divDateInput").value || null;
+  const symbol = document.getElementById("divSymbolInput").value.trim().toUpperCase();
+  const amount = Number(document.getElementById("divAmountInput").value);
+  const note = document.getElementById("divNoteInput").value.trim();
+
+  if (!symbol) { appAlert({ title: "Missing symbol", message: "Enter the stock symbol this dividend is from." }); return; }
+  if (!amount || amount <= 0 || Number.isNaN(amount)) { appAlert({ title: "Invalid amount", message: "Enter a valid dividend amount." }); return; }
+
+  const p = getCurrentPortfolio();
+  if (!p.dividends) p.dividends = [];
+  p.dividends.push({ id: uid(), date, symbol, amount, note });
+  saveState();
+
+  document.getElementById("divDateInput").value = "";
+  document.getElementById("divSymbolInput").value = "";
+  document.getElementById("divAmountInput").value = "";
+  document.getElementById("divNoteInput").value = "";
+  renderDividends();
 });
 
 function renderPerformancePanel() {
@@ -2110,6 +2211,7 @@ document.getElementById("importBackupInput").addEventListener("change", (e) => {
           renderPortfolioTabs();
           render();
           renderTransactions();
+          renderDividends();
           refresh();
         },
       });
@@ -2128,6 +2230,7 @@ renderPortfolioTabs();
 render();
 refresh();
 renderTransactions();
+renderDividends();
 let refreshIntervalId = setInterval(refresh, 30000);
 
 document.addEventListener("visibilitychange", () => {

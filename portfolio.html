@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <title>NEPSE Portfolio</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
   * { box-sizing: border-box; }
@@ -239,13 +240,48 @@
   .app-modal-actions .app-modal-ok { background: #3FA796; border-color: #3FA796; color: #0D1210; }
   .app-modal-actions .app-modal-ok.danger { background: #C4553D; border-color: #C4553D; color: #17110F; }
   .app-modal-actions.single button { flex: none; min-width: 120px; margin-left: auto; }
+
+  /* Login gate */
+  #loginGate { position: fixed; inset: 0; background: #0D1210; display: flex; align-items: center; justify-content: center; z-index: 500; padding: 20px; font-family: 'Inter', sans-serif; }
+  #loginGate.hide { display: none; }
+  .lg-box { width: 100%; max-width: 340px; background: #1A1F24; border: 1px solid #2A3138; border-radius: 12px; padding: 26px; }
+  .lg-title { font-size: 16px; font-weight: 600; color: #EDEFF1; margin-bottom: 4px; }
+  .lg-sub { font-size: 12.5px; color: #6B7680; margin-bottom: 18px; line-height: 1.5; }
+  .lg-box input { width: 100%; background: #14181C; border: 1px solid #2A3138; border-radius: 7px; padding: 10px 12px; color: #EDEFF1; font-size: 13.5px; font-family: inherit; margin-bottom: 10px; }
+  .lg-box input:focus { outline: none; border-color: #3FA796; }
+  .lg-row { display: flex; gap: 8px; margin-top: 4px; }
+  .lg-row button { flex: 1; padding: 11px; border-radius: 7px; font-family: inherit; font-size: 13px; font-weight: 600; border: 1px solid #2A3138; background: #1D2329; color: #EDEFF1; cursor: pointer; }
+  .lg-row button:hover { border-color: #3A424B; }
+  .lg-row .lg-primary { background: #3FA796; border-color: #3FA796; color: #0D1210; }
+  .lg-msg { font-size: 12px; color: #C4553D; margin-top: 10px; min-height: 14px; }
+  .lg-msg.ok { color: #3FA796; }
+  .lg-loading { font-size: 12.5px; color: #6B7680; }
 </style>
 </head>
 <body>
+<div id="loginGate">
+  <div class="lg-box">
+    <div class="lg-title">Sign in to your portfolio</div>
+    <div class="lg-sub" id="lgSub">Your holdings and transactions are private to your account.</div>
+    <div id="lgFormArea">
+      <input type="email" id="lgEmail" placeholder="Email" autocomplete="username" />
+      <input type="password" id="lgPassword" placeholder="Password" autocomplete="current-password" />
+      <div class="lg-row">
+        <button class="lg-primary" id="lgSignInBtn">Sign in</button>
+        <button id="lgSignUpBtn">Create account</button>
+      </div>
+      <div class="lg-msg" id="lgMsg"></div>
+    </div>
+    <div id="lgLoadingArea" style="display:none;" class="lg-loading">Checking your session…</div>
+  </div>
+</div>
 <div class="wrap">
-  <div class="ee-brand">
-    <div class="ee-mark">EE</div>
-    <div class="ee-brand-text"><b>Elite Elliott</b> · Portfolio</div>
+  <div class="ee-brand" style="display:flex; align-items:center; justify-content:space-between;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="ee-mark">EE</div>
+      <div class="ee-brand-text"><b>Elite Elliott</b> · Portfolio</div>
+    </div>
+    <button class="btn label" id="lgSignOutBtn" style="font-size:11.5px; padding:6px 10px;">Sign out</button>
   </div>
   <div class="portfolio-tabs" id="portfolioTabs"></div>
 
@@ -507,6 +543,84 @@
 const WORKER_URL = "https://shiny-term-f599.bharatiaashish43.workers.dev";
 function getWorkerUrl() { return WORKER_URL; }
 
+/* ---------- Auth (Supabase) ----------
+   Same project as the rest of the Elite Elliott app (core.js). Portfolio data is
+   stored server-side per signed-in user (table "portfolio_data", RLS-scoped to
+   auth.uid()), so no one can see another account's holdings — even on a shared
+   device or browser. See PORTFOLIO_SCHEMA.sql for the table + policy to run once
+   in the Supabase SQL editor. */
+const SUPABASE_URL = "https://bfuatuhoosiwaugcxhjt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmdWF0dWhvb3Npd2F1Z2N4aGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzIxNTksImV4cCI6MjEwMTg0ODE1OX0.0eGEG6MDysnAx8P08xdf9hQxzBTl1erQRNxFOh4ZQDI";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUserId = null;
+
+function lgSetMsg(text, ok) {
+  const el = document.getElementById("lgMsg");
+  el.textContent = text || "";
+  el.classList.toggle("ok", !!ok);
+}
+function validEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+async function lgSignIn() {
+  const email = document.getElementById("lgEmail").value.trim().toLowerCase();
+  const password = document.getElementById("lgPassword").value;
+  if (!validEmail(email)) { lgSetMsg("Enter a valid email address."); return; }
+  if (!password) { lgSetMsg("Enter your password."); return; }
+  lgSetMsg("Signing in…", true);
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { lgSetMsg(error.message); return; }
+  await bootForUser(data.user.id);
+}
+async function lgSignUp() {
+  const email = document.getElementById("lgEmail").value.trim().toLowerCase();
+  const password = document.getElementById("lgPassword").value;
+  if (!validEmail(email)) { lgSetMsg("Enter a valid email address."); return; }
+  if (password.length < 6) { lgSetMsg("Password should be at least 6 characters."); return; }
+  lgSetMsg("Creating account…", true);
+  const { data, error } = await sb.auth.signUp({ email, password });
+  if (error) { lgSetMsg(error.message); return; }
+  if (data.session) { await bootForUser(data.user.id); }
+  else { lgSetMsg("Check your inbox to confirm your email, then sign in.", true); }
+}
+function lgSignOut() {
+  sb.auth.signOut().finally(() => location.reload());
+}
+document.getElementById("lgSignInBtn").addEventListener("click", lgSignIn);
+document.getElementById("lgSignUpBtn").addEventListener("click", lgSignUp);
+document.getElementById("lgSignOutBtn").addEventListener("click", lgSignOut);
+document.getElementById("lgPassword").addEventListener("keydown", (e) => { if (e.key === "Enter") lgSignIn(); });
+
+async function checkAuthAndBoot() {
+  document.getElementById("lgFormArea").style.display = "none";
+  document.getElementById("lgLoadingArea").style.display = "block";
+  const { data } = await sb.auth.getSession();
+  if (data.session && data.session.user) {
+    await bootForUser(data.session.user.id);
+  } else {
+    document.getElementById("lgFormArea").style.display = "block";
+    document.getElementById("lgLoadingArea").style.display = "none";
+  }
+}
+async function bootForUser(userId) {
+  currentUserId = userId;
+  // Clear any in-memory state left over from a previous account in this tab
+  // (e.g. sign-in right after sign-out without a full page reload). Without
+  // this, loadState()'s "server row is empty" fallback would keep showing
+  // the previous user's portfolios instead of starting fresh.
+  portfolios = [];
+  currentPortfolioId = null;
+  document.getElementById("loginGate").classList.add("hide");
+  await loadState();
+  recompute();
+  renderPortfolioTabs();
+  render();
+  refresh();
+  renderTransactions();
+  renderDividends();
+  if (typeof refreshIntervalId !== "undefined" && refreshIntervalId) clearInterval(refreshIntervalId);
+  refreshIntervalId = setInterval(refresh, 30000);
+}
+
 /* ---------- Multi-portfolio state ---------- */
 let portfolios = [];
 let currentPortfolioId = null;
@@ -542,39 +656,78 @@ function migratePortfolios(fromVersion, data) {
   return data;
 }
 
-function loadState() {
+// Per-user cache keys — namespaced by the signed-in user's id, so switching accounts
+// on the same browser never shows the previous person's cached data.
+function lsKey(name) { return `ee_${name}_${currentUserId}`; }
+
+function loadLocalCache() {
   try {
-    const raw = localStorage.getItem("eePortfoliosV2");
+    const raw = localStorage.getItem(lsKey("portfoliosV2"));
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length) portfolios = parsed;
     }
   } catch (e) {}
-  if (!portfolios.length) portfolios = defaultPortfolios();
-
-  let storedVersion = 1;
   try {
-    const v = localStorage.getItem("eeSchemaVersion");
-    if (v) storedVersion = Number(v) || 1;
+    currentPortfolioId = localStorage.getItem(lsKey("currentPortfolioId"));
   } catch (e) {}
-  if (storedVersion < SCHEMA_VERSION) {
-    portfolios = migratePortfolios(storedVersion, portfolios);
+}
+function saveLocalCache() {
+  try {
+    localStorage.setItem(lsKey("portfoliosV2"), JSON.stringify(portfolios));
+    localStorage.setItem(lsKey("currentPortfolioId"), currentPortfolioId || "");
+  } catch (e) {}
+}
+
+async function loadState() {
+  loadLocalCache(); // fast paint from cache while we confirm against the server
+
+  try {
+    const { data, error } = await sb
+      .from("portfolio_data")
+      .select("portfolios, current_portfolio_id, schema_version")
+      .eq("user_id", currentUserId)
+      .maybeSingle();
+
+    if (!error && data && Array.isArray(data.portfolios) && data.portfolios.length) {
+      portfolios = data.portfolios;
+      currentPortfolioId = data.current_portfolio_id;
+      const storedVersion = data.schema_version || 1;
+      if (storedVersion < SCHEMA_VERSION) portfolios = migratePortfolios(storedVersion, portfolios);
+    } else if (!portfolios.length) {
+      portfolios = defaultPortfolios();
+    }
+  } catch (e) {
+    // Offline or request failed — fall back to whatever the local cache gave us.
+    if (!portfolios.length) portfolios = defaultPortfolios();
   }
 
-  try {
-    currentPortfolioId = localStorage.getItem("eeCurrentPortfolioId");
-  } catch (e) {}
   if (!currentPortfolioId || !portfolios.find((p) => p.id === currentPortfolioId)) {
     currentPortfolioId = portfolios[0].id;
   }
+  saveLocalCache();
 }
 
+let _saveTimer = null;
 function saveState() {
-  try {
-    localStorage.setItem("eePortfoliosV2", JSON.stringify(portfolios));
-    localStorage.setItem("eeCurrentPortfolioId", currentPortfolioId);
-    localStorage.setItem("eeSchemaVersion", String(SCHEMA_VERSION));
-  } catch (e) {}
+  saveLocalCache();
+  // Debounce server writes slightly so rapid edits (e.g. typing in a tx row) don't
+  // fire a request per keystroke.
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(async () => {
+    if (!currentUserId) return;
+    try {
+      await sb.from("portfolio_data").upsert({
+        user_id: currentUserId,
+        portfolios,
+        current_portfolio_id: currentPortfolioId,
+        schema_version: SCHEMA_VERSION,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.error("Portfolio sync failed, kept locally:", e);
+    }
+  }, 400);
 }
 
 function getCurrentPortfolio() {
@@ -2365,14 +2518,8 @@ document.getElementById("importBackupInput").addEventListener("change", (e) => {
 });
 
 /* ---------- Init ---------- */
-loadState();
-recompute();
-renderPortfolioTabs();
-render();
-refresh();
-renderTransactions();
-renderDividends();
-let refreshIntervalId = setInterval(refresh, 30000);
+let refreshIntervalId = null;
+checkAuthAndBoot();
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {

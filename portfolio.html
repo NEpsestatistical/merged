@@ -504,6 +504,15 @@ function defaultPortfolios() {
   }];
 }
 
+const SCHEMA_VERSION = 2; // bump when portfolios[] shape changes; add a migration below
+
+function migratePortfolios(fromVersion, data) {
+  // v1 -> v2: no shape change yet, just introducing the version field itself.
+  // Future migrations go here, e.g.:
+  // if (fromVersion < 3) { data = data.map(p => ({ ...p, someNewField: default })); }
+  return data;
+}
+
 function loadState() {
   try {
     const raw = localStorage.getItem("eePortfoliosV2");
@@ -513,6 +522,15 @@ function loadState() {
     }
   } catch (e) {}
   if (!portfolios.length) portfolios = defaultPortfolios();
+
+  let storedVersion = 1;
+  try {
+    const v = localStorage.getItem("eeSchemaVersion");
+    if (v) storedVersion = Number(v) || 1;
+  } catch (e) {}
+  if (storedVersion < SCHEMA_VERSION) {
+    portfolios = migratePortfolios(storedVersion, portfolios);
+  }
 
   try {
     currentPortfolioId = localStorage.getItem("eeCurrentPortfolioId");
@@ -526,6 +544,7 @@ function saveState() {
   try {
     localStorage.setItem("eePortfoliosV2", JSON.stringify(portfolios));
     localStorage.setItem("eeCurrentPortfolioId", currentPortfolioId);
+    localStorage.setItem("eeSchemaVersion", String(SCHEMA_VERSION));
   } catch (e) {}
 }
 
@@ -565,6 +584,29 @@ function renamePortfolioTo(name) {
   renderPortfolioTabs();
 }
 
+function autoBackupBeforeDestruction(reason) {
+  try {
+    const payload = {
+      app: "NEPSE Portfolio",
+      exportedAt: new Date().toISOString(),
+      reason, // e.g. "pre-delete", "pre-clear"
+      portfolios,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    a.href = url;
+    a.download = `nepse-portfolio-autobackup-${reason}-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error("Auto-backup failed:", e);
+  }
+}
+
 function deleteCurrentPortfolio() {
   if (portfolios.length <= 1) {
     appAlert({ title: "Can't delete", message: "You need at least one portfolio — clear its data instead if you want to reset it." });
@@ -573,10 +615,11 @@ function deleteCurrentPortfolio() {
   const p = getCurrentPortfolio();
   appConfirm({
     title: "Delete portfolio?",
-    message: `Delete portfolio "${p.name}" and all its transactions? This can't be undone.`,
+    message: `Delete portfolio "${p.name}" and all its transactions? A backup file will download automatically first.`,
     confirmText: "Delete",
     danger: true,
     onConfirm: () => {
+      autoBackupBeforeDestruction("pre-delete");
       portfolios = portfolios.filter((x) => x.id !== p.id);
       currentPortfolioId = portfolios[0].id;
       saveState();
@@ -593,10 +636,11 @@ function clearCurrentPortfolioData() {
   const p = getCurrentPortfolio();
   appConfirm({
     title: "Clear portfolio data?",
-    message: `Clear all holdings and transaction history for "${p.name}"? This can't be undone.`,
+    message: `Clear all holdings and transaction history for "${p.name}"? A backup file will download automatically first.`,
     confirmText: "Clear",
     danger: true,
     onConfirm: () => {
+      autoBackupBeforeDestruction("pre-clear");
       p.transactions = [];
       saveState();
       recompute();
@@ -2084,7 +2128,17 @@ renderPortfolioTabs();
 render();
 refresh();
 renderTransactions();
-setInterval(refresh, 30000);
+let refreshIntervalId = setInterval(refresh, 30000);
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    clearInterval(refreshIntervalId);
+    refreshIntervalId = null;
+  } else if (!refreshIntervalId) {
+    refresh(); // catch up immediately on return
+    refreshIntervalId = setInterval(refresh, 30000);
+  }
+});
 </script>
 </body>
 </html>

@@ -169,16 +169,47 @@
   .tx-fifo-row td { padding: 0; border-bottom: 1px solid #20262C; }
   .tx-fifo-detail { background: #14181C; padding: 12px 16px; font-family: 'Inter', sans-serif; font-size: 12px; }
   .tx-fifo-detail .fifo-title { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #6B7680; margin-bottom: 8px; }
-  .tx-fifo-match { display: grid; grid-template-columns: 90px 1fr 1fr 1fr 1fr 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #20262C; align-items: center; }
+  .tx-fifo-match { display: grid; grid-template-columns: 90px 1fr 1fr 1fr 1fr 1fr 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #20262C; align-items: center; }
   .tx-fifo-match:last-of-type { border-bottom: none; }
   .tx-fifo-match .m-label { color: #6B7680; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
-  .tx-fifo-total { display: grid; grid-template-columns: 90px 1fr 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0 2px; margin-top: 4px; border-top: 1px solid #2A3138; font-weight: 600; }
+  .tx-fifo-total { display: grid; grid-template-columns: 90px 1fr 1fr 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0 2px; margin-top: 4px; border-top: 1px solid #2A3138; font-weight: 600; }
   .row-side-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; }
   .tx-add-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .tx-add-row input, .tx-add-row select { background: #14181C; border: 1px solid #2A3138; border-radius: 6px; padding: 9px 10px; color: #EDEFF1; font-family: inherit; font-size: 12.5px; }
   .settings-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
   .btn.danger { border-color: rgba(196,85,61,.4); color: #E8998A; }
   .btn.danger:hover { border-color: #C4553D; }
+
+  /* Realized performance summary */
+  .perf-panel { background: #1A1F24; border: 1px solid #2A3138; border-radius: 10px; padding: 20px; margin-bottom: 20px; display: none; }
+  .perf-panel.show { display: block; }
+  .perf-panel h3 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+  .perf-panel p { font-family: 'Inter', sans-serif; font-size: 12px; color: #6B7680; margin: 0 0 14px; line-height: 1.5; }
+  .perf-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #2A3138; border: 1px solid #2A3138; border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+  .perf-cell { background: #14181C; padding: 14px 16px; }
+  .perf-cell .stat-label { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .1em; color: #6B7680; text-transform: uppercase; margin-bottom: 6px; }
+  .perf-cell .stat-value { font-size: 17px; font-weight: 600; }
+  .best-worst { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 4px; }
+  .bw-card { background: #14181C; border: 1px solid #2A3138; border-radius: 8px; padding: 12px 14px; font-family: 'Inter', sans-serif; }
+  .bw-card .bw-label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #6B7680; margin-bottom: 6px; }
+  .bw-card .bw-sym { font-size: 14px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+  .bw-card .bw-amt { font-size: 13px; margin-top: 2px; }
+  .stock-perf-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 16px; }
+  .stock-perf-table th { text-align: left; font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .06em; color: #6B7680; text-transform: uppercase; padding: 8px 8px; border-bottom: 1px solid #2A3138; }
+  .stock-perf-table td { padding: 8px 8px; border-bottom: 1px solid #20262C; }
+  .lot-status-tag { font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; letter-spacing: .02em; }
+  .lot-status-tag.open { background: rgba(63,167,150,.15); color: #3FA796; }
+  .lot-status-tag.partial { background: rgba(212,163,58,.15); color: #D4A33A; }
+  .lot-status-tag.closed { background: rgba(107,118,128,.18); color: #9BA3AB; }
+  .lots-toggle { background: none; border: none; color: #6B7680; font-family: 'Inter', sans-serif; font-size: 11px; cursor: pointer; padding: 0; margin-top: 6px; text-align: left; }
+  .lots-toggle:hover { color: #9BA3AB; }
+  .lot-line { display: grid; grid-template-columns: 90px 70px 70px 70px 90px 90px 100px; gap: 8px; padding: 5px 0; font-family: 'Inter', sans-serif; font-size: 11.5px; border-bottom: 1px dashed #20262C; align-items: center; }
+  .lot-line:last-child { border-bottom: none; }
+  .lot-line .m-label { color: #6B7680; font-size: 9px; text-transform: uppercase; }
+  .reconcile-note { font-family: 'Inter', sans-serif; font-size: 11px; color: #4A5158; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #2A3138; }
+  .reconcile-note.ok { color: #3FA796; }
+  .reconcile-note.bad { color: #C4553D; }
+  .fee-note { font-family: 'Inter', sans-serif; font-size: 11px; color: #4A5158; margin: -8px 0 14px; }
 </style>
 </head>
 <body>
@@ -198,6 +229,7 @@
     <div style="display:flex; gap:8px; flex-wrap: wrap;">
       <button class="btn primary label" id="importBtn">⇪ Import from Meroshare</button>
       <button class="btn label" id="txBtn">🧾 Transactions</button>
+      <button class="btn label" id="perfBtn">📊 Realized Performance</button>
       <button class="btn label" id="refreshBtn">↻ Refresh</button>
       <button class="btn label" id="settingsBtn">⚙</button>
     </div>
@@ -229,7 +261,7 @@
     </div>
   </div>
   <div class="footer-note" style="margin-top:-12px; margin-bottom:20px;">
-    Realized P/L reflects gains/losses locked in from shares already sold, based on imported Trade Book history using FIFO lot matching. It does not include current holdings' unrealized gain/loss shown above.
+    Realized P/L reflects gains/losses locked in from shares already sold, based on imported Trade Book history using FIFO lot matching. It does not include current holdings' unrealized gain/loss shown above. This figure is gross (before any selling charges) unless charges were entered on the sell transaction — see Realized Performance for a net breakdown where available.
   </div>
 
   <div class="panel" id="importPanel">
@@ -263,7 +295,7 @@
 
   <div class="panel" id="txPanel">
     <h3>Transaction History</h3>
-    <p>Every buy, sell, and import that built your current holdings, for this portfolio. Fix a mistake by editing or deleting an entry below — holdings and realized P/L recalculate automatically.</p>
+    <p>Every buy, sell, and import that built your current holdings, for this portfolio. Fix a mistake by editing or deleting an entry below — holdings and realized P/L recalculate automatically. Selling charges are optional — enter them only if you know the actual amount from your broker; they're never estimated or assumed.</p>
     <table class="tx-table">
       <thead>
         <tr><th>Date</th><th>Symbol</th><th>Side</th><th>Qty</th><th>Price</th><th>Cost Basis</th><th>Proceeds</th><th>Gain/Loss</th><th>Return</th><th></th></tr>
@@ -276,8 +308,26 @@
       <select id="txSideInput"><option value="buy">Buy</option><option value="sell">Sell</option></select>
       <input id="txQtyInput" type="number" placeholder="Qty" style="width:80px;" />
       <input id="txPriceInput" type="number" placeholder="Price" style="width:90px;" />
+      <input id="txFeesInput" type="number" placeholder="Charges (optional)" style="width:140px;" />
       <button class="add-btn label" id="txAddBtn">+ Add Transaction</button>
     </div>
+  </div>
+
+  <div class="perf-panel" id="perfPanel">
+    <h3>Realized Performance Summary</h3>
+    <p>Derived live from your transaction ledger's FIFO chain — closed positions only. Reflects gross figures unless you've entered actual selling charges on a sell transaction.</p>
+    <div class="perf-grid" id="perfGrid"></div>
+    <div class="best-worst" id="bestWorstRow"></div>
+    <div id="stockPerfWrap">
+      <div class="stat-label label" style="margin-top:10px;">By Symbol</div>
+      <table class="stock-perf-table">
+        <thead>
+          <tr><th>Symbol</th><th>Qty Sold</th><th>Cost Basis</th><th>Proceeds</th><th>Realized P/L</th><th>Return</th></tr>
+        </thead>
+        <tbody id="stockPerfBody"></tbody>
+      </table>
+    </div>
+    <div class="reconcile-note label" id="reconcileNote"></div>
   </div>
 
   <div class="settings-box" id="settingsBox">
@@ -308,6 +358,10 @@
       <div class="modal-field">
         <label>Price per share (Rs)</label>
         <input type="number" id="tradePrice" min="0" step="0.01" placeholder="0.00" />
+      </div>
+      <div class="modal-field" id="tradeFeesField">
+        <label>Selling charges (Rs) <span style="text-transform:none; opacity:.7;">(optional, actual amount only)</span></label>
+        <input type="number" id="tradeFees" min="0" step="0.01" placeholder="0.00" />
       </div>
       <div class="modal-field" id="tradeDateField">
         <label>Purchase date <span style="text-transform:none; opacity:.7;">(optional)</span></label>
@@ -431,6 +485,7 @@ function switchPortfolio(id) {
   renderPortfolioTabs();
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 }
 
 function createPortfolio() {
@@ -463,6 +518,7 @@ function deleteCurrentPortfolio() {
   renderPortfolioTabs();
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 }
 
 function clearCurrentPortfolioData() {
@@ -473,6 +529,7 @@ function clearCurrentPortfolioData() {
   recompute();
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 }
 
 /* ---------- Recompute holdings + realized P/L from the transaction ledger ---------- */
@@ -501,11 +558,17 @@ function getRates() {
   };
 }
 
-function holdingDays(purchaseDate) {
+function holdingDays(purchaseDate, endDate) {
   if (!purchaseDate) return null;
   const then = new Date(purchaseDate);
-  const now = new Date();
+  const now = endDate ? new Date(endDate) : new Date();
   return Math.floor((now - then) / (1000 * 60 * 60 * 24));
+}
+
+function holdingTermLabel(days) {
+  const rates = getRates();
+  if (days === null || days === undefined || Number.isNaN(days)) return "—";
+  return days > rates.thresholdDays ? "Long-term" : "Short-term";
 }
 
 /* ---------- Import: CSV/XLSX parsing ---------- */
@@ -591,6 +654,7 @@ function extractTmsTrades(rows) {
     const qtyKey = findKey(r, ["tradeqty", "quantity", "qty"]);
     const priceKey = findKey(r, ["pricenpr", "price"]);
     const idKey = findKey(r, ["exchangetradeid", "tradeid"]);
+    const feesKey = findKey(r, ["totalcommission", "commission", "brokercharge", "sebonfee", "totalcharge", "charges"]);
     const clientIdKey = findKey(r, ["client"]) && !findKey(r, ["clientname"]) ? findKey(r, ["client"]) : findKey(r, ["clientid"]);
     const clientNameKey = findKey(r, ["clientname", "name"]);
     const symbol = symKey ? String(r[symKey] || "").toUpperCase().trim() : null;
@@ -600,7 +664,9 @@ function extractTmsTrades(rows) {
     const date = idKey ? dateFromTradeId(r[idKey]) : null;
     const clientId = clientIdKey ? String(r[clientIdKey] || "").trim() : "";
     const clientName = clientNameKey ? String(r[clientNameKey] || "").trim() : "";
-    return { symbol, side, qty, price, date, clientId, clientName };
+    const feesRaw = feesKey ? num(r[feesKey]) : NaN;
+    const fees = Number.isNaN(feesRaw) ? null : feesRaw;
+    return { symbol, side, qty, price, date, clientId, clientName, fees };
   }).filter((t) => t.symbol && t.side && !Number.isNaN(t.qty) && !Number.isNaN(t.price));
 }
 
@@ -622,13 +688,17 @@ function extractMeroshareHistory(rows) {
 
 // FIFO lot matching: buys push lots, sells consume oldest lots first.
 // buildFIFOAnalysis is the single source of truth for FIFO accounting: it returns
-// current holdings, total realized P/L, AND a per-transaction breakdown (with the
-// exact buy lot(s) matched to every sell) so holdings, lifetime realized P/L, and
-// the transaction history table can never disagree with each other.
+// current holdings, total realized P/L, a per-transaction breakdown (with the
+// exact buy lot(s) matched to every sell), and the full per-lot status of every
+// buy (open/partial/closed) so holdings, lifetime realized P/L, the transaction
+// history table, and the realized performance summary can never disagree.
 //
 // Chronological order = transaction date, with original ledger position (array index
 // in the *unsorted* `trades` input) as a deterministic tie-breaker for same-date trades.
 // This is independent of however the Transaction History table chooses to display rows.
+//
+// Net figures (selling charges) are only computed when a sell transaction carries an
+// explicit `fees` value entered by the user — nothing is estimated or assumed.
 function buildFIFOAnalysis(trades) {
   const indexed = trades.map((t, i) => ({ t, i }));
   indexed.sort((a, b) => {
@@ -637,8 +707,11 @@ function buildFIFOAnalysis(trades) {
     return a.i - b.i;
   });
 
-  const bySymbol = {}; // symbol -> array of remaining lots {qty, price, date, transactionId}
+  const bySymbol = {}; // symbol -> array of remaining lots {qty, price, date, transactionId, originalQty}
+  const lotRegistry = {}; // transactionId -> lot object (persists after qty hits 0, for status reporting)
   let realizedPL = 0;
+  let realizedNetPL = 0;
+  let hasAnyNetData = false;
   const perTransaction = {}; // transactionId -> analysis record
 
   indexed.forEach(({ t }) => {
@@ -646,7 +719,9 @@ function buildFIFOAnalysis(trades) {
     const lots = bySymbol[t.symbol];
 
     if (t.side.startsWith("b")) {
-      lots.push({ qty: t.qty, price: t.price, date: t.date, transactionId: t.id });
+      const lot = { qty: t.qty, price: t.price, date: t.date, transactionId: t.id, originalQty: t.qty };
+      lots.push(lot);
+      lotRegistry[t.id] = lot;
       perTransaction[t.id] = {
         transactionId: t.id,
         symbol: t.symbol,
@@ -670,17 +745,21 @@ function buildFIFOAnalysis(trades) {
         const cost = take * lot.price;
         const proceeds = take * t.price;
         const matchPL = proceeds - cost;
+        const holdDays = holdingDays(lot.date, t.date);
         realizedPL += matchPL;
         costBasis += cost;
         matches.push({
           buyTransactionId: lot.transactionId,
           buyDate: lot.date,
           buyPrice: lot.price,
+          sellDate: t.date,
           qty: take,
           cost,
           proceeds,
           realizedPL: matchPL,
           realizedPLPercent: cost > 0 ? (matchPL / cost) * 100 : 0,
+          holdingDays: holdDays,
+          holdingTerm: holdingTermLabel(holdDays),
         });
         lot.qty -= take;
         remaining -= take;
@@ -688,6 +767,20 @@ function buildFIFOAnalysis(trades) {
       }
       const proceedsTotal = (t.qty - remaining) * t.price; // matched qty only (unmatched shares have no cost basis)
       const totalPL = proceedsTotal - costBasis;
+
+      // Net figures only when the user actually supplied a fee amount on this sell.
+      const feesVal = (t.fees !== undefined && t.fees !== null && !Number.isNaN(Number(t.fees))) ? Number(t.fees) : null;
+      let netProceeds = null, netPL = null;
+      if (feesVal !== null) {
+        hasAnyNetData = true;
+        netProceeds = proceedsTotal - feesVal;
+        netPL = netProceeds - costBasis;
+        realizedNetPL += netPL;
+      } else {
+        // No fee data for this sell — its net contribution is unknown, not zero.
+        // We still track a "gross-as-net" fallback sum separately below if needed.
+      }
+
       perTransaction[t.id] = {
         transactionId: t.id,
         symbol: t.symbol,
@@ -697,7 +790,10 @@ function buildFIFOAnalysis(trades) {
         date: t.date,
         costBasis,
         proceeds: proceedsTotal,
+        fees: feesVal,
+        netProceeds,
         realizedPL: totalPL,
+        netRealizedPL: netPL,
         realizedPLPercent: costBasis > 0 ? (totalPL / costBasis) * 100 : 0,
         matches,
         unmatchedQty: remaining > 0 ? remaining : 0, // sold more than ever bought (bad data / short) - flagged, not silently dropped
@@ -716,7 +812,30 @@ function buildFIFOAnalysis(trades) {
     result[symbol] = { symbol, qty, avgCost, purchaseDate };
   });
 
-  return { holdings: result, realizedPL, perTransaction };
+  // Per-lot status report, built from the persistent lot registry (survives full consumption).
+  const lotStatus = Object.values(lotRegistry).map((lot) => {
+    const matchedQty = lot.originalQty - lot.qty;
+    const remainingQty = lot.qty;
+    const originalCost = lot.originalQty * lot.price;
+    const remainingCost = remainingQty * lot.price;
+    let status = "OPEN";
+    if (matchedQty > 0 && remainingQty > 0) status = "PARTIALLY SOLD";
+    else if (matchedQty > 0 && remainingQty <= 0) status = "FULLY SOLD";
+    return {
+      transactionId: lot.transactionId,
+      symbol: null, // filled in by caller if needed; buy tx already carries symbol via perTransaction
+      buyDate: lot.date,
+      price: lot.price,
+      originalQty: lot.originalQty,
+      matchedQty,
+      remainingQty,
+      originalCost,
+      remainingCost,
+      status,
+    };
+  });
+
+  return { holdings: result, realizedPL, realizedNetPL: hasAnyNetData ? realizedNetPL : null, hasAnyNetData, perTransaction, lotStatus };
 }
 
 // Thin wrapper kept for backward compatibility with existing callers (recompute(), etc.)
@@ -797,15 +916,16 @@ function finalizeImport(selectedClientId) {
   const symbolsFromTradeBook = new Set(Object.keys(fromTrades));
 
   // Real trade-book trades go into the ledger as-is (full buy/sell history, best source).
+  // `fees` is only carried over when the Trade Book actually included a commission/charges column.
   trades.forEach((t) => {
-    p.transactions.push({ id: uid(), symbol: t.symbol, side: t.side.startsWith("b") ? "buy" : "sell", qty: t.qty, price: t.price, date: t.date, note: "Trade Book import" });
+    p.transactions.push({ id: uid(), symbol: t.symbol, side: t.side.startsWith("b") ? "buy" : "sell", qty: t.qty, price: t.price, date: t.date, fees: t.fees ?? null, note: "Trade Book import" });
   });
 
   // WACC/Share-Values rows have no per-trade history, only a balance — logged as a
   // single "opening balance" buy so it still shows up in the ledger and is editable.
   usable.forEach((m) => {
     if (symbolsFromTradeBook.has(m.symbol)) return; // trade book already gave real trades for this symbol
-    p.transactions.push({ id: uid(), symbol: m.symbol, side: "buy", qty: m.qty, price: m.avgCost, date: m.purchaseDate, note: "Opening balance (imported)" });
+    p.transactions.push({ id: uid(), symbol: m.symbol, side: "buy", qty: m.qty, price: m.avgCost, date: m.purchaseDate, fees: null, note: "Opening balance (imported)" });
   });
 
   status.className = "import-status ok";
@@ -820,6 +940,7 @@ function finalizeImport(selectedClientId) {
   recompute();
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 }
 
 function handleFiles(fileList) {
@@ -925,6 +1046,8 @@ function openTradeModal(mode, id) {
   const sub = document.getElementById("tradeModalSub");
   const qtyInput = document.getElementById("tradeQty");
   const priceInput = document.getElementById("tradePrice");
+  const feesField = document.getElementById("tradeFeesField");
+  const feesInput = document.getElementById("tradeFees");
   const dateField = document.getElementById("tradeDateField");
   const dateInput = document.getElementById("tradeDate");
   const qtyHint = document.getElementById("tradeQtyHint");
@@ -936,6 +1059,7 @@ function openTradeModal(mode, id) {
   errorBox.textContent = "";
   qtyInput.value = "";
   dateInput.value = "";
+  feesInput.value = "";
 
   const p = prices[h.symbol];
   const ltp = p ? p.ltp : null;
@@ -947,6 +1071,7 @@ function openTradeModal(mode, id) {
     qtyHint.textContent = "";
     priceInput.value = ltp !== null ? ltp.toFixed(2) : h.avgCost.toFixed(2);
     dateField.style.display = "block";
+    feesField.style.display = "none";
     totalLabel.textContent = "Total cost";
     confirmBtn.textContent = "Confirm Buy";
     confirmBtn.className = "confirm-buy";
@@ -957,7 +1082,8 @@ function openTradeModal(mode, id) {
     qtyHint.textContent = `Max ${h.qty} shares`;
     priceInput.value = ltp !== null ? ltp.toFixed(2) : "";
     dateField.style.display = "none";
-    totalLabel.textContent = "Realized P/L";
+    feesField.style.display = "block";
+    totalLabel.textContent = "Realized P/L (gross)";
     confirmBtn.textContent = "Confirm Sell";
     confirmBtn.className = "confirm-sell";
   }
@@ -1004,6 +1130,8 @@ function confirmTrade() {
 
   const qty = Number(document.getElementById("tradeQty").value);
   const price = Number(document.getElementById("tradePrice").value);
+  const feesRaw = document.getElementById("tradeFees").value;
+  const fees = feesRaw !== "" && !Number.isNaN(Number(feesRaw)) ? Number(feesRaw) : null;
 
   if (!qty || qty <= 0) {
     errorBox.textContent = "Enter a valid quantity.";
@@ -1024,10 +1152,10 @@ function confirmTrade() {
   const p = getCurrentPortfolio();
   if (mode === "buy") {
     const dateStr = document.getElementById("tradeDate").value || null;
-    p.transactions.push({ id: uid(), symbol: h.symbol, side: "buy", qty, price, date: dateStr, note: "" });
+    p.transactions.push({ id: uid(), symbol: h.symbol, side: "buy", qty, price, date: dateStr, fees: null, note: "" });
   } else {
     const todayStr = new Date().toISOString().slice(0, 10);
-    p.transactions.push({ id: uid(), symbol: h.symbol, side: "sell", qty, price, date: todayStr, note: "" });
+    p.transactions.push({ id: uid(), symbol: h.symbol, side: "sell", qty, price, date: todayStr, fees, note: "" });
   }
   saveState();
   recompute();
@@ -1035,6 +1163,7 @@ function confirmTrade() {
   closeTradeModal();
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 }
 
 function buyHolding(id) { openTradeModal("buy", id); }
@@ -1165,6 +1294,7 @@ function render() {
       recompute();
       refresh();
       renderTransactions();
+      renderPerformancePanel();
     });
   });
 
@@ -1249,7 +1379,7 @@ document.getElementById("addBtn").addEventListener("click", () => {
   const date = document.getElementById("dateInput").value || null;
   if (!symbol || !qty || !cost) return;
   const p = getCurrentPortfolio();
-  p.transactions.push({ id: uid(), symbol, side: "buy", qty, price: cost, date, note: "" });
+  p.transactions.push({ id: uid(), symbol, side: "buy", qty, price: cost, date, fees: null, note: "" });
   saveState();
   recompute();
   document.getElementById("symbolInput").value = "";
@@ -1258,6 +1388,7 @@ document.getElementById("addBtn").addEventListener("click", () => {
   document.getElementById("dateInput").value = "";
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 });
 
 /* ---------- Portfolio tabs ---------- */
@@ -1356,13 +1487,17 @@ function renderTransactions() {
           <div><span class="m-label">Buy Price</span><br>Rs ${fmt(m.buyPrice, 2)}</div>
           <div><span class="m-label">Cost</span><br>Rs ${fmt(m.cost, 2)}</div>
           <div><span class="m-label">Sale Value</span><br>Rs ${fmt(m.proceeds, 2)}</div>
+          <div><span class="m-label">Held</span><br>${m.holdingDays !== null ? m.holdingDays + "d (" + m.holdingTerm + ")" : "—"}</div>
           <div class="${m.realizedPL > 0 ? "up" : m.realizedPL < 0 ? "down" : ""}"><span class="m-label">Gain</span><br>${m.realizedPL >= 0 ? "+" : ""}Rs ${fmt(m.realizedPL, 2)}</div>
         </div>
       `).join("");
+      const feeLine = a.fees !== null
+        ? `<div class="fee-note">Selling charges: Rs ${fmt(a.fees, 2)} · Net proceeds: Rs ${fmt(a.netProceeds, 2)} · Net realized P/L: ${a.netRealizedPL >= 0 ? "+" : ""}Rs ${fmt(a.netRealizedPL, 2)}</div>`
+        : `<div class="fee-note">No selling charges entered for this sale — figures above are gross.</div>`;
       detailRow.innerHTML = `
         <td colspan="10">
           <div class="tx-fifo-detail">
-            <div class="fifo-title">FIFO Matches</div>
+            <div class="fifo-title">FIFO Matches (this sell consumed the buy lot(s) below, oldest first)</div>
             ${matchRows}
             <div class="tx-fifo-total">
               <div></div>
@@ -1370,8 +1505,10 @@ function renderTransactions() {
               <div></div>
               <div>Cost Basis<br>Rs ${fmt(a.costBasis, 2)}</div>
               <div>Sale Proceeds<br>Rs ${fmt(a.proceeds, 2)}</div>
+              <div></div>
               <div class="${plClass}">Realized Gain<br>${plCell}<br>Return: ${pctCell}</div>
             </div>
+            ${feeLine}
           </div>
         </td>
       `;
@@ -1398,6 +1535,7 @@ function renderTransactions() {
       recompute();
       refresh();
       renderTransactions();
+      renderPerformancePanel();
     });
   });
 
@@ -1418,7 +1556,8 @@ function editTransactionRow(id) {
     <td><select class="edit-side"><option value="buy" ${t.side === "buy" ? "selected" : ""}>Buy</option><option value="sell" ${t.side === "sell" ? "selected" : ""}>Sell</option></select></td>
     <td><input type="number" value="${t.qty}" class="edit-qty" /></td>
     <td><input type="number" value="${t.price}" class="edit-price" /></td>
-    <td class="tx-actions" colspan="5">
+    <td colspan="2"><input type="number" value="${t.fees !== null && t.fees !== undefined ? t.fees : ""}" class="edit-fees" placeholder="Charges (optional)" /></td>
+    <td class="tx-actions" colspan="3">
       <button class="tx-save">✓ Save</button>
       <button class="tx-cancel">✕ Cancel</button>
     </td>
@@ -1430,12 +1569,15 @@ function editTransactionRow(id) {
     const qty = Number(row.querySelector(".edit-qty").value);
     const price = Number(row.querySelector(".edit-price").value);
     const date = row.querySelector(".edit-date").value || null;
+    const feesRaw = row.querySelector(".edit-fees").value;
+    const fees = feesRaw !== "" && !Number.isNaN(Number(feesRaw)) ? Number(feesRaw) : null;
     if (!symbol || !qty || qty <= 0 || price < 0) { alert("Enter a valid symbol, quantity, and price."); return; }
-    t.symbol = symbol; t.side = side; t.qty = qty; t.price = price; t.date = date;
+    t.symbol = symbol; t.side = side; t.qty = qty; t.price = price; t.date = date; t.fees = fees;
     saveState();
     recompute();
     refresh();
     renderTransactions();
+    renderPerformancePanel();
   });
 }
 
@@ -1450,18 +1592,191 @@ document.getElementById("txAddBtn").addEventListener("click", () => {
   const qty = Number(document.getElementById("txQtyInput").value);
   const price = Number(document.getElementById("txPriceInput").value);
   const date = document.getElementById("txDateInput").value || null;
+  const feesRaw = document.getElementById("txFeesInput").value;
+  const fees = feesRaw !== "" && !Number.isNaN(Number(feesRaw)) ? Number(feesRaw) : null;
   if (!symbol || !qty || qty <= 0 || price < 0) { alert("Enter a valid symbol, quantity, and price."); return; }
   const p = getCurrentPortfolio();
-  p.transactions.push({ id: uid(), symbol, side, qty, price, date, note: "" });
+  p.transactions.push({ id: uid(), symbol, side, qty, price, date, fees, note: "" });
   saveState();
   recompute();
   document.getElementById("txSymbolInput").value = "";
   document.getElementById("txQtyInput").value = "";
   document.getElementById("txPriceInput").value = "";
   document.getElementById("txDateInput").value = "";
+  document.getElementById("txFeesInput").value = "";
   refresh();
   renderTransactions();
+  renderPerformancePanel();
 });
+
+/* ---------- Realized Performance Summary panel ---------- */
+document.getElementById("perfBtn").addEventListener("click", () => {
+  document.getElementById("perfPanel").classList.toggle("show");
+  renderPerformancePanel();
+});
+
+function renderPerformancePanel() {
+  const panel = document.getElementById("perfPanel");
+  if (!panel.classList.contains("show")) return; // no need to compute when hidden
+
+  const p = getCurrentPortfolio();
+  const validTrades = (p.transactions || []).filter((t) => t.symbol && t.side && t.qty > 0 && t.price >= 0);
+  const { perTransaction, realizedPL: rplFromTrades, realizedNetPL, hasAnyNetData, lotStatus } = buildFIFOAnalysis(validTrades);
+
+  const sells = Object.values(perTransaction).filter((a) => a.side === "sell" && a.matches.length);
+
+  let totalGains = 0, totalLosses = 0, wins = 0, losses = 0;
+  let best = null, worst = null;
+  const bySymbol = {};
+
+  sells.forEach((a) => {
+    if (a.realizedPL > 0) { totalGains += a.realizedPL; wins++; }
+    else if (a.realizedPL < 0) { totalLosses += a.realizedPL; losses++; }
+
+    if (!best || a.realizedPL > best.realizedPL) best = a;
+    if (!worst || a.realizedPL < worst.realizedPL) worst = a;
+
+    if (!bySymbol[a.symbol]) bySymbol[a.symbol] = { symbol: a.symbol, qty: 0, cost: 0, proceeds: 0, pl: 0 };
+    bySymbol[a.symbol].qty += a.qty - (a.unmatchedQty || 0);
+    bySymbol[a.symbol].cost += a.costBasis;
+    bySymbol[a.symbol].proceeds += a.proceeds;
+    bySymbol[a.symbol].pl += a.realizedPL;
+  });
+
+  const totalSells = sells.length;
+  const winRate = totalSells ? (wins / totalSells) * 100 : null;
+
+  // ---- summary grid ----
+  const grid = document.getElementById("perfGrid");
+  const netLine = hasAnyNetData
+    ? `<div class="stat-value ${realizedNetPL >= 0 ? "up" : "down"}">${realizedNetPL >= 0 ? "+" : ""}Rs ${fmt(realizedNetPL, 0)}</div>`
+    : `<div class="stat-value faint">No charges entered</div>`;
+  grid.innerHTML = `
+    <div class="perf-cell">
+      <div class="stat-label">Net Realized P/L</div>
+      ${netLine}
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Gross Realized P/L</div>
+      <div class="stat-value ${rplFromTrades >= 0 ? "up" : "down"}">${rplFromTrades >= 0 ? "+" : ""}Rs ${fmt(rplFromTrades, 0)}</div>
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Total Realized Gains</div>
+      <div class="stat-value up">+Rs ${fmt(totalGains, 0)}</div>
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Total Realized Losses</div>
+      <div class="stat-value down">Rs ${fmt(totalLosses, 0)}</div>
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Winning Sells</div>
+      <div class="stat-value up">${wins}</div>
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Losing Sells</div>
+      <div class="stat-value down">${losses}</div>
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Win Rate</div>
+      <div class="stat-value">${winRate !== null ? fmt(winRate, 1) + "%" : "—"}</div>
+    </div>
+    <div class="perf-cell">
+      <div class="stat-label">Closed Sells</div>
+      <div class="stat-value">${totalSells}</div>
+    </div>
+  `;
+
+  // ---- best / worst ----
+  const bw = document.getElementById("bestWorstRow");
+  if (!totalSells) {
+    bw.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">No closed sells yet in this portfolio.</div>';
+  } else {
+    bw.innerHTML = `
+      <div class="bw-card">
+        <div class="bw-label">Best Sale</div>
+        <div class="bw-sym">${best.symbol} · ${best.date || "not set"}</div>
+        <div class="bw-amt up">+Rs ${fmt(best.realizedPL, 0)} (${best.realizedPLPercent >= 0 ? "+" : ""}${fmt(best.realizedPLPercent, 1)}%)</div>
+      </div>
+      <div class="bw-card">
+        <div class="bw-label">Worst Sale</div>
+        <div class="bw-sym">${worst.symbol} · ${worst.date || "not set"}</div>
+        <div class="bw-amt down">${worst.realizedPL >= 0 ? "+" : ""}Rs ${fmt(worst.realizedPL, 0)} (${worst.realizedPLPercent >= 0 ? "+" : ""}${fmt(worst.realizedPLPercent, 1)}%)</div>
+      </div>
+    `;
+  }
+
+  // ---- by-symbol realized performance ----
+  const stockBody = document.getElementById("stockPerfBody");
+  const symRows = Object.values(bySymbol).sort((a, b) => b.pl - a.pl);
+  if (!symRows.length) {
+    stockBody.innerHTML = '<tr><td colspan="6" class="empty-state">No closed positions yet.</td></tr>';
+  } else {
+    stockBody.innerHTML = symRows.map((s) => {
+      const ret = s.cost > 0 ? (s.pl / s.cost) * 100 : 0;
+      return `
+        <tr>
+          <td class="sym">${s.symbol}</td>
+          <td class="muted">${fmt(s.qty, 0)}</td>
+          <td class="muted">Rs ${fmt(s.cost, 2)}</td>
+          <td class="muted">Rs ${fmt(s.proceeds, 2)}</td>
+          <td class="${s.pl >= 0 ? "up" : "down"}">${s.pl >= 0 ? "+" : ""}Rs ${fmt(s.pl, 2)}</td>
+          <td class="${ret >= 0 ? "up" : "down"}">${ret >= 0 ? "+" : ""}${fmt(ret, 2)}%</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // ---- FIFO lot status (open/partial/closed), grouped by symbol ----
+  let lotsHtml = "";
+  const lotsBySymbol = {};
+  lotStatus.forEach((l) => {
+    const symOfLot = perTransaction[l.transactionId]?.symbol;
+    if (!symOfLot) return;
+    if (!lotsBySymbol[symOfLot]) lotsBySymbol[symOfLot] = [];
+    lotsBySymbol[symOfLot].push(l);
+  });
+  const lotSymbols = Object.keys(lotsBySymbol).sort();
+  if (lotSymbols.length) {
+    lotsHtml = `<div class="stat-label label" style="margin-top:18px;">FIFO Lot Status (all buy lots)</div>`;
+    lotSymbols.forEach((sym) => {
+      const lots = lotsBySymbol[sym].sort((a, b) => (a.buyDate || "").localeCompare(b.buyDate || ""));
+      const lines = lots.map((l) => {
+        const statusClass = l.status === "OPEN" ? "open" : l.status === "PARTIALLY SOLD" ? "partial" : "closed";
+        return `
+          <div class="lot-line">
+            <div>${l.buyDate || "not set"}</div>
+            <div class="muted"><span class="m-label">Orig Qty</span><br>${fmt(l.originalQty, 0)}</div>
+            <div class="muted"><span class="m-label">Sold</span><br>${fmt(l.matchedQty, 0)}</div>
+            <div class="muted"><span class="m-label">Remaining</span><br>${fmt(l.remainingQty, 0)}</div>
+            <div class="muted"><span class="m-label">Orig Cost</span><br>Rs ${fmt(l.originalCost, 2)}</div>
+            <div class="muted"><span class="m-label">Remaining Cost</span><br>Rs ${fmt(l.remainingCost, 2)}</div>
+            <div><span class="lot-status-tag ${statusClass}">${l.status}</span></div>
+          </div>
+        `;
+      }).join("");
+      lotsHtml += `<div style="margin-top:8px;"><div class="muted label" style="font-size:12px; font-weight:600; margin-bottom:2px;">${sym}</div>${lines}</div>`;
+    });
+  }
+  let lotsWrap = document.getElementById("lotStatusWrap");
+  if (!lotsWrap) {
+    lotsWrap = document.createElement("div");
+    lotsWrap.id = "lotStatusWrap";
+    document.getElementById("stockPerfWrap").after(lotsWrap);
+  }
+  lotsWrap.innerHTML = lotsHtml;
+
+  // ---- reconciliation note ----
+  const sumTxPL = sells.reduce((s, a) => s + a.realizedPL, 0);
+  const reconcileEl = document.getElementById("reconcileNote");
+  const diff = Math.abs(sumTxPL - rplFromTrades);
+  if (diff <= 0.01) {
+    reconcileEl.className = "reconcile-note ok";
+    reconcileEl.textContent = `✓ Reconciled: sum of all completed FIFO sell P/L (Rs ${fmt(sumTxPL, 2)}) matches portfolio lifetime realized P/L (Rs ${fmt(rplFromTrades, 2)}).`;
+  } else {
+    reconcileEl.className = "reconcile-note bad";
+    reconcileEl.textContent = `⚠ Reconciliation mismatch: sum of sell P/L (Rs ${fmt(sumTxPL, 2)}) vs lifetime realized P/L (Rs ${fmt(rplFromTrades, 2)}). This shouldn't happen — check the console.`;
+  }
+}
 
 /* ---------- Settings: rename / clear / delete portfolio ---------- */
 document.getElementById("renamePortfolioBtn").addEventListener("click", () => {

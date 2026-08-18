@@ -1302,8 +1302,10 @@ function confirmTrade() {
     errorBox.className = "modal-error show";
     return;
   }
-  if (!price || price <= 0) {
-    errorBox.textContent = "Enter a valid price.";
+  // Buy price can legitimately be 0 (e.g. bonus shares) — only sells require a real price.
+  const priceRaw = document.getElementById("tradePrice").value;
+  if (priceRaw === "" || Number.isNaN(price) || price < 0 || (mode === "sell" && price <= 0)) {
+    errorBox.textContent = mode === "buy" ? "Enter a valid price (0 is allowed for bonus shares)." : "Enter a valid price.";
     errorBox.className = "modal-error show";
     return;
   }
@@ -1557,9 +1559,15 @@ dropZone.addEventListener("drop", (e) => {
 document.getElementById("addBtn").addEventListener("click", () => {
   const symbol = document.getElementById("symbolInput").value.trim().toUpperCase();
   const qty = Number(document.getElementById("qtyInput").value);
-  const cost = Number(document.getElementById("costInput").value);
+  const costRaw = document.getElementById("costInput").value;
+  const cost = Number(costRaw);
   const date = document.getElementById("dateInput").value || null;
-  if (!symbol || !qty || !cost) return;
+  // Note: cost can legitimately be 0 (e.g. bonus shares) — only reject empty/invalid input,
+  // not a genuine zero value. Using costRaw !== "" avoids the falsy-zero bug.
+  if (!symbol || !qty || qty <= 0 || costRaw === "" || Number.isNaN(cost) || cost < 0) {
+    appAlert({ title: "Missing info", message: "Enter a valid symbol, quantity, and avg cost (0 is allowed for bonus shares)." });
+    return;
+  }
   const p = getCurrentPortfolio();
   p.transactions.push({ id: uid(), symbol, side: "buy", qty, price: cost, date, fees: null, note: "" });
   saveState();

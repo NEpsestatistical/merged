@@ -374,6 +374,12 @@
       <button class="btn danger label" id="clearPortfolioBtn">🗑 Clear This Portfolio's Data</button>
       <button class="btn danger label" id="deletePortfolioBtn">✕ Delete This Portfolio</button>
     </div>
+    <div class="label" style="font-size:12px; color:#6B7680; margin:16px 0 8px;">BACKUP</div>
+    <div class="settings-actions">
+      <button class="btn label" id="exportAllBtn">⬇ Export All Portfolios (.json)</button>
+      <label class="btn label" for="importBackupInput" style="display:inline-flex;">⬆ Restore from Backup</label>
+      <input type="file" id="importBackupInput" accept="application/json" style="display:none;" />
+    </div>
   </div>
 
   <div class="error-box" id="errorBox">Couldn't reach the price feed. Check the Worker URL in settings.</div>
@@ -1077,28 +1083,64 @@ document.getElementById("clientImportBtn").addEventListener("click", () => {
 });
 
 /* ---------- Price refresh ---------- */
+let staleSymbols = new Set();
+
+async function fetchOne(workerUrl, symbol, timeoutMs = 8000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${workerUrl}/?symbol=${encodeURIComponent(symbol)}`, { signal: ctrl.signal });
+    if (!res.ok) throw new Error(`${symbol}: ${res.status}`);
+    return await res.json();
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 async function refresh() {
   const errorBox = document.getElementById("errorBox");
   errorBox.style.display = "none";
   if (holdings.length === 0) { render(); return; }
   const workerUrl = getWorkerUrl();
-  try {
-    const results = await Promise.all(
-      holdings.map(async (h) => {
-        const res = await fetch(`${workerUrl}/?symbol=${encodeURIComponent(h.symbol)}`);
-        if (!res.ok) throw new Error(`${h.symbol}: ${res.status}`);
-        return res.json();
-      })
-    );
-    const next = {};
-    results.forEach((r) => { if (r.symbol) next[r.symbol] = r; });
-    prevPrices = { ...prices };
-    prices = next;
+
+  // Fire all requests, but let each fail independently so one bad symbol
+  // doesn't wipe out prices for the whole portfolio.
+  const settled = await Promise.allSettled(
+    holdings.map((h) => fetchOne(workerUrl, h.symbol))
+  );
+
+  prevPrices = { ...prices };
+  const next = { ...prices }; // start from last-known-good, overwrite what succeeded
+  const failedSymbols = [];
+  const newStale = new Set();
+
+  settled.forEach((result, i) => {
+    const symbol = holdings[i].symbol;
+    if (result.status === "fulfilled" && result.value && result.value.symbol) {
+      next[result.value.symbol] = result.value;
+    } else {
+      failedSymbols.push(symbol);
+      // Keep whatever we last had for this symbol, but flag it stale
+      // instead of silently pretending it's current.
+      if (next[symbol]) newStale.add(symbol);
+    }
+  });
+
+  prices = next;
+  staleSymbols = newStale;
+
+  if (failedSymbols.length === 0) {
+    errorBox.style.display = "none";
     document.getElementById("lastUpdated").textContent = new Date().toLocaleTimeString() + " · refreshes every 30s";
-    render();
-  } catch (e) {
+  } else if (failedSymbols.length === holdings.length) {
+    errorBox.textContent = "Couldn't reach the price feed. Showing last known prices — check the Worker URL in settings.";
     errorBox.style.display = "block";
+  } else {
+    errorBox.textContent = `Couldn't refresh: ${failedSymbols.join(", ")}. Showing last known price for ${failedSymbols.length === 1 ? "it" : "them"}.`;
+    errorBox.style.display = "block";
+    document.getElementById("lastUpdated").textContent = new Date().toLocaleTimeString() + " · refreshes every 30s (partial)";
   }
+  render();
 }
 
 /* ---------- Generic app modal (replaces native prompt/confirm/alert) ---------- */
@@ -1434,7 +1476,7 @@ function render() {
       <span class="sym-cell"><span class="sym">${h.symbol}</span>${dayChgHtml}</span>
       <span class="muted">${h.qty}</span>
       <span class="muted">${fmt(h.avgCost, 2)}</span>
-      <span class="${flashClass}">${ltp !== null ? fmt(ltp, 2) : "—"}</span>
+      <span class="${flashClass}">${ltp !== null ? fmt(ltp, 2) : "—"}</span>${staleSymbols.has(h.symbol) ? ' <span class="faint label" title="Last successful update — feed failed on the most recent refresh">stale</span>' : ""}
       <span>${value !== null ? "Rs " + fmt(value, 0) : "—"}</span>
       <span class="${pl === null ? '' : (pl >= 0 ? 'up' : 'down')}">${pl === null ? "—" : (pl >= 0 ? "+" : "") + fmt(plPct, 1) + "%"}</span>
       <span>${termTag}</span>
@@ -1982,6 +2024,58 @@ document.getElementById("renamePortfolioBtn").addEventListener("click", () => {
 });
 document.getElementById("clearPortfolioBtn").addEventListener("click", clearCurrentPortfolioData);
 document.getElementById("deletePortfolioBtn").addEventListener("click", deleteCurrentPortfolio);
+
+/* ---------- Backup: export / restore all portfolios ---------- */
+document.getElementById("exportAllBtn").addEventListener("click", () => {
+  const payload = {
+    app: "NEPSE Portfolio",
+    exportedAt: new Date().toISOString(),
+    portfolios,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `nepse-portfolio-backup-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("importBackupInput").addEventListener("change", (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      const incoming = Array.isArray(parsed) ? parsed : parsed.portfolios;
+      if (!Array.isArray(incoming) || !incoming.length) throw new Error("No portfolios found in file.");
+      appConfirm({
+        title: "Restore backup?",
+        message: `This will replace all ${portfolios.length} current portfolio(s) with ${incoming.length} from the backup file. This can't be undone.`,
+        confirmText: "Restore",
+        danger: true,
+        onConfirm: () => {
+          portfolios = incoming;
+          currentPortfolioId = portfolios[0].id;
+          saveState();
+          recompute();
+          renderPortfolioTabs();
+          render();
+          renderTransactions();
+          refresh();
+        },
+      });
+    } catch (err) {
+      appAlert({ title: "Restore failed", message: "That file doesn't look like a valid backup: " + err.message });
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = "";
+});
 
 /* ---------- Init ---------- */
 loadState();

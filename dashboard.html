@@ -41,7 +41,14 @@
     <section class="intelligence-grid" aria-label="Market intelligence">
       <article class="intel-intro"><p class="section-kicker">Market intelligence</p><h2>What your data can tell you today.</h2><p>The connected source provides precise single-symbol quotes. Broader market modules are ready for a full-market feed without invented numbers.</p></article>
       <article class="intel-list"><div class="intel-heading"><span>Watchlist momentum</span><span>Live</span></div><p>Track individual instruments below, with LTP and daily movement refreshed from the existing worker.</p><a href="#watchlist">Open market monitor <span>↓</span></a></article>
-      <article class="intel-list muted-module"><div class="intel-heading"><span>Discovery queue</span><span>Live</span></div><p>Top gainers, top losers, and index movers below, refreshed from the full-market feed.</p><a href="#discovery"><span>↓</span></a></article>
+      <article class="intel-list muted-module"><div class="intel-heading"><span>Discovery queue</span><span>Live</span></div><p>Market pulse, full-board leaderboard, and sector impact below, refreshed from the full-market feed.</p><a href="#discovery"><span>↓</span></a></article>
+    </section>
+
+    <section class="panel" id="pulsePanel" style="margin-bottom:28px;">
+      <div class="panel-head"><div><p class="section-kicker">Discovery</p><h2>Market Pulse — gainers vs losers</h2></div><span class="panel-index">01</span></div>
+      <p id="pulseBreadth" class="stage-note loading">Loading…</p>
+      <div class="pulse-bar"><div id="pulseFillUp" class="pulse-fill-up"></div><div id="pulseFillDown" class="pulse-fill-down"></div></div>
+      <p id="pulseVerdict" class="stage-note"></p>
     </section>
 
     <section class="monitor-grid" id="discovery">
@@ -56,24 +63,24 @@
     </section>
 
     <section class="panel" id="moversPanel" style="margin-bottom:28px;">
-      <div class="panel-head"><div><p class="section-kicker">Discovery</p><h2>Which stocks moved NEPSE, and by how much</h2></div><span class="panel-index">04</span></div>
-      <div class="table-scroll"><table id="moversTable"><thead><tr><th>Symbol</th><th>Change</th><th>Index contribution</th></tr></thead><tbody><tr><td colspan="3" class="loading">Loading…</td></tr></tbody></table></div>
+      <div class="panel-head"><div><p class="section-kicker">Discovery</p><h2>Contribution Leaderboard — every stock, ranked by index impact</h2></div><span class="panel-index">04</span></div>
+      <div class="table-scroll"><table id="moversTable"><thead><tr><th>#</th><th>Symbol</th><th>Change</th><th>Index contribution</th></tr></thead><tbody><tr><td colspan="4" class="loading">Loading…</td></tr></tbody></table></div>
       <p class="stage-note" id="moversNote"></p>
     </section>
 
     <section class="panel" id="sectorPanel" style="margin-bottom:28px;">
-      <div class="panel-head"><div><p class="section-kicker">Discovery</p><h2>Sector impact — who fell, and how far it spread</h2></div><span class="panel-index">05</span></div>
-      <div class="table-scroll"><table id="sectorTable"><thead><tr><th>Sector</th><th>Avg change</th><th>Breadth</th><th>Index contribution</th><th>Biggest drags</th></tr></thead><tbody><tr><td colspan="5" class="loading">Loading…</td></tr></tbody></table></div>
+      <div class="panel-head"><div><p class="section-kicker">Discovery</p><h2>Sector impact — ranked by contribution magnitude</h2></div><span class="panel-index">05</span></div>
+      <div class="table-scroll"><table id="sectorTable"><thead><tr><th>#</th><th>Sector</th><th>Avg change</th><th>Breadth</th><th>Index contribution</th><th>Biggest drags</th></tr></thead><tbody><tr><td colspan="6" class="loading">Loading…</td></tr></tbody></table></div>
       <p class="stage-note" id="sectorNote"></p>
     </section>
 
     <section class="monitor-grid">
-      <article class="panel watch-panel" id="watchlist"><div class="panel-head"><div><p class="section-kicker">Market monitor</p><h2>Watchlist</h2></div><span class="panel-index">01</span></div>
+      <article class="panel watch-panel" id="watchlist"><div class="panel-head"><div><p class="section-kicker">Market monitor</p><h2>Watchlist</h2></div><span class="panel-index">06</span></div>
         <div class="watch-add-row"><input id="watchInput" class="watch-input" placeholder="Add symbol e.g. NABIL" autocomplete="off" spellcheck="false"><button id="watchAddBtn" class="watch-add-btn" type="button">Add symbol</button></div>
         <div class="table-scroll"><table id="watchTable"><thead><tr><th>Symbol</th><th>LTP</th><th>Change</th><th></th></tr></thead><tbody><tr><td colspan="4" class="loading">No symbols yet — add one above.</td></tr></tbody></table></div>
       </article>
 
-      <aside class="source-panel"><p class="section-kicker">Data coverage</p><h2>Built honestly.</h2><p>Top gainers, losers, and index movers now run off a full-market feed. NEPSE's own official index and float-adjusted weights are still not published via this source — index contribution below is a market-cap-weighted approximation, not the exchange's official figure.</p><div class="source-tags"><span>Single-symbol quotes</span><span>Full-market feed</span><span>Portfolio FIFO</span><span>Local import/export</span></div></aside>
+      <aside class="source-panel"><p class="section-kicker">Data coverage</p><h2>Built honestly.</h2><p>Market pulse, the full leaderboard, and sector impact now run off a full-market feed. NEPSE's own official index and float-adjusted weights are still not published via this source — index contribution below is an apportionment model, not the exchange's official per-stock figure.</p><div class="source-tags"><span>Single-symbol quotes</span><span>Full-market feed</span><span>Portfolio FIFO</span><span>Local import/export</span></div></aside>
     </section>
 
     <section class="panel holdings-panel" id="holdings"><div class="panel-head"><div><p class="section-kicker">Portfolio analysis</p><h2>Current holdings</h2></div><a href="portfolio.html" class="table-link">Manage portfolio <span>↗</span></a></div><div class="table-scroll"><table id="holdingsTable"><thead><tr><th>Symbol</th><th>Qty</th><th>Avg cost</th><th>LTP</th><th>P/L</th></tr></thead><tbody><tr><td colspan="5" class="loading">Loading holdings…</td></tr></tbody></table></div></section>

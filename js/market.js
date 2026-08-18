@@ -1,18 +1,8 @@
-const CRYPTO_IDS = { BTC:"bitcoin", ETH:"ethereum", SOL:"solana", BNB:"binancecoin", XRP:"ripple",
-  ADA:"cardano", DOGE:"dogecoin", DOT:"polkadot", MATIC:"matic-network", POL:"polygon-ecosystem-token",
-  LTC:"litecoin", AVAX:"avalanche-2", LINK:"chainlink", TRX:"tron", SHIB:"shiba-inu", ATOM:"cosmos",
-  UNI:"uniswap", XLM:"stellar", NEAR:"near", APT:"aptos" };
 const STOOQ_INDEX_ALIASES = { "SPX":"^spx", "US500":"^spx", "DJI":"^dji", "DOW":"^dji", "NDX":"^ndq",
   "NASDAQ":"^ndq", "VIX":"^vix", "US30":"^dji" };
 const PRICE_CACHE_TTL_MS = 45000;
 const PRICE_BACKOFF_TTL_MS = 5*60000; // after repeated failures, stop hammering the proxy chain for this long
 const PRICE_MAX_CONSECUTIVE_FAILS = 3;
-
-function cryptoIdFor(ticker){
-  const t = ticker.toUpperCase();
-  const base = Object.keys(CRYPTO_IDS).find(b => t === b || t === b+"USD" || t === b+"USDT");
-  return base ? CRYPTO_IDS[base] : null;
-}
 
 // Resolves a watchlist ticker to the symbol Stooq expects.
 // - "AAPL"           -> "aapl.us"     (default: US-listed equities)
@@ -34,31 +24,6 @@ function priceForFallback(ticker, note){
   const price = (20 + (h%48000)/100).toFixed(2);
   const chg = (((h>>3)%4000)/100 - 20).toFixed(2);
   return { price, chg: parseFloat(chg), live:false, error: note };
-}
-
-async function fetchCryptoPrice(ticker){
-  const id = cryptoIdFor(ticker);
-  const cgUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`;
-  const attempts = [
-    { label:"direct", run: () => fetchWithTimeout(cgUrl, 7000).then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP "+r.status))) },
-    ...CORS_PROXIES.map((build,i) => ({ label:"proxy"+i, run: async () => {
-      const { url, json } = build(cgUrl);
-      const res = await fetchWithTimeout(url, 9000);
-      if(!res.ok) throw new Error("HTTP "+res.status);
-      if(json){ const data = await res.json(); return JSON.parse(data.contents); }
-      return res.json();
-    }}))
-  ];
-  const errors = [];
-  for(const a of attempts){
-    try{
-      const data = await a.run();
-      const entry = data[id];
-      if(!entry || typeof entry.usd !== "number") throw new Error("No data in response");
-      return { price: entry.usd.toFixed(entry.usd < 10 ? 4 : 2), chg: parseFloat((entry.usd_24h_change||0).toFixed(2)), live:true };
-    }catch(e){ errors.push(`${a.label}: ${e.message}`); }
-  }
-  throw new Error("CoinGecko unreachable — " + errors.join(" | "));
 }
 
 function parseStooqCsv(csv){
@@ -123,7 +88,7 @@ async function fetchLivePrice(ticker, force){
 
   let result;
   try{
-    result = cryptoIdFor(ticker) ? await fetchCryptoPrice(ticker) : await fetchStooqPrice(ticker);
+    result = await fetchStooqPrice(ticker);
     state.priceFailCount[ticker] = 0;
   }catch(e){
     console.error(`[watchlist] live price failed for ${ticker}:`, e.message);
@@ -154,9 +119,7 @@ async function runLimited(items, worker, concurrency=3, staggerMs=120){
 function stooqChartImgUrl(ticker){
   // Stooq's public chart-image endpoint — no key required. Renders a small line chart PNG
   // straight from their servers, so no CORS proxy or extra fetch call is needed for it.
-  const symbol = cryptoIdFor(ticker)
-    ? (ticker.toUpperCase().replace(/USDT?$/,"") + "usd")
-    : resolveStooqSymbol(ticker).symbol;
+  const symbol = resolveStooqSymbol(ticker).symbol;
   return `https://stooq.com/c/?s=${encodeURIComponent(symbol)}&c=3m&t=l&a=0&b=0&w=280&h=80`;
 }
 function priceChipHtml(t, data, loading){

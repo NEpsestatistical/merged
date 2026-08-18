@@ -1,291 +1,251 @@
 /* =========================================================
-   NEPSE Dashboard — data layer
-   Uses ONLY the existing single-symbol worker
-   (https://shiny-term-f599.bharatiaashish43.workers.dev/?symbol=XXX)
-   and the portfolio data already stored in localStorage by
-   portfolio.html (key "eePortfoliosV2"). Market-wide gainers/
-   losers/sector data is handled separately by dashboard-market.js.
+   NEPSE Dashboard — full-market discovery layer
+   Populates: #gainersTable, #losersTable, #moversTable, #sectorTable
+
+   Uses the SAME worker as dashboard.js (single-symbol quotes) but hits
+   its /all endpoint for the full board in one call. Does NOT touch
+   WORKER_URL, portfolio storage, or anything in dashboard.js.
+
+   INDEX POINTS — how they're computed, and the honesty limits:
+   The worker's /all now also returns `index: { date, value, pointChange,
+   percentChange }` — the OFFICIAL NEPSE point change, scraped from
+   merolagani's real daily index table. That table only updates once a
+   trading day fully closes, so during live market hours this is the
+   most recently closed day's point change, not a live tick — labeled
+   as such in the UI.
+
+   Individual stocks don't come with an official per-stock point-
+   contribution figure (that requires float-adjusted market-cap weights,
+   which NEPSE doesn't publish and this source doesn't have). So each
+   stock's point figure is: its share of total turnover-weighted market
+   impact (changeAmount x qty), signed to match its OWN direction, scaled
+   to the magnitude of the real index point change:
+
+     pointsContribution_i = sign(impact_i) * (|impact_i| / totalAbsImpact) * |index.pointChange|
+
+   This means a rising stock always shows positive points and a falling
+   stock always shows negative points — sized by how much of that day's
+   total turnover it accounted for — and the magnitudes are anchored to
+   the real NEPSE point move, not an invented number. It is still an
+   apportionment model, not NEPSE's own weighting, and is labeled as such.
    ========================================================= */
 
-const WORKER_URL = "https://shiny-term-f599.bharatiaashish43.workers.dev";
-const WATCHLIST_KEY = "eeDashboardWatchlist";
+const MARKET_WORKER_URL = "https://shiny-term-f599.bharatiaashish43.workers.dev";
+const MARKET_CACHE_TTL_MS = 45000;
 
-function fmt(n, d = 2) {
+let _marketCache = { data: null, ts: 0 };
+
+function mfmt(n, d = 2) {
   if (n === null || n === undefined || Number.isNaN(n)) return "—";
   return Number(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
-/* ---------- Fetch a single symbol quote from the worker ---------- */
-async function fetchQuote(symbol) {
-  const res = await fetch(`${WORKER_URL}/?symbol=${encodeURIComponent(symbol)}`);
-  if (!res.ok) throw new Error(`${symbol}: HTTP ${res.status}`);
-  return res.json();
+function mfmtSigned(n, d = 2) {
+  if (n === null || n === undefined || Number.isNaN(n)) return "—";
+  const s = Number(n) >= 0 ? "+" : "";
+  return s + mfmt(n, d);
 }
 
-/* ---------- Same defensive day-change reader as portfolio.html,
-   since the worker's field names for change aren't documented. ---------- */
-function getDayChange(p, ltp) {
-  if (!p) return null;
-  const pct = [p.percentChange, p.perChange, p.changePercent, p.percChange, p.pctChange]
-    .find((v) => v !== undefined && v !== null && !Number.isNaN(Number(v)));
-  const amtRaw = [p.pointChange, p.change, p.netChange, p.diff, p.priceChange]
-    .find((v) => v !== undefined && v !== null && !Number.isNaN(Number(v)));
-
-  let amt = amtRaw !== undefined ? Number(amtRaw) : null;
-  let pctNum = pct !== undefined ? Number(pct) : null;
-
-  if (amt === null && pctNum !== null && ltp !== null) {
-    amt = ltp - ltp / (1 + pctNum / 100);
-  } else if (pctNum === null && amt !== null && ltp !== null) {
-    const prevClose = ltp - amt;
-    pctNum = prevClose ? (amt / prevClose) * 100 : 0;
+/* ---------- Fetch the full board (+ index summary) from the worker's /all endpoint ---------- */
+async function fetchFullBoard(force) {
+  if (!force && _marketCache.data && (Date.now() - _marketCache.ts) < MARKET_CACHE_TTL_MS) {
+    return _marketCache.data;
   }
-
-  if (amt === null || pctNum === null || Number.isNaN(amt) || Number.isNaN(pctNum)) return null;
-  return { amt, pct: pctNum };
-}
-
-/* =========================================================
-   PORTFOLIO — read the same localStorage the portfolio page writes,
-   rebuild holdings with the identical FIFO logic, then fetch live LTPs.
-   ========================================================= */
-
-function loadPortfolios() {
-  try {
-    const raw = localStorage.getItem("eePortfoliosV2");
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length) return parsed;
-    }
-  } catch (e) {}
-  return [];
-}
-
-function getCurrentPortfolio(portfolios) {
-  if (!portfolios.length) return null;
-  let currentId = null;
-  try { currentId = localStorage.getItem("eeCurrentPortfolioId"); } catch (e) {}
-  return portfolios.find((p) => p.id === currentId) || portfolios[0];
-}
-
-// FIFO lot matching — identical to portfolio.html's buildHoldingsFromTrades.
-function buildHoldingsFromTrades(trades) {
-  const bySymbol = {};
-  const sorted = [...trades].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
-  sorted.forEach((t) => {
-    if (!bySymbol[t.symbol]) bySymbol[t.symbol] = [];
-    const lots = bySymbol[t.symbol];
-    if (t.side.startsWith("b")) {
-      lots.push({ qty: t.qty, price: t.price, date: t.date });
-    } else if (t.side.startsWith("s")) {
-      let remaining = t.qty;
-      while (remaining > 0 && lots.length) {
-        const lot = lots[0];
-        const take = Math.min(lot.qty, remaining);
-        lot.qty -= take;
-        remaining -= take;
-        if (lot.qty <= 0) lots.shift();
-      }
-    }
+  const res = await fetch(`${MARKET_WORKER_URL}/all`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = await res.json();
+  const rawBoard = Array.isArray(json.board) ? json.board : [];
+  // The source page renders each row twice (desktop + mobile markup), so the
+  // worker's scraper picks up duplicates. Dedupe by symbol, keeping the first.
+  const seen = new Set();
+  const board = rawBoard.filter(r => {
+    if (!r.symbol || seen.has(r.symbol)) return false;
+    seen.add(r.symbol);
+    return true;
   });
+  const index = json.index || null; // { date, value, pointChange, percentChange } | null
+  _marketCache = { data: { board, index }, ts: Date.now() };
+  return _marketCache.data;
+}
 
-  const result = {};
-  Object.keys(bySymbol).forEach((symbol) => {
-    const lots = bySymbol[symbol].filter((l) => l.qty > 0);
-    if (!lots.length) return;
-    const qty = lots.reduce((s, l) => s + l.qty, 0);
-    const cost = lots.reduce((s, l) => s + l.qty * l.price, 0);
-    result[symbol] = { symbol, qty, avgCost: cost / qty };
+/* ---------- Impact proxy: rupee value moved, % share of movement, and real-point apportionment ---------- */
+function computeImpact(board, index) {
+  const rows = board
+    .filter(r => r.symbol && r.percentChange !== null && r.percentChange !== undefined)
+    .map(r => {
+      const changeAmount = r.changeAmount !== null && r.changeAmount !== undefined
+        ? Number(r.changeAmount)
+        : null;
+      const qty = r.qty !== null && r.qty !== undefined ? Number(r.qty) : null;
+      const impact = (changeAmount !== null && qty !== null && !Number.isNaN(changeAmount) && !Number.isNaN(qty))
+        ? changeAmount * qty
+        : null;
+      return { ...r, impact };
+    });
+
+  const totalAbsImpact = rows.reduce((s, r) => s + (r.impact !== null ? Math.abs(r.impact) : 0), 0);
+  const indexPointChange = index && !Number.isNaN(index.pointChange) ? Number(index.pointChange) : null;
+
+  return rows.map(r => {
+    const contributionPct = (r.impact !== null && totalAbsImpact > 0) ? (r.impact / totalAbsImpact) * 100 : null;
+    const pointsContribution = (r.impact !== null && totalAbsImpact > 0 && indexPointChange !== null)
+      ? Math.sign(r.impact) * (Math.abs(r.impact) / totalAbsImpact) * Math.abs(indexPointChange)
+      : null;
+    return { ...r, contributionPct, pointsContribution };
   });
-  return result;
 }
 
-async function loadPortfolioSnapshot() {
-  const snapshotEl = document.getElementById("portfolioSnapshot");
-  const holdingsBody = document.querySelector("#holdingsTable tbody");
+/* ---------- Gainers / Losers ---------- */
+function renderGainersLosers(rows) {
+  const ranked = rows.filter(r => r.percentChange !== null).slice().sort((a, b) => b.percentChange - a.percentChange);
+  const gainers = ranked.filter(r => r.percentChange > 0).slice(0, 10);
+  const losers = ranked.filter(r => r.percentChange < 0).slice(-10).reverse();
 
-  const portfolios = loadPortfolios();
-  const current = getCurrentPortfolio(portfolios);
+  const gainersBody = document.querySelector("#gainersTable tbody");
+  const losersBody = document.querySelector("#losersTable tbody");
 
-  if (!current || !current.transactions || !current.transactions.length) {
-    snapshotEl.innerHTML = `<p class="loading">No portfolio data yet. Add holdings on the Portfolio page.</p>`;
-    holdingsBody.innerHTML = `<tr><td colspan="5" class="loading">No holdings yet.</td></tr>`;
-    return;
-  }
-
-  const holdings = Object.values(buildHoldingsFromTrades(current.transactions));
-
-  if (!holdings.length) {
-    snapshotEl.innerHTML = `<p class="loading">No open positions in "${current.name}".</p>`;
-    holdingsBody.innerHTML = `<tr><td colspan="5" class="loading">No open positions.</td></tr>`;
-    return;
-  }
-
-  let quotes = {};
-  let fetchFailed = false;
-  try {
-    const results = await Promise.all(
-      holdings.map(async (h) => {
-        try { return await fetchQuote(h.symbol); }
-        catch (e) { return null; }
-      })
-    );
-    results.forEach((r) => { if (r && r.symbol) quotes[r.symbol] = r; });
-  } catch (e) {
-    fetchFailed = true;
-  }
-
-  let totalInvested = 0, totalValue = 0, todayPL = 0, haveAnyLtp = false;
-
-  holdings.forEach((h) => {
-    const q = quotes[h.symbol];
-    const ltp = q ? Number(q.ltp) : null;
-    totalInvested += h.qty * h.avgCost;
-    if (ltp !== null && !Number.isNaN(ltp)) {
-      totalValue += h.qty * ltp;
-      haveAnyLtp = true;
-      const chg = getDayChange(q, ltp);
-      if (chg) todayPL += h.qty * chg.amt;
-    } else {
-      totalValue += h.qty * h.avgCost; // fall back to cost basis if no live price
-    }
-  });
-
-  const totalPL = totalValue - totalInvested;
-  const totalPLPct = totalInvested ? (totalPL / totalInvested) * 100 : 0;
-
-  const plClass = totalPL >= 0 ? "up" : "down";
-  const dayClass = todayPL >= 0 ? "up" : "down";
-
-  snapshotEl.innerHTML = `
-   <div class="stat">
-      <div class="value">Rs ${fmt(totalValue, 0)}</div>
-      <div class="label">Portfolio Value${haveAnyLtp ? "" : " (live price unavailable)"}</div>
-   </div>
-   <div class="stat">
-      <div class="value ${plClass}" style="font-size:22px">Rs ${fmt(Math.abs(totalPL), 0)}</div>
-      <div class="label">Total P/L (${fmt(totalPLPct, 1)}%)</div>
-   </div>
-   <div class="stat">
-      <div class="value ${dayClass}" style="font-size:22px">Rs ${fmt(Math.abs(todayPL), 0)}</div>
-      <div class="label">Today's P/L</div>
-    </div>
-    <div class="stat">
-      <div class="value" style="font-size:22px">Rs ${fmt(totalInvested, 0)}</div>
-      <div class="label">Invested</div>
-   </div>
- `;
-
-  holdingsBody.innerHTML = holdings.map((h) => {
-    const q = quotes[h.symbol];
-    const ltp = q ? Number(q.ltp) : null;
-    const pl = ltp !== null && !Number.isNaN(ltp) ? (ltp - h.avgCost) * h.qty : null;
-    const plClass2 = pl === null ? "" : (pl >= 0 ? "up" : "down");
-    return `
-      <tr>
-        <td>${h.symbol}</td>
-        <td>${fmt(h.qty, 0)}</td>
-        <td>${fmt(h.avgCost, 2)}</td>
-        <td>${ltp !== null ? "Rs " + fmt(ltp, 2) : "—"}</td>
-        <td class="${plClass2}">${pl !== null ? "Rs " + fmt(Math.abs(pl), 0) : "Data unavailable"}</td>
-      </tr>
-    `;
-  }).join("");
-
-  if (fetchFailed) {
-    holdingsBody.insertAdjacentHTML("beforeend",
-      `<tr><td colspan="5" class="loading">Some live prices failed to load — showing cost basis where unavailable.</td></tr>`);
-  }
-}
-
-/* =========================================================
-   WATCHLIST — user-managed symbol list, each fetched individually.
-   ========================================================= */
-
-function loadWatchlist() {
-  try {
-    const raw = localStorage.getItem(WATCHLIST_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch (e) {}
-  return [];
-}
-
-function saveWatchlist(list) {
-  try { localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list)); } catch (e) {}
-}
-
-async function renderWatchlist() {
-  const body = document.querySelector("#watchTable tbody");
-  const list = loadWatchlist();
-
-  if (!list.length) {
-    body.innerHTML = `<tr><td colspan="4" class="loading">No symbols yet — add one above.</td></tr>`;
-    return;
-  }
-
-  body.innerHTML = list.map((s) => `<tr><td>${s}</td><td colspan="2" class="loading">Loading...</td><td></td></tr>`).join("");
-
-  const results = await Promise.all(list.map(async (symbol) => {
-    try { return { symbol, data: await fetchQuote(symbol) }; }
-    catch (e) { return { symbol, data: null, error: true }; }
-  }));
-
-  body.innerHTML = results.map(({ symbol, data, error }) => {
-    if (error || !data) {
-      return `
+  gainersBody.innerHTML = gainers.length
+    ? gainers.map(r => `
         <tr>
-          <td>${symbol}</td>
-          <td colspan="2" class="loading">Data unavailable</td>
-          <td><button class="watch-remove-btn" data-symbol="${symbol}" type="button">✕</button></td>
-        </tr>`;
-    }
-    const ltp = data.ltp !== undefined ? Number(data.ltp) : null;
-    const chg = getDayChange(data, ltp);
-    const chgClass = chg ? (chg.amt >= 0 ? "up" : "down") : "";
-    const chgText = chg ? `${fmt(chg.amt, 2)} (${fmt(chg.pct, 2)}%)` : "—";
+          <td>${r.symbol}</td>
+          <td>Rs ${mfmt(r.ltp)}</td>
+          <td class="up">${mfmtSigned(r.percentChange)}%</td>
+        </tr>`).join("")
+    : `<tr><td colspan="3" class="loading">No gainers today.</td></tr>`;
+
+  losersBody.innerHTML = losers.length
+    ? losers.map(r => `
+        <tr>
+          <td>${r.symbol}</td>
+          <td>Rs ${mfmt(r.ltp)}</td>
+          <td class="down">${mfmtSigned(r.percentChange)}%</td>
+        </tr>`).join("")
+    : `<tr><td colspan="3" class="loading">No losers today.</td></tr>`;
+}
+
+/* ---------- Movers (by market impact, shown as index points when available) ---------- */
+function renderMovers(rows, index) {
+  const body = document.querySelector("#moversTable tbody");
+  const note = document.getElementById("moversNote");
+
+  const hasPoints = index && !Number.isNaN(index.pointChange);
+
+  const ranked = rows
+    .filter(r => r.impact !== null)
+    .slice()
+    .sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact))
+    .slice(0, 10);
+
+  if (!ranked.length) {
+    body.innerHTML = `<tr><td colspan="3" class="loading">Turnover data unavailable — check the worker's qty field.</td></tr>`;
+    if (note) note.textContent = "";
+    return;
+  }
+
+  body.innerHTML = ranked.map(r => {
+    const cls = r.impact >= 0 ? "up" : "down";
+    const contribText = hasPoints
+      ? `${mfmtSigned(r.pointsContribution, 2)} pts`
+      : `${mfmtSigned(r.contributionPct, 2)}%`;
     return `
       <tr>
-        <td>${symbol}</td>
-        <td>${ltp !== null ? "Rs " + fmt(ltp, 2) : "—"}</td>
-        <td class="${chgClass}">${chgText}</td>
-        <td><button class="watch-remove-btn" data-symbol="${symbol}" type="button">✕</button></td>
+        <td>${r.symbol}</td>
+        <td class="${cls}">${mfmtSigned(r.percentChange)}%</td>
+        <td class="${cls}">${contribText}</td>
       </tr>`;
   }).join("");
+
+  if (note) {
+    note.textContent = hasPoints
+      ? `Points are apportioned from NEPSE's official close-to-close change on ${index.date} (${mfmtSigned(index.pointChange)} pts), split by each stock's share of total turnover-weighted movement — not NEPSE's own float-adjusted weighting, and not live-updating intraday.`
+      : "Index contribution is a turnover-weighted impact proxy (price change × traded quantity, as a share of total market movement) — the official NEPSE point figure wasn't available this refresh.";
+  }
 }
 
-function setupWatchlistControls() {
-  const input = document.getElementById("watchInput");
-  const addBtn = document.getElementById("watchAddBtn");
-  const body = document.querySelector("#watchTable tbody");
+/* ---------- Sector impact ---------- */
+function renderSectors(rows, index) {
+  const body = document.querySelector("#sectorTable tbody");
+  const note = document.getElementById("sectorNote");
+  const hasPoints = index && !Number.isNaN(index.pointChange);
 
-  function addSymbol() {
-    const symbol = input.value.trim().toUpperCase();
-    if (!symbol) return;
-    const list = loadWatchlist();
-    if (!list.includes(symbol)) {
-      list.push(symbol);
-      saveWatchlist(list);
-      renderWatchlist();
-    }
-    input.value = "";
+  const bySector = {};
+  rows.forEach(r => {
+    const sec = r.sector || "Others";
+    if (!bySector[sec]) bySector[sec] = [];
+    bySector[sec].push(r);
+  });
+
+  const sectorRows = Object.keys(bySector).map(sector => {
+    const list = bySector[sector];
+    const withChange = list.filter(r => r.percentChange !== null);
+    const avgChange = withChange.length
+      ? withChange.reduce((s, r) => s + r.percentChange, 0) / withChange.length
+      : null;
+    const falling = withChange.filter(r => r.percentChange < 0).length;
+    const total = withChange.length;
+    const contributionPct = list.reduce((s, r) => s + (r.contributionPct || 0), 0);
+    const pointsContribution = list.reduce((s, r) => s + (r.pointsContribution || 0), 0);
+    const drags = list
+      .filter(r => r.impact !== null && r.impact < 0)
+      .sort((a, b) => a.impact - b.impact)
+      .slice(0, 2)
+      .map(r => `${r.symbol} (${mfmtSigned(r.percentChange)}%)`)
+      .join(", ") || "—";
+
+    return { sector, avgChange, falling, total, contributionPct, pointsContribution, drags };
+  }).filter(s => s.total > 0)
+    .sort((a, b) => (hasPoints ? a.pointsContribution - b.pointsContribution : a.contributionPct - b.contributionPct)); // worst-impact sectors first
+
+  if (!sectorRows.length) {
+    body.innerHTML = `<tr><td colspan="5" class="loading">Sector data unavailable.</td></tr>`;
+    if (note) note.textContent = "";
+    return;
   }
 
-  addBtn.addEventListener("click", addSymbol);
-  input.addEventListener("keydown", (e) => { if (e.key === "Enter") addSymbol(); });
+  body.innerHTML = sectorRows.map(s => {
+    const cls = s.avgChange === null ? "" : (s.avgChange >= 0 ? "up" : "down");
+    const contribVal = hasPoints ? s.pointsContribution : s.contributionPct;
+    const contribCls = contribVal >= 0 ? "up" : "down";
+    const contribText = hasPoints ? `${mfmtSigned(s.pointsContribution, 2)} pts` : `${mfmtSigned(s.contributionPct, 2)}%`;
+    return `
+      <tr>
+        <td>${s.sector}</td>
+        <td class="${cls}">${mfmtSigned(s.avgChange)}%</td>
+        <td>${s.falling}/${s.total} falling</td>
+        <td class="${contribCls}">${contribText}</td>
+        <td>${s.drags}</td>
+      </tr>`;
+  }).join("");
 
-  body.addEventListener("click", (e) => {
-    const btn = e.target.closest(".watch-remove-btn");
-    if (!btn) return;
-    const symbol = btn.dataset.symbol;
-    const list = loadWatchlist().filter((s) => s !== symbol);
-    saveWatchlist(list);
-    renderWatchlist();
-  });
+  if (note) {
+    note.textContent = hasPoints
+      ? `Sectors ranked by total apportioned points (sum of each constituent's share of NEPSE's ${index.date} close-to-close change), most negative first.`
+      : "Sectors are ranked by total turnover-weighted impact, most negative first.";
+  }
 }
 
 /* ---------- init ---------- */
+async function loadMarketDiscovery(force) {
+  try {
+    const { board, index } = await fetchFullBoard(force);
+    if (!board.length) throw new Error("Empty board");
+    const rows = computeImpact(board, index);
+    renderGainersLosers(rows);
+    renderMovers(rows, index);
+    renderSectors(rows, index);
+  } catch (e) {
+    console.error("[market] discovery load failed:", e.message);
+    const gb = document.querySelector("#gainersTable tbody");
+    const lb = document.querySelector("#losersTable tbody");
+    const mb = document.querySelector("#moversTable tbody");
+    const sb = document.querySelector("#sectorTable tbody");
+    if (gb) gb.innerHTML = `<tr><td colspan="3" class="loading">Data unavailable.</td></tr>`;
+    if (lb) lb.innerHTML = `<tr><td colspan="3" class="loading">Data unavailable.</td></tr>`;
+    if (mb) mb.innerHTML = `<tr><td colspan="3" class="loading">Market data unavailable — ${e.message}</td></tr>`;
+    if (sb) sb.innerHTML = `<tr><td colspan="5" class="loading">Market data unavailable — ${e.message}</td></tr>`;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  loadPortfolioSnapshot();
-  setupWatchlistControls();
-  renderWatchlist();
+  loadMarketDiscovery();
 });

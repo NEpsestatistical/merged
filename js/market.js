@@ -6,15 +6,28 @@
    its /all endpoint for the full board in one call. Does NOT touch
    WORKER_URL, portfolio storage, or anything in dashboard.js.
 
-   IMPORTANT — index contribution honesty note:
-   The worker's board data has no market-cap or shares-outstanding
-   field (only symbol, ltp, percentChange, changeAmount, qty, sector).
-   NEPSE's real index is float-adjusted market-cap-weighted, which we
-   cannot reproduce from this. Instead we compute a turnover-weighted
-   "impact" proxy — changeAmount x qty = rupee value moved today — and
-   express each stock/sector's share of TOTAL market movement as a
-   percentage. This is labeled clearly in the UI as an approximation,
-   never presented as NEPSE's official index points.
+   INDEX POINTS — how they're computed, and the honesty limits:
+   The worker's /all now also returns `index: { date, value, pointChange,
+   percentChange }` — the OFFICIAL NEPSE point change, scraped from
+   merolagani's real daily index table. That table only updates once a
+   trading day fully closes, so during live market hours this is the
+   most recently closed day's point change, not a live tick — labeled
+   as such in the UI.
+
+   Individual stocks don't come with an official per-stock point-
+   contribution figure (that requires float-adjusted market-cap weights,
+   which NEPSE doesn't publish and this source doesn't have). So each
+   stock's point figure is: its share of total turnover-weighted market
+   impact (changeAmount x qty), signed to match its OWN direction, scaled
+   to the magnitude of the real index point change:
+
+     pointsContribution_i = sign(impact_i) * (|impact_i| / totalAbsImpact) * |index.pointChange|
+
+   This means a rising stock always shows positive points and a falling
+   stock always shows negative points — sized by how much of that day's
+   total turnover it accounted for — and the magnitudes are anchored to
+   the real NEPSE point move, not an invented number. It is still an
+   apportionment model, not NEPSE's own weighting, and is labeled as such.
    ========================================================= */
 
 const MARKET_WORKER_URL = "https://shiny-term-f599.bharatiaashish43.workers.dev";
@@ -33,7 +46,7 @@ function mfmtSigned(n, d = 2) {
   return s + mfmt(n, d);
 }
 
-/* ---------- Fetch the full board from the worker's /all endpoint ---------- */
+/* ---------- Fetch the full board (+ index summary) from the worker's /all endpoint ---------- */
 async function fetchFullBoard(force) {
   if (!force && _marketCache.data && (Date.now() - _marketCache.ts) < MARKET_CACHE_TTL_MS) {
     return _marketCache.data;
@@ -42,12 +55,13 @@ async function fetchFullBoard(force) {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = await res.json();
   const board = Array.isArray(json.board) ? json.board : [];
-  _marketCache = { data: board, ts: Date.now() };
-  return board;
+  const index = json.index || null; // { date, value, pointChange, percentChange } | null
+  _marketCache = { data: { board, index }, ts: Date.now() };
+  return _marketCache.data;
 }
 
-/* ---------- Impact proxy: rupee value moved, and % share of total movement ---------- */
-function computeImpact(board) {
+/* ---------- Impact proxy: rupee value moved, % share of movement, and real-point apportionment ---------- */
+function computeImpact(board, index) {
   const rows = board
     .filter(r => r.symbol && r.percentChange !== null && r.percentChange !== undefined)
     .map(r => {
@@ -62,11 +76,15 @@ function computeImpact(board) {
     });
 
   const totalAbsImpact = rows.reduce((s, r) => s + (r.impact !== null ? Math.abs(r.impact) : 0), 0);
+  const indexPointChange = index && !Number.isNaN(index.pointChange) ? Number(index.pointChange) : null;
 
-  return rows.map(r => ({
-    ...r,
-    contributionPct: (r.impact !== null && totalAbsImpact > 0) ? (r.impact / totalAbsImpact) * 100 : null,
-  }));
+  return rows.map(r => {
+    const contributionPct = (r.impact !== null && totalAbsImpact > 0) ? (r.impact / totalAbsImpact) * 100 : null;
+    const pointsContribution = (r.impact !== null && totalAbsImpact > 0 && indexPointChange !== null)
+      ? Math.sign(r.impact) * (Math.abs(r.impact) / totalAbsImpact) * Math.abs(indexPointChange)
+      : null;
+    return { ...r, contributionPct, pointsContribution };
+  });
 }
 
 /* ---------- Gainers / Losers ---------- */
@@ -97,10 +115,12 @@ function renderGainersLosers(rows) {
     : `<tr><td colspan="3" class="loading">No losers today.</td></tr>`;
 }
 
-/* ---------- Movers (by market impact) ---------- */
-function renderMovers(rows) {
+/* ---------- Movers (by market impact, shown as index points when available) ---------- */
+function renderMovers(rows, index) {
   const body = document.querySelector("#moversTable tbody");
   const note = document.getElementById("moversNote");
+
+  const hasPoints = index && !Number.isNaN(index.pointChange);
 
   const ranked = rows
     .filter(r => r.impact !== null)
@@ -116,23 +136,29 @@ function renderMovers(rows) {
 
   body.innerHTML = ranked.map(r => {
     const cls = r.impact >= 0 ? "up" : "down";
+    const contribText = hasPoints
+      ? `${mfmtSigned(r.pointsContribution, 2)} pts`
+      : `${mfmtSigned(r.contributionPct, 2)}%`;
     return `
       <tr>
         <td>${r.symbol}</td>
         <td class="${cls}">${mfmtSigned(r.percentChange)}%</td>
-        <td class="${cls}">${mfmtSigned(r.contributionPct, 2)}%</td>
+        <td class="${cls}">${contribText}</td>
       </tr>`;
   }).join("");
 
   if (note) {
-    note.textContent = "Index contribution is a turnover-weighted impact proxy (price change × traded quantity, as a share of total market movement) — not NEPSE's official float-adjusted index points, which require market-cap data this source doesn't provide.";
+    note.textContent = hasPoints
+      ? `Points are apportioned from NEPSE's official close-to-close change on ${index.date} (${mfmtSigned(index.pointChange)} pts), split by each stock's share of total turnover-weighted movement — not NEPSE's own float-adjusted weighting, and not live-updating intraday.`
+      : "Index contribution is a turnover-weighted impact proxy (price change × traded quantity, as a share of total market movement) — the official NEPSE point figure wasn't available this refresh.";
   }
 }
 
 /* ---------- Sector impact ---------- */
-function renderSectors(rows) {
+function renderSectors(rows, index) {
   const body = document.querySelector("#sectorTable tbody");
   const note = document.getElementById("sectorNote");
+  const hasPoints = index && !Number.isNaN(index.pointChange);
 
   const bySector = {};
   rows.forEach(r => {
@@ -150,6 +176,7 @@ function renderSectors(rows) {
     const falling = withChange.filter(r => r.percentChange < 0).length;
     const total = withChange.length;
     const contributionPct = list.reduce((s, r) => s + (r.contributionPct || 0), 0);
+    const pointsContribution = list.reduce((s, r) => s + (r.pointsContribution || 0), 0);
     const drags = list
       .filter(r => r.impact !== null && r.impact < 0)
       .sort((a, b) => a.impact - b.impact)
@@ -157,9 +184,9 @@ function renderSectors(rows) {
       .map(r => `${r.symbol} (${mfmtSigned(r.percentChange)}%)`)
       .join(", ") || "—";
 
-    return { sector, avgChange, falling, total, contributionPct, drags };
+    return { sector, avgChange, falling, total, contributionPct, pointsContribution, drags };
   }).filter(s => s.total > 0)
-    .sort((a, b) => a.contributionPct - b.contributionPct); // biggest drag sectors first
+    .sort((a, b) => (hasPoints ? a.pointsContribution - b.pointsContribution : a.contributionPct - b.contributionPct)); // worst-impact sectors first
 
   if (!sectorRows.length) {
     body.innerHTML = `<tr><td colspan="5" class="loading">Sector data unavailable.</td></tr>`;
@@ -169,42 +196,45 @@ function renderSectors(rows) {
 
   body.innerHTML = sectorRows.map(s => {
     const cls = s.avgChange === null ? "" : (s.avgChange >= 0 ? "up" : "down");
-    const contribCls = s.contributionPct >= 0 ? "up" : "down";
+    const contribVal = hasPoints ? s.pointsContribution : s.contributionPct;
+    const contribCls = contribVal >= 0 ? "up" : "down";
+    const contribText = hasPoints ? `${mfmtSigned(s.pointsContribution, 2)} pts` : `${mfmtSigned(s.contributionPct, 2)}%`;
     return `
       <tr>
         <td>${s.sector}</td>
         <td class="${cls}">${mfmtSigned(s.avgChange)}%</td>
         <td>${s.falling}/${s.total} falling</td>
-        <td class="${contribCls}">${mfmtSigned(s.contributionPct, 2)}%</td>
+        <td class="${contribCls}">${contribText}</td>
         <td>${s.drags}</td>
       </tr>`;
   }).join("");
 
   if (note) {
-    note.textContent = "Sectors are ranked by total impact (sum of each constituent's turnover-weighted contribution), most negative first.";
+    note.textContent = hasPoints
+      ? `Sectors ranked by total apportioned points (sum of each constituent's share of NEPSE's ${index.date} close-to-close change), most negative first.`
+      : "Sectors are ranked by total turnover-weighted impact, most negative first.";
   }
 }
 
 /* ---------- init ---------- */
 async function loadMarketDiscovery(force) {
   try {
-    const board = await fetchFullBoard(force);
+    const { board, index } = await fetchFullBoard(force);
     if (!board.length) throw new Error("Empty board");
-    const rows = computeImpact(board);
+    const rows = computeImpact(board, index);
     renderGainersLosers(rows);
-    renderMovers(rows);
-    renderSectors(rows);
+    renderMovers(rows, index);
+    renderSectors(rows, index);
   } catch (e) {
     console.error("[market] discovery load failed:", e.message);
-    const failMsg = `<td colspan="5" class="loading">Market data unavailable — ${e.message}</td>`;
     const gb = document.querySelector("#gainersTable tbody");
     const lb = document.querySelector("#losersTable tbody");
     const mb = document.querySelector("#moversTable tbody");
     const sb = document.querySelector("#sectorTable tbody");
     if (gb) gb.innerHTML = `<tr><td colspan="3" class="loading">Data unavailable.</td></tr>`;
     if (lb) lb.innerHTML = `<tr><td colspan="3" class="loading">Data unavailable.</td></tr>`;
-    if (mb) mb.innerHTML = `<tr>${failMsg}</tr>`.replace("colspan=\"5\"", "colspan=\"3\"");
-    if (sb) sb.innerHTML = `<tr>${failMsg}</tr>`;
+    if (mb) mb.innerHTML = `<tr><td colspan="3" class="loading">Market data unavailable — ${e.message}</td></tr>`;
+    if (sb) sb.innerHTML = `<tr><td colspan="5" class="loading">Market data unavailable — ${e.message}</td></tr>`;
   }
 }
 
